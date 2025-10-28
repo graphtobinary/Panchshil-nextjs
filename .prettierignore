@@ -1,0 +1,34 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Build outputs
+.next
+out
+build
+dist
+
+# Next.js generated files
+.next/*
+next-env.d.ts
+
+# Environment files
+.env*
+
+# Git
+.git
+
+# Husky
+.husky
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
