@@ -11,6 +11,7 @@ const config: Config = {
     extend: {
       colors: {
         "black-chocolate": "#1F180D",
+        "gold-beige": "#9E8C70",
       },
       fontFamily: {
         sans: ["var(--font-open-sans)", "system-ui", "sans-serif"],

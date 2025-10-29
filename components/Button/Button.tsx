@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "outline" | "ghost" | "hero" | "overlay";
+  variant?: "default" | "outline" | "ghost" | "hero" | "overlay" | "signature";
   size?: "default" | "sm" | "lg";
 }
 
@@ -15,6 +15,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       hero: "relative overflow-hidden bg-white/40 hover:bg-white/50 text-white transition-opacity duration-300",
       overlay:
         "bg-black-chocolate/55 relative overflow-hidden hover:bg-black-chocolate/65 text-white transition-opacity duration-300",
+      signature:
+        "bg-gold-beige text-white hover:opacity-95 transition-opacity duration-300",
     };
 
     const sizes = {

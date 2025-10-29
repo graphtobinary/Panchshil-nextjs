@@ -2,6 +2,7 @@
 
 @theme {
   --color-black-chocolate: #1f180d;
+  --color-gold-beige: #9e8c70;
 }
 
 :root {
@@ -50,6 +51,40 @@ body {
   min-width: 0;
   position: relative;
   user-select: none;
+}
+
+/* Projects carousel - independent sizing (3.5 cards) */
+.embla-projects {
+  overflow: hidden;
+  cursor: grab;
+}
+
+.embla-projects:active {
+  cursor: grabbing;
+}
+
+.embla-projects__container {
+  display: flex;
+  touch-action: pan-x pan-y;
+}
+
+.embla-projects__slide {
+  /* width controlled by Tailwind basis utility */
+  min-width: 0;
+  position: relative;
+  user-select: none;
+}
+
+/* Signature full-width carousel */
+.embla-signature {
+  overflow: hidden;
+}
+.embla-signature__container {
+  display: flex;
+}
+.embla-signature__slide {
+  flex: 0 0 100%;
+  min-width: 0;
 }
 
 /* Utility classes for ZapfHumanist601 display font */
