@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ProjectsCarousel } from "./ProjectsCarousel";
-import { ProjectCardData, RegionKey, TabKey } from "@/interfaces";
+import { ProjectCardData, RegionKey, TabKey, CountryKey } from "@/interfaces";
 
 const tabs: { key: TabKey; label: string }[] = [
   { key: "residential", label: "RESIDENTIAL" },
@@ -145,148 +145,214 @@ const indiaDataByTab: Record<TabKey, ProjectCardData[]> = {
   ],
 };
 
-// For demo purposes, international reuses images but could be different
-const internationalDataByTab: Record<TabKey, ProjectCardData[]> = {
+// International data: Country -> Category -> Projects
+const dubaiDataByTab: Record<TabKey, ProjectCardData[]> = {
   residential: [
     {
-      id: "intl-yoo",
+      id: "dubai-yoo1",
       title: "YOO RESIDENCES",
       location: "Dubai, UAE",
       image: "/assets/images/yoo-pune.jpg",
     },
     {
-      id: "intl-towers",
-      title: "SKY TOWERS",
-      location: "Colombo, Sri Lanka",
+      id: "dubai-towers1",
+      title: "DUBAI TOWERS",
+      location: "Dubai, UAE",
       image: "/assets/images/panchshil-towers.jpg",
     },
     {
-      id: "intl-waterfront",
-      title: "WATERFRONT",
-      location: "Male, Maldives",
-      image: "/assets/images/waterfront.jpg",
-    },
-    {
-      id: "intl-yoo2",
-      title: "YOO RESIDENCES",
+      id: "dubai-waterfront1",
+      title: "DUBAI WATERFRONT",
       location: "Dubai, UAE",
-      image: "/assets/images/yoo-pune.jpg",
+      image: "/assets/images/waterfront.jpg",
     },
   ],
   office: [
     {
-      id: "intl-towers2",
-      title: "GLOBAL TOWERS",
+      id: "dubai-office1",
+      title: "BUSINESS DISTRICT",
       location: "Dubai, UAE",
       image: "/assets/images/panchshil-towers.jpg",
     },
     {
-      id: "intl-waterfront2",
-      title: "BAY FRONT",
-      location: "Colombo, Sri Lanka",
-      image: "/assets/images/waterfront.jpg",
-    },
-    {
-      id: "intl-yoo3",
-      title: "ICONIC HUB",
-      location: "Male, Maldives",
+      id: "dubai-office2",
+      title: "COMMERCIAL HUB",
+      location: "Dubai, UAE",
       image: "/assets/images/yoo-pune.jpg",
-    },
-    {
-      id: "intl-towers3",
-      title: "GLOBAL TOWERS",
-      location: "Dubai, UAE",
-      image: "/assets/images/panchshil-towers.jpg",
     },
   ],
   hospitality: [
     {
-      id: "intl-waterfront3",
-      title: "COASTAL RESORT",
-      location: "Male, Maldives",
-      image: "/assets/images/waterfront.jpg",
-    },
-    {
-      id: "intl-yoo4",
+      id: "dubai-hotel1",
       title: "URBAN SUITES",
       location: "Dubai, UAE",
-      image: "/assets/images/yoo-pune.jpg",
+      image: "/assets/images/hospitality.jpg",
     },
     {
-      id: "intl-towers4",
-      title: "GRAND TOWER",
-      location: "Colombo, Sri Lanka",
-      image: "/assets/images/panchshil-towers.jpg",
-    },
-    {
-      id: "intl-yoo5",
-      title: "URBAN SUITES",
+      id: "dubai-hotel2",
+      title: "DUBAI RESORT",
       location: "Dubai, UAE",
       image: "/assets/images/yoo-pune.jpg",
     },
   ],
   datacenter: [
     {
-      id: "intl-towers5",
-      title: "DATA HUB",
-      location: "Dubai, UAE",
-      image: "/assets/images/panchshil-towers.jpg",
-    },
-    {
-      id: "intl-yoo6",
-      title: "EDGE DC",
-      location: "Colombo, Sri Lanka",
-      image: "/assets/images/yoo-pune.jpg",
-    },
-    {
-      id: "intl-waterfront4",
-      title: "OCEAN DC",
-      location: "Male, Maldives",
-      image: "/assets/images/waterfront.jpg",
-    },
-    {
-      id: "intl-towers6",
-      title: "DATA HUB",
+      id: "dubai-dc1",
+      title: "DATA HUB DUBAI",
       location: "Dubai, UAE",
       image: "/assets/images/panchshil-towers.jpg",
     },
   ],
   retail: [
     {
-      id: "intl-yoo7",
+      id: "dubai-retail1",
       title: "BOUTIQUE MALL",
       location: "Dubai, UAE",
       image: "/assets/images/yoo-pune.jpg",
     },
     {
-      id: "intl-waterfront5",
-      title: "SEAVIEW RETAIL",
-      location: "Male, Maldives",
+      id: "dubai-retail2",
+      title: "LUXURY GALLERIA",
+      location: "Dubai, UAE",
       image: "/assets/images/waterfront.jpg",
-    },
-    {
-      id: "intl-towers7",
-      title: "GLOBAL GALLERIA",
-      location: "Colombo, Sri Lanka",
-      image: "/assets/images/panchshil-towers.jpg",
-    },
-    {
-      id: "intl-yoo8",
-      title: "BOUTIQUE MALL",
-      location: "Dubai, UAE",
-      image: "/assets/images/yoo-pune.jpg",
     },
   ],
 };
 
-// Root: Region -> Categories -> Projects
+const maldivesDataByTab: Record<TabKey, ProjectCardData[]> = {
+  residential: [
+    {
+      id: "maldives-res1",
+      title: "ISLAND VILLAS",
+      location: "Male, Maldives",
+      image: "/assets/images/waterfront.jpg",
+    },
+    {
+      id: "maldives-res2",
+      title: "COASTAL RESIDENCES",
+      location: "Male, Maldives",
+      image: "/assets/images/yoo-pune.jpg",
+    },
+  ],
+  office: [
+    {
+      id: "maldives-office1",
+      title: "BUSINESS CENTER",
+      location: "Male, Maldives",
+      image: "/assets/images/panchshil-towers.jpg",
+    },
+  ],
+  hospitality: [
+    {
+      id: "maldives-hotel1",
+      title: "COASTAL RESORT",
+      location: "Male, Maldives",
+      image: "/assets/images/waterfront.jpg",
+    },
+    {
+      id: "maldives-hotel2",
+      title: "RAYYA BY ATMOSPHERE",
+      location: "Male, Maldives",
+      image: "/assets/images/raya-by-atmosphere.jpg",
+    },
+  ],
+  datacenter: [
+    {
+      id: "maldives-dc1",
+      title: "OCEAN DC",
+      location: "Male, Maldives",
+      image: "/assets/images/waterfront.jpg",
+    },
+  ],
+  retail: [
+    {
+      id: "maldives-retail1",
+      title: "SEAVIEW RETAIL",
+      location: "Male, Maldives",
+      image: "/assets/images/waterfront.jpg",
+    },
+  ],
+};
+
+const srilankaDataByTab: Record<TabKey, ProjectCardData[]> = {
+  residential: [
+    {
+      id: "srilanka-res1",
+      title: "SKY TOWERS",
+      location: "Colombo, Sri Lanka",
+      image: "/assets/images/panchshil-towers.jpg",
+    },
+    {
+      id: "srilanka-res2",
+      title: "URBAN LIFESTYLE",
+      location: "Colombo, Sri Lanka",
+      image: "/assets/images/yoo-pune.jpg",
+    },
+  ],
+  office: [
+    {
+      id: "srilanka-office1",
+      title: "BAY FRONT",
+      location: "Colombo, Sri Lanka",
+      image: "/assets/images/waterfront.jpg",
+    },
+    {
+      id: "srilanka-office2",
+      title: "ICONIC HUB",
+      location: "Colombo, Sri Lanka",
+      image: "/assets/images/yoo-pune.jpg",
+    },
+  ],
+  hospitality: [
+    {
+      id: "srilanka-hotel1",
+      title: "GRAND TOWER",
+      location: "Colombo, Sri Lanka",
+      image: "/assets/images/panchshil-towers.jpg",
+    },
+    {
+      id: "srilanka-hotel2",
+      title: "METRO RESORT",
+      location: "Colombo, Sri Lanka",
+      image: "/assets/images/hospitality.jpg",
+    },
+  ],
+  datacenter: [
+    {
+      id: "srilanka-dc1",
+      title: "EDGE DC",
+      location: "Colombo, Sri Lanka",
+      image: "/assets/images/yoo-pune.jpg",
+    },
+  ],
+  retail: [
+    {
+      id: "srilanka-retail1",
+      title: "GLOBAL GALLERIA",
+      location: "Colombo, Sri Lanka",
+      image: "/assets/images/panchshil-towers.jpg",
+    },
+  ],
+};
+
+// Root: Region -> Country -> Category -> Projects
+const projectsByCountry: Record<
+  CountryKey,
+  Record<TabKey, ProjectCardData[]>
+> = {
+  dubai: dubaiDataByTab,
+  maldives: maldivesDataByTab,
+  srilanka: srilankaDataByTab,
+};
+
 const projectsByRegion: Record<RegionKey, Record<TabKey, ProjectCardData[]>> = {
   india: indiaDataByTab,
-  international: internationalDataByTab,
+  international: dubaiDataByTab, // Default to Dubai when International is selected
 };
 
 export function Projects() {
   const [region, setRegion] = useState<RegionKey>("india");
+  const [country, setCountry] = useState<CountryKey>("dubai");
   const [active, setActive] = useState<TabKey>("residential");
 
   return (
@@ -309,7 +375,11 @@ export function Projects() {
             return (
               <button
                 key={r}
-                onClick={() => setRegion(r)}
+                onClick={() => {
+                  setRegion(r);
+                  if (r === "international") setCountry("dubai");
+                  if (r === "india") setActive("residential");
+                }}
                 className={
                   "text-[12px] md:text-[16px] font-medium tracking-wider uppercase transition-colors " +
                   (isActive
@@ -323,30 +393,61 @@ export function Projects() {
           })}
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-20">
-          {tabs.map((t) => {
-            const isActive = t.key === active;
-            return (
-              <button
-                key={t.key}
-                onClick={() => setActive(t.key)}
-                className={
-                  "text-[12px] md:text-[16px] font-medium tracking-wider uppercase transition-colors " +
-                  (isActive
-                    ? "text-gold-beige border-b-3 border-gold-beige"
-                    : "text-gold-beige/60 hover:text-gold-beige")
-                }
-              >
-                {t.label}
-              </button>
-            );
-          })}
-        </div>
+        {/* Category Tabs (for India) or Country Tabs (for International) */}
+        {region === "india" ? (
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-20">
+            {tabs.map((t) => {
+              const isActive = t.key === active;
+              return (
+                <button
+                  key={t.key}
+                  onClick={() => setActive(t.key)}
+                  className={
+                    "text-[12px] md:text-[16px] font-medium tracking-wider uppercase transition-colors " +
+                    (isActive
+                      ? "text-gold-beige border-b-3 border-gold-beige"
+                      : "text-gold-beige/60 hover:text-gold-beige")
+                  }
+                >
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-10 mb-20">
+            {(["dubai", "maldives", "srilanka"] as CountryKey[]).map((c) => {
+              const isActive = c === country;
+              return (
+                <button
+                  key={c}
+                  onClick={() => {
+                    setCountry(c);
+                    setActive("residential");
+                  }}
+                  className={
+                    "text-[12px] md:text-[16px] font-medium tracking-wider uppercase transition-colors " +
+                    (isActive
+                      ? "text-gold-beige border-b-3 border-gold-beige"
+                      : "text-gold-beige/60 hover:text-gold-beige")
+                  }
+                >
+                  {c}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {/* Carousel with progress + top-right arrows inside */}
         <div className="relative">
-          <ProjectsCarousel items={projectsByRegion[region][active]} />
+          <ProjectsCarousel
+            items={
+              region === "india"
+                ? projectsByRegion[region][active]
+                : projectsByCountry[country][active]
+            }
+          />
         </div>
       </div>
     </section>

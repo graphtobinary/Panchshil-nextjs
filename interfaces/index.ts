@@ -16,6 +16,7 @@ export interface ProjectsCarouselProps {
 }
 
 export type RegionKey = "india" | "international";
+export type CountryKey = "dubai" | "maldives" | "srilanka";
 export type TabKey =
   | "residential"
   | "office"

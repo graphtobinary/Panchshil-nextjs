@@ -163,7 +163,7 @@ export function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div className="w-4/5">
+          <div>
             <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
               STAY IN THE KNOW
             </div>

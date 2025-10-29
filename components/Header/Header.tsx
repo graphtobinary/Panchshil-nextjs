@@ -31,7 +31,7 @@ export function Header() {
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={"#"}
                   className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light"
                 >
                   {item.label}
