@@ -57,10 +57,10 @@ export function Footer() {
             INTERNATIONAL OFFICE
           </div>
           <div className="space-y-2 text-sm">
-            <p>Express Towers,</p>
-            <p>20th Floor, Nariman Point,</p>
-            <p>Mumbai - 400 021.</p>
-            <p>Dubai</p>
+            <p>One Offices,</p>
+            <p>Level 5 office 5.11,</p>
+            <p>One Za&apos;abeel, Za&apos;abeel Palace Street,</p>
+            <p>Dubai, UAE</p>
           </div>
           <div className="mt-4 flex items-center gap-2 text-sm">
             <Image
@@ -69,7 +69,7 @@ export function Footer() {
               width={18}
               height={18}
             />
-            <span>+91 22 66863939</span>
+            <span>+971 04 545 3481</span>
           </div>
         </div>
 
@@ -89,7 +89,7 @@ export function Footer() {
               <div className="uppercase font-display-semi text-sm text-black mb-3">
                 Dubai
               </div>
-              <div>+91 897 000 7700</div>
+              <div>+971 04 545 3481</div>
             </div>
           </div>
         </div>
@@ -176,7 +176,7 @@ export function Footer() {
                 />
                 <button
                   type="submit"
-                  className="text-sm text-gold-beige underline"
+                  className="text-sm text-gold-beige underline cursor-pointer"
                 >
                   Submit
                 </button>
@@ -209,7 +209,7 @@ export function Footer() {
               Privacy
             </a>
             <a className="hover:text-gold-beige" href="">
-              Cookie Policy
+              Disclaimer
             </a>
           </div>
           <div className="flex items-center gap-3">

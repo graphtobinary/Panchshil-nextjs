@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef } from "react";
+import { Button } from "../Button";
 
 interface AccordionItemProps {
   id: number;
@@ -21,12 +23,20 @@ export function AccordionItem({
   isOpen,
   onToggle,
 }: AccordionItemProps) {
+  const itemRef = useRef<HTMLDivElement>(null);
+
+  // When an item opens, scroll it to the top of the viewport smoothly
+  useEffect(() => {
+    if (isOpen && itemRef.current) {
+      itemRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isOpen]);
   return (
-    <>
+    <div ref={itemRef}>
       {/* Accordion Header */}
       <button
         onClick={onToggle}
-        className="flex items-center gap-4 justify-between py-6 px-4 md:px-8 bg-[#FFFAF7] border-b border-gray-200 hover:bg-gray-50 transition-colors w-4/5 mx-auto"
+        className="flex cursor-pointer items-center gap-4 justify-between py-6 px-4 md:px-8 bg-[#FFFAF7] border-b border-gray-200 hover:bg-gray-50 transition-colors w-4/5 mx-auto"
       >
         <div className="flex items-center gap-6 w-full justify-between">
           <span className="text-2xl font-display-semi text-black-chocolate">
@@ -83,9 +93,15 @@ export function AccordionItem({
                 ))}
               </div>
             )}
+            {/* CTA Button */}
+            <div className="flex justify-center pt-5">
+              <Button variant="hero" size="lg" className="w-48">
+                Learn More
+              </Button>
+            </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

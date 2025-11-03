@@ -42,17 +42,6 @@ export const accordionItems: AccordionData[] = [
   },
   {
     id: 4,
-    title: "Data Center",
-    description:
-      "Powering the digital future with state-of-the-art infrastructure. Panchshil's data centers combine robust technology, redundant power systems, and cutting-edge security to deliver mission-critical solutions for enterprises. Our facilities offer scalable, reliable, and secure colocation services that meet the highest industry standards, ensuring seamless operations for businesses in the digital age.",
-    image: "/assets/images/residental.jpg",
-    stats: [
-      { label: "2 Million sq.ft Developed" },
-      { label: "1.5 Million sq.ft Planned" },
-    ],
-  },
-  {
-    id: 5,
     title: "Retail & F&B",
     description:
       "Creating vibrant retail destinations and culinary experiences. Panchshil's retail and food & beverage developments bring together luxury brands, dining experiences, and entertainment in thoughtfully designed spaces. Our retail projects feature premium shopping environments with curated tenant mixes, exceptional dining options, and engaging customer experiences that cater to the evolving lifestyle needs of modern consumers.",
@@ -60,6 +49,17 @@ export const accordionItems: AccordionData[] = [
     stats: [
       { label: "1.5 Million sq.ft Developed" },
       { label: "500K sq.ft Under Construction" },
+    ],
+  },
+  {
+    id: 5,
+    title: "Data Center",
+    description:
+      "Powering the digital future with state-of-the-art infrastructure. Panchshil's data centers combine robust technology, redundant power systems, and cutting-edge security to deliver mission-critical solutions for enterprises. Our facilities offer scalable, reliable, and secure colocation services that meet the highest industry standards, ensuring seamless operations for businesses in the digital age.",
+    image: "/assets/images/residental.jpg",
+    stats: [
+      { label: "2 Million sq.ft Developed" },
+      { label: "1.5 Million sq.ft Planned" },
     ],
   },
 ];

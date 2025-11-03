@@ -90,7 +90,7 @@ export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
           {items.map((item) => (
             <div
               key={item.id}
-              className="embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative h-[300px] md:h-[420px] overflow-hidden"
+              className="cursor-pointer embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative h-[300px] md:h-[420px] overflow-hidden"
             >
               <Image
                 src={item.image}

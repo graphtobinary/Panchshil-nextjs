@@ -15,7 +15,7 @@ export default function Home() {
       <Header />
       <Hero />
       <WelcomeSection />
-      <Accordion items={accordionItems} defaultOpen={3} />
+      <Accordion items={accordionItems} defaultOpen={1} />
       <Projects />
       <Signature />
       <Services />

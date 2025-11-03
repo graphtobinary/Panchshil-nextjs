@@ -85,7 +85,7 @@ export function ServicesCarousel({ items }: ServicesCarouselProps) {
           {items.map((item) => (
             <div
               key={item.id}
-              className="embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative rounded-sm overflow-hidden border border-black-chocolate/10 bg-white"
+              className="cursor-pointer embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative rounded-sm overflow-hidden border border-black-chocolate/10 bg-white"
             >
               <div className="relative h-[260px] md:h-[320px]">
                 <Image
