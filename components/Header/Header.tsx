@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function Header() {
@@ -16,12 +17,12 @@ export function Header() {
         {/* Logo */}
         <div className="flex justify-center pt-8 pb-4">
           <Link href="/" className="flex flex-col items-center">
-            <div className="w-12 h-12 bg-black relative rounded-sm flex items-center justify-center">
-              <div className="w-8 h-8 bg-yellow-400 rounded-full"></div>
-            </div>
-            <span className="text-white mt-2 text-lg tracking-wide font-display">
-              Panchshil
-            </span>
+            <Image
+              src="/assets/images/panchshil-logo.png"
+              alt="Panchshil"
+              width={98}
+              height={98}
+            />
           </Link>
         </div>
 
