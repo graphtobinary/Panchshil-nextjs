@@ -24,18 +24,23 @@ export function AccordionItem({
   onToggle,
 }: AccordionItemProps) {
   const itemRef = useRef<HTMLDivElement>(null);
+  const clickRef = useRef(false);
 
   // When an item opens, scroll it to the top of the viewport smoothly
   useEffect(() => {
-    if (isOpen && itemRef.current) {
+    if (isOpen && clickRef.current && itemRef.current) {
       itemRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      clickRef.current = false; // reset after scroll
     }
   }, [isOpen]);
   return (
     <div ref={itemRef}>
       {/* Accordion Header */}
       <button
-        onClick={onToggle}
+        onClick={() => {
+          clickRef.current = true;
+          onToggle();
+        }}
         className="flex cursor-pointer items-center gap-4 justify-between py-6 px-4 md:px-8 bg-[#FFFAF7] border-b border-gray-200 hover:bg-gray-50 transition-colors w-4/5 mx-auto"
       >
         <div className="flex items-center gap-6 w-full justify-between">
