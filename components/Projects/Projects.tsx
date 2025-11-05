@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ProjectsCarousel } from "./ProjectsCarousel";
 import { ProjectCardData, RegionKey, TabKey, CountryKey } from "@/interfaces";
 
@@ -355,11 +355,33 @@ export function Projects() {
   const [country, setCountry] = useState<CountryKey>("dubai");
   const [active, setActive] = useState<TabKey>("residential");
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="w-full bg-[#FFFAF7] py-20">
+    <section ref={sectionRef} className="w-full bg-[#FFFAF7] py-20">
       <div className=" mx-auto">
         {/* Title + Subtitle */}
-        <div className="text-center mb-10">
+        <div
+          className={`text-center mb-10 ${isInView ? "animate-fade-in-up" : "opacity-0"}`}
+        >
           <div className="text-lg tracking-[0.2em] font-medium text-gold-beige mb-2">
             WE ARE NOW
           </div>
@@ -369,7 +391,9 @@ export function Projects() {
         </div>
 
         {/* Region Tabs */}
-        <div className="flex items-center justify-center gap-12 mb-12">
+        <div
+          className={`flex items-center justify-center gap-12 mb-12 ${isInView ? "animate-fade-in-up-delay-1" : "opacity-0"}`}
+        >
           {(["india", "international"] as RegionKey[]).map((r) => {
             const isActive = r === region;
             return (
@@ -395,7 +419,9 @@ export function Projects() {
 
         {/* Category Tabs (for India) or Country Tabs (for International) */}
         {region === "india" ? (
-          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-20">
+          <div
+            className={`flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-20 ${isInView ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
+          >
             {tabs.map((t) => {
               const isActive = t.key === active;
               return (
@@ -415,7 +441,9 @@ export function Projects() {
             })}
           </div>
         ) : (
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-10 mb-20">
+          <div
+            className={`flex flex-wrap items-center justify-center gap-8 md:gap-10 mb-20 ${isInView ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
+          >
             {(["dubai", "maldives", "srilanka"] as CountryKey[]).map((c) => {
               const isActive = c === country;
               return (
@@ -440,7 +468,9 @@ export function Projects() {
         )}
 
         {/* Carousel with progress + top-right arrows inside */}
-        <div className="relative">
+        <div
+          className={`relative ${isInView ? "animate-fade-in-up-delay-3" : "opacity-0"}`}
+        >
           <ProjectsCarousel
             items={
               region === "india"

@@ -71,38 +71,50 @@ export function AccordionItem({
           </div>
 
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-black/40 to-black/80 "></div>
+          <div className="absolute inset-0 bg-linear-to-b from-white/60 via-black/40 to-black/80 "></div>
 
           {/* Content Overlay */}
           <div className="relative z-10 h-full flex flex-col justify-end items-center max-w-[1200px] mx-auto px-6 md:px-12 py-16">
             {/* Title */}
-            <h3 className="text-5xl uppercase md:text-4xl  font-display-semi text-white mb-6 max-w-3xl">
+            <h3
+              className={`text-5xl uppercase md:text-4xl  font-display-semi text-white mb-6 max-w-3xl ${
+                isOpen ? "animate-fade-in-up" : "opacity-0"
+              }`}
+            >
               {title}
             </h3>
 
             {/* Description */}
-            <p className="text-base md:text-lg text-center text-white/95 mb-8 max-w-3xl leading-relaxed">
+            <p
+              className={`text-base md:text-lg text-center text-white/95 mb-8 max-w-3xl leading-relaxed ${
+                isOpen ? "animate-fade-in-up-delay-1" : "opacity-0"
+              }`}
+            >
               {description}
             </p>
 
-            {/* Stats */}
-            {stats && stats.length > 0 && (
-              <div className="flex flex-wrap gap-6 md:gap-8 text-white">
-                {stats.map((stat, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <span className="text-lg md:text-xl">•</span>
-                    <span className="text-base md:text-lg font-display-semi">
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
+            {/* Stats + CTA Combined with animation */}
+            <div
+              className={`${isOpen ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
+            >
+              {stats && stats.length > 0 && (
+                <div className="flex flex-wrap gap-6 md:gap-8 text-white">
+                  {stats.map((stat, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <span className="text-lg md:text-xl">•</span>
+                      <span className="text-base md:text-lg font-display-semi">
+                        {stat.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* CTA Button */}
+              <div className="flex justify-center pt-5">
+                <Button variant="hero" size="lg" className="w-48">
+                  Learn More
+                </Button>
               </div>
-            )}
-            {/* CTA Button */}
-            <div className="flex justify-center pt-5">
-              <Button variant="hero" size="lg" className="w-48">
-                Learn More
-              </Button>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 type NewsCard = {
   id: string;
@@ -10,6 +11,24 @@ type NewsCard = {
 };
 
 export function LatestNews() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
   const items: NewsCard[] = [
     {
       id: "latest",
@@ -29,11 +48,11 @@ export function LatestNews() {
   ];
 
   return (
-    <section className="w-full bg-[#FFFAF7] py-10">
+    <section ref={sectionRef} className="w-full bg-[#FFFAF7] py-10">
       {/* Mobile: horizontal scroll; Desktop: 3 columns */}
       <div className="">
         <div
-          className="grid grid-cols-1  md:grid-cols-3  mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [-ms-overflow-style:none]"
+          className={`grid grid-cols-1  md:grid-cols-3  mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [-ms-overflow-style:none] ${isInView ? "animate-fade-in-up" : "opacity-0"}`}
           style={{ WebkitOverflowScrolling: "touch" }}
         >
           {items.map((item) => (
@@ -51,7 +70,7 @@ export function LatestNews() {
                   sizes="(min-width: 768px) 33vw, 80vw"
                 />
                 {/* overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-white/40 to-black/70" />
+                <div className="absolute inset-0 bg-linear-to-b from-black/10 via-white/40 to-black/70" />
 
                 <div className="absolute inset-0 flex flex-col items-center justify-end p-6 text-white">
                   <div className="text-base md:text-lg font-display-semi tracking-wide">

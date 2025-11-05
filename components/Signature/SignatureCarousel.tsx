@@ -20,11 +20,13 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
 
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setCanPrev(emblaApi.canScrollPrev());
     setCanNext(emblaApi.canScrollNext());
+    setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
   useEffect(() => {
@@ -81,56 +83,60 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
 
               {/* Text strip */}
               <div className="bg-[#F5EEE6] py-10">
-                <div className="mx-auto px-6 text-center">
+                <div className="mx-auto px-2 md:px-6 text-center">
                   <h3 className="text-black-chocolate text-base font-display-semi md:text-xl tracking-wide mb-6">
                     RAAYA BY ATMOSPHERE
                   </h3>
 
-                  <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 text-gold-beige">
-                    <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 text-gold-beige">
+                    <div className="flex items-center md:gap-3 gap-2">
                       <Image
                         src="/assets/images/landscape-icon.png"
                         alt="Lush green landscape"
                         width={28}
                         height={28}
+                        className="w-5 h-5 md:w-6 md:h-6"
                       />
-                      <span className="text-sm md:text-base font-display-semi">
+                      <span className="text-xs md:text-base font-display-semi">
                         LUSH GREEN LANDSCAPE
                       </span>
                     </div>
                     <span className="hidden md:inline h-6 w-px bg-black-chocolate/20" />
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center md:gap-3 gap-2">
                       <Image
                         src="/assets/images/living-room-icon.png"
                         alt="living room "
                         width={28}
                         height={28}
+                        className="w-5 h-5 md:w-6 md:h-6"
                       />
-                      <span className="text-sm md:text-base font-display-semi">
+                      <span className="text-xs md:text-base font-display-semi">
                         SPACIOUS APARTMENTS
                       </span>
                     </div>
                     <span className="hidden md:inline h-6 w-px bg-black-chocolate/20" />
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center md:gap-3 gap-2">
                       <Image
                         src="/assets/images/stars-icon.png"
                         alt="stars icon"
                         width={28}
                         height={28}
+                        className="w-5 h-5 md:w-6 md:h-6"
                       />
-                      <span className="text-sm md:text-base font-display-semi">
+                      <span className="text-xs md:text-base font-display-semi">
                         UNDERGROUND SPA
                       </span>
                     </div>
                     <span className="hidden md:inline h-6 w-px bg-black-chocolate/20" />
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center md:gap-3 gap-2">
                       <Image
                         src="/assets/images/facial-massage-icon.png"
                         alt="stars icon"
                         width={28}
                         height={28}
+                        className="w-5 h-5 md:w-6 md:h-6"
                       />
-                      <span className="text-sm md:text-base font-display-semi">
+                      <span className="text-xs md:text-base font-display-semi">
                         UNDERGROUND SPA
                       </span>
                     </div>
@@ -146,6 +152,22 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Carousel Dots */}
+      <div className="flex items-center justify-center gap-2 mt-8 md:hidden">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => emblaApi?.scrollTo(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            className={`transition-all duration-300 rounded-full ${
+              selectedIndex === index
+                ? "bg-gold-beige w-8 h-2"
+                : "bg-gold-beige/40 w-2 h-2 hover:bg-gold-beige/60"
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
