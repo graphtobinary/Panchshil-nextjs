@@ -7,8 +7,23 @@ import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { Button } from "@/components/Button";
 
+interface Feature {
+  icon: string;
+  iconAlt: string;
+  text: string;
+}
+
+interface SlideData {
+  id: string;
+  src: string;
+  alt: string;
+  title: string;
+  features: Feature[];
+  ctaText: string;
+}
+
 interface SignatureCarouselProps {
-  images: { id: string; src: string; alt: string }[];
+  images: SlideData[];
 }
 
 export function SignatureCarousel({ images }: SignatureCarouselProps) {
@@ -85,66 +100,40 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
               <div className="bg-[#F5EEE6] py-10">
                 <div className="mx-auto px-2 md:px-6 text-center">
                   <h3 className="text-black-chocolate text-base font-display-semi md:text-xl tracking-wide mb-6">
-                    RAAYA BY ATMOSPHERE
+                    {img.title}
                   </h3>
 
                   <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 text-gold-beige">
-                    <div className="flex items-center md:gap-3 gap-2">
-                      <Image
-                        src="/assets/images/landscape-icon.png"
-                        alt="Lush green landscape"
-                        width={28}
-                        height={28}
-                        className="w-5 h-5 md:w-6 md:h-6"
-                      />
-                      <span className="text-xs md:text-base font-display-semi">
-                        LUSH GREEN LANDSCAPE
-                      </span>
-                    </div>
-                    <span className="hidden md:inline h-6 w-px bg-black-chocolate/20" />
-                    <div className="flex items-center md:gap-3 gap-2">
-                      <Image
-                        src="/assets/images/living-room-icon.png"
-                        alt="living room "
-                        width={28}
-                        height={28}
-                        className="w-5 h-5 md:w-6 md:h-6"
-                      />
-                      <span className="text-xs md:text-base font-display-semi">
-                        SPACIOUS APARTMENTS
-                      </span>
-                    </div>
-                    <span className="hidden md:inline h-6 w-px bg-black-chocolate/20" />
-                    <div className="flex items-center md:gap-3 gap-2">
-                      <Image
-                        src="/assets/images/stars-icon.png"
-                        alt="stars icon"
-                        width={28}
-                        height={28}
-                        className="w-5 h-5 md:w-6 md:h-6"
-                      />
-                      <span className="text-xs md:text-base font-display-semi">
-                        UNDERGROUND SPA
-                      </span>
-                    </div>
-                    <span className="hidden md:inline h-6 w-px bg-black-chocolate/20" />
-                    <div className="flex items-center md:gap-3 gap-2">
-                      <Image
-                        src="/assets/images/facial-massage-icon.png"
-                        alt="stars icon"
-                        width={28}
-                        height={28}
-                        className="w-5 h-5 md:w-6 md:h-6"
-                      />
-                      <span className="text-xs md:text-base font-display-semi">
-                        UNDERGROUND SPA
-                      </span>
-                    </div>
+                    {img.features.flatMap((feature, featureIndex) =>
+                      [
+                        <div
+                          key={`feature-${featureIndex}`}
+                          className="flex items-center md:gap-3 gap-2"
+                        >
+                          <Image
+                            src={feature.icon}
+                            alt={feature.iconAlt}
+                            width={28}
+                            height={28}
+                            className="w-5 h-5 md:w-6 md:h-6"
+                          />
+                          <span className="text-xs md:text-base font-display-semi">
+                            {feature.text}
+                          </span>
+                        </div>,
+                        featureIndex < img.features.length - 1 && (
+                          <span
+                            key={`separator-${featureIndex}`}
+                            className="hidden md:inline h-6 w-px bg-black-chocolate/20"
+                          />
+                        ),
+                      ].filter(Boolean)
+                    )}
                   </div>
 
                   <div className="mt-8">
                     <Button variant="signature" className="px-6">
-                      Discover
+                      {img.ctaText}
                     </Button>
                   </div>
                 </div>

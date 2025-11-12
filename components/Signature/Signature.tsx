@@ -27,16 +27,88 @@ export function Signature() {
       id: "raya-1",
       src: "/assets/images/raya-by-atmosphere.jpg",
       alt: "Raaya by Atmosphere",
+      title: "42 East Residences",
+      features: [
+        {
+          icon: "/assets/images/landscape-icon.png",
+          iconAlt: "Lush green landscape",
+          text: "An exclusive collection of only 42 residences",
+        },
+        {
+          icon: "/assets/images/living-room-icon.png",
+          iconAlt: "living room",
+          text: "Boutique island living just minutes from the beach",
+        },
+        {
+          icon: "/assets/images/stars-icon.png",
+          iconAlt: "stars icon",
+          text: "Spacious sunlit living areas with serene views of Dubai",
+        },
+        {
+          icon: "/assets/images/facial-massage-icon.png",
+          iconAlt: "facial massage icon",
+          text: "Amenity floor featuring infinity-edge pool, spa area, yoga deck, fitness centre, clubhouse and much more",
+        },
+      ],
+      ctaText: "Discover",
     },
     {
       id: "raya-2",
       src: "/assets/images/raya-by-atmosphere.jpg",
       alt: "Raaya by Atmosphere",
+      title: "RAAYA BY ATMOSPHERE",
+      features: [
+        {
+          icon: "/assets/images/landscape-icon.png",
+          iconAlt: "Lush green landscape",
+          text: "A luxury island retreat with 167 beach and over-water villas in the Raa Atoll",
+        },
+        {
+          icon: "/assets/images/living-room-icon.png",
+          iconAlt: "living room",
+          text: "88% of the island preserved in greenery",
+        },
+        {
+          icon: "/assets/images/stars-icon.png",
+          iconAlt: "stars icon",
+          text: "Over 12 adventure and leisure experiences",
+        },
+        {
+          icon: "/assets/images/facial-massage-icon.png",
+          iconAlt: "facial massage icon",
+          text: "Seven signature restaurants offering global flavours",
+        },
+      ],
+      ctaText: "Discover",
     },
     {
       id: "raya-3",
       src: "/assets/images/raya-by-atmosphere.jpg",
       alt: "Raaya by Atmosphere",
+      title: "Omnia",
+      features: [
+        {
+          icon: "/assets/images/landscape-icon.png",
+          iconAlt: "Lush green landscape",
+          text: "Only 12 residences with one apartment per level ",
+        },
+        {
+          icon: "/assets/images/living-room-icon.png",
+          iconAlt: "living room",
+          text: "Built on freehold land in Bandra West",
+        },
+        {
+          icon: "/assets/images/stars-icon.png",
+          iconAlt: "stars icon",
+          text: "Spacious decks providing serene views of Almeida Park",
+        },
+        {
+          icon: "/assets/images/facial-massage-icon.png",
+          iconAlt: "facial massage icon",
+          text: "An array of amenities including a rooftop swimming pool, party lounge, fitness centre and yoga room",
+        },
+      ],
+      ctaText: "Discover",
     },
   ];
 

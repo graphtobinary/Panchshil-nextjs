@@ -7,7 +7,8 @@ import Image from "next/image";
 import { Button } from "../Button/Button";
 
 export interface SlideData {
-  image: string;
+  image?: string;
+  video?: string;
   title: string;
   description: string;
   ctaText: string;
@@ -60,13 +61,25 @@ export function CustomCarousel({ slides }: CustomCarouselProps) {
         <div className="embla__container flex h-full">
           {slides.map((slide, index) => (
             <div key={index} className="embla__slide flex-[0_0_100%] relative">
-              <Image
-                src={slide.image}
-                alt={slide.title}
-                fill
-                className="object-cover"
-                priority={index === 0}
-              />
+              {slide.video ? (
+                <video
+                  src={slide.video}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                />
+              ) : (
+                <Image
+                  src={slide.image ?? ""}
+                  alt={slide.title}
+                  fill
+                  className="object-cover"
+                  priority={index === 0}
+                />
+              )}
               {/* Overlay for better text readability */}
               <div className="absolute inset-0 bg-black/20"></div>
             </div>

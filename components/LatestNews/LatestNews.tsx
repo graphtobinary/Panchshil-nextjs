@@ -33,17 +33,17 @@ export function LatestNews() {
     {
       id: "latest",
       title: "LATEST NEWS",
-      image: "/assets/images/latest-news.jpg",
+      image: "/assets/images/news.jpg",
     },
     {
       id: "blogs",
       title: "EXPERT BLOGS",
-      image: "/assets/images/expert-blogs.jpg",
+      image: "/assets/images/Blogs.jpg",
     },
     {
       id: "sustain",
       title: "SUSTANIBILITY",
-      image: "/assets/images/sustanibility.jpg",
+      image: "/assets/images/Sustainability.jpg",
     },
   ];
 
