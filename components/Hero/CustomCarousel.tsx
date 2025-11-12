@@ -20,7 +20,7 @@ interface CustomCarouselProps {
 
 export function CustomCarousel({ slides }: CustomCarouselProps) {
   const autoplay = useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+    Autoplay({ delay: 15000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
