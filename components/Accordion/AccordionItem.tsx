@@ -65,7 +65,7 @@ export function AccordionItem({
               src={image}
               alt={title}
               fill
-              className="object-cover"
+              className="object-fill"
               priority
             />
           </div>
