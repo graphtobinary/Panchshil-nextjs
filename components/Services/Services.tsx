@@ -25,27 +25,27 @@ export function Services() {
   const items: ServiceCardData[] = [
     {
       id: "facility",
-      title: "FACILITY",
+      title: "Facility Management",
       image: "/assets/images/Facility-Management.jpg",
     },
     {
       id: "fitout",
-      title: "FIT-OUT",
+      title: "Fit-Out Management",
       image: "/assets/images/Fit-Out-Management.jpg",
     },
     {
       id: "project",
-      title: "PROJECT",
+      title: "Project Management",
       image: "/assets/images/Project-Management.jpg",
     },
     {
       id: "residential",
-      title: "RESIDENTAL",
+      title: "Residential Leasing & Resale",
       image: "/assets/images/Residential-Leasing.jpg",
     },
     {
       id: "development",
-      title: "Development",
+      title: "Development Management",
       image: "/assets/images/Development-Managment.jpg",
     },
   ];

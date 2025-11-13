@@ -53,7 +53,7 @@ export const accordionItems: AccordionData[] = [
   },
   {
     id: 5,
-    title: "Data Center",
+    title: "Data Centres",
     description:
       "Powering the digital future with state-of-the-art infrastructure. Panchshil's data centers combine robust technology, redundant power systems, and cutting-edge security to deliver mission-critical solutions for enterprises. Our facilities offer scalable, reliable, and secure colocation services that meet the highest industry standards, ensuring seamless operations for businesses in the digital age.",
     image: "/assets/images/data-center-wide.webp",

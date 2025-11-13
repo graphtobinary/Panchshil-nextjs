@@ -1,14 +1,39 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+
+interface NavItemChild {
+  label: string;
+  href: string;
+}
+
+interface NavItem {
+  label: string;
+  href: string;
+  child?: NavItemChild[];
+}
 
 export function Header() {
-  const navItems = [
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
+  const navItems: NavItem[] = [
     { label: "About", href: "/about" },
     { label: "Residential", href: "/residential" },
     { label: "Office Parks", href: "/office-parks" },
     { label: "Data Centres", href: "/data-centres" },
     { label: "Hospitality", href: "/hospitality" },
     { label: "Retail & F&B", href: "/retail" },
+    {
+      label: "International Projects",
+      href: "/international-projects",
+      child: [
+        { label: "Dubai", href: "/dubai" },
+        { label: "Maldives", href: "/maldives" },
+        { label: "Sri Lanka", href: "/sri-lanka" },
+      ],
+    },
   ];
 
   return (
@@ -30,13 +55,46 @@ export function Header() {
         <nav className="flex justify-center">
           <ul className="flex flex-wrap justify-center gap-6 lg:gap-12 text-white">
             {navItems.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={"#"}
-                  className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light"
+              <li key={item.href} className="relative">
+                <div
+                  className={`relative ${item.child ? "pb-3" : ""}`}
+                  onMouseEnter={() => item.child && setHoveredItem(item.href)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
-                  {item.label}
-                </Link>
+                  <Link
+                    href={item.href}
+                    className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light block"
+                  >
+                    {item.label}
+                  </Link>
+
+                  {/* Dropdown Menu */}
+                  {item.child && (
+                    <div
+                      className={`absolute top-full left-1/2 -translate-x-1/2 z-50 transition-all duration-200 ${
+                        hoveredItem === item.href
+                          ? "opacity-100 visible"
+                          : "opacity-0 invisible pointer-events-none"
+                      }`}
+                      style={{ marginTop: "-0.5rem" }}
+                    >
+                      <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg min-w-[160px] py-2">
+                        <ul className="flex flex-col">
+                          {item.child.map((childItem) => (
+                            <li key={childItem.href}>
+                              <Link
+                                href={childItem.href}
+                                className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 transition-colors hover:font-medium"
+                              >
+                                {childItem.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </li>
             ))}
           </ul>

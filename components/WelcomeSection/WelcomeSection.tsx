@@ -37,7 +37,7 @@ export function WelcomeSection() {
     { label: "55", value: "Projects" },
     { label: "23", value: "Years Of Legacy" },
     { label: "35", value: "Million sq.ft developed" },
-    { label: "45", value: "Million sq.ft Under Development" },
+    { label: "43", value: "Million sq.ft Under Development" },
   ];
 
   return (

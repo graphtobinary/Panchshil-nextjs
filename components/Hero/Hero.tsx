@@ -5,9 +5,9 @@ export function Hero() {
   const slides: SlideData[] = [
     {
       video: "/assets/videos/omnia--banner.mp4",
-      title: "Your Sanctuary of Serenity ",
+      title: "Omnia - Your Sanctuary Of Serenity",
       description:
-        "In the heart of one of Mumbai's liveliest neighbourhoods lies a tower that prioritizes quietude, calm and character. Omnia is built on freehold land and designed around the rarest luxury in Bandra —uninterrupted privacy.",
+        "In the heart of one of Mumbai's liveliest neighbourhoods lies a tower that prioritizes solitude, calm and character. Omnia is built on freehold land and designed around the rarest luxury in Bandra —uninterrupted privacy.",
       ctaText: "Discover",
     },
     {

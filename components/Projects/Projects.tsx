@@ -22,20 +22,20 @@ const indiaDataByTab: Record<TabKey, ProjectCardData[]> = {
     },
     {
       id: "yoopune",
-      title: "YOO PUNE",
+      title: "Yoopune",
 
       location: "Pune, India",
       image: "/assets/images/yoopune thumbnil.jpg",
     },
     {
       id: "yoovillas",
-      title: "YOO VILLAS",
+      title: "Yoovillas",
       location: "Pune, India",
       image: "/assets/images/yoovillas-thumbnil.jpg",
     },
     {
       id: "omnia",
-      title: "OMNIA",
+      title: "Omnia",
       location: "Mumbai, India",
       image: "/assets/images/omnia-thumbnil.png",
     },
@@ -49,19 +49,19 @@ const indiaDataByTab: Record<TabKey, ProjectCardData[]> = {
     },
     {
       id: "freezone",
-      title: "EON Freezone",
+      title: "EON Free Zone I",
       location: "Pune, India",
       image: "/assets/images/Eon-free-zone.webp",
     },
     {
       id: "techpark",
-      title: "Techpark One",
+      title: "Tech Park One",
       location: "Pune, India",
       image: "/assets/images/techparkone.webp",
     },
     {
       id: "wts",
-      title: "World Trade Centre",
+      title: "World Trade Center",
       location: "Pune, India",
       image: "/assets/images/worldtradecenter.jpg",
     },
@@ -69,7 +69,7 @@ const indiaDataByTab: Record<TabKey, ProjectCardData[]> = {
   hospitality: [
     {
       id: "carlton",
-      title: "Ritz Carlton",
+      title: "The Ritz-Carlton",
       location: "Pune, India",
       image: "/assets/images/ritz.webp",
     },
@@ -121,13 +121,13 @@ const indiaDataByTab: Record<TabKey, ProjectCardData[]> = {
     },
     {
       id: "waterfront",
-      title: "SOHO Studio",
+      title: "SOHO Street",
       location: "Pune, India",
       image: "/assets/images/soho.webp",
     },
     {
       id: "pavillion",
-      title: "Pavillion",
+      title: "The Pavillion",
       location: "Pune, India",
       image: "/assets/images/The-Pavillion.jpg",
     },
@@ -147,7 +147,7 @@ const dubaiDataByTab: Record<TabKey, ProjectCardData[]> = {
       id: "east-residences",
       title: "42 East Residences",
       location: "Dubai, UAE",
-      image: "/assets/images/yoo-pune.jpg",
+      image: "/assets/images/42east-dubai-project.png",
     },
     // {
     //   id: "dubai-towers1",
@@ -219,7 +219,7 @@ const maldivesDataByTab: Record<TabKey, ProjectCardData[]> = {
     {
       id: "raaya-atmosphere",
       title: "Raaya by atmosphere",
-      location: "Maldives",
+      location: "Raa Atoll, Kudakurathu Island, Maldives",
       image: "/assets/images/raaya.webp",
     },
     {
@@ -253,66 +253,40 @@ const maldivesDataByTab: Record<TabKey, ProjectCardData[]> = {
   retail: [],
 };
 
-// const srilankaDataByTab: Record<TabKey, ProjectCardData[]> = {
-//   residential: [
-//     {
-//       id: "srilanka-res1",
-//       title: "SKY TOWERS",
-//       location: "Colombo, Sri Lanka",
-//       image: "/assets/images/panchshil-towers.jpg",
-//     },
-//     {
-//       id: "srilanka-res2",
-//       title: "URBAN LIFESTYLE",
-//       location: "Colombo, Sri Lanka",
-//       image: "/assets/images/yoo-pune.jpg",
-//     },
-//   ],
-//   office: [
-//     {
-//       id: "srilanka-office1",
-//       title: "BAY FRONT",
-//       location: "Colombo, Sri Lanka",
-//       image: "/assets/images/waterfront.jpg",
-//     },
-//     {
-//       id: "srilanka-office2",
-//       title: "ICONIC HUB",
-//       location: "Colombo, Sri Lanka",
-//       image: "/assets/images/yoo-pune.jpg",
-//     },
-//   ],
-//   hospitality: [
-//     {
-//       id: "srilanka-hotel1",
-//       title: "GRAND TOWER",
-//       location: "Colombo, Sri Lanka",
-//       image: "/assets/images/panchshil-towers.jpg",
-//     },
-//     {
-//       id: "srilanka-hotel2",
-//       title: "METRO RESORT",
-//       location: "Colombo, Sri Lanka",
-//       image: "/assets/images/hospitality.jpg",
-//     },
-//   ],
-//   datacenter: [
-//     {
-//       id: "srilanka-dc1",
-//       title: "EDGE DC",
-//       location: "Colombo, Sri Lanka",
-//       image: "/assets/images/yoo-pune.jpg",
-//     },
-//   ],
-//   retail: [
-//     {
-//       id: "srilanka-retail1",
-//       title: "GLOBAL GALLERIA",
-//       location: "Colombo, Sri Lanka",
-//       image: "/assets/images/panchshil-towers.jpg",
-//     },
-//   ],
-// };
+const srilankaDataByTab: Record<TabKey, ProjectCardData[]> = {
+  residential: [
+    {
+      id: "srilanka-carlton",
+      title: "The Ritz-Carlton Reserve",
+      location: "Pottuvil, Sri Lanka",
+      image: "/assets/images/ritz-carlton-srilanka.jpeg",
+    },
+    //   {
+    //     id: "srilanka-res2",
+    //     title: "URBAN LIFESTYLE",
+    //     location: "Colombo, Sri Lanka",
+    //     image: "/assets/images/yoo-pune.jpg",
+    //   },
+    // ],
+    // office: [
+    //   {
+    //     id: "srilanka-office1",
+    //     title: "BAY FRONT",
+    //     location: "Colombo, Sri Lanka",
+    //     image: "/assets/images/waterfront.jpg",
+    //   },
+    //   {
+    //     id: "srilanka-office2",
+    //     title: "ICONIC HUB",
+    //     location: "Colombo, Sri Lanka",
+    //     image: "/assets/images/yoo-pune.jpg",
+    //   },
+  ],
+  office: [],
+  hospitality: [],
+  datacenter: [],
+  retail: [],
+};
 
 // Root: Region -> Country -> Category -> Projects
 const projectsByCountry: Record<
@@ -321,7 +295,7 @@ const projectsByCountry: Record<
 > = {
   dubai: dubaiDataByTab,
   maldives: maldivesDataByTab,
-  // srilanka: srilankaDataByTab,
+  srilanka: srilankaDataByTab,
 };
 
 const projectsByRegion: Record<RegionKey, Record<TabKey, ProjectCardData[]>> = {
@@ -423,7 +397,7 @@ export function Projects() {
           <div
             className={`flex flex-wrap items-center justify-center gap-8 md:gap-10 mb-20 ${isInView ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
           >
-            {(["dubai", "maldives"] as CountryKey[]).map((c) => {
+            {(["dubai", "maldives", "srilanka"] as CountryKey[]).map((c) => {
               const isActive = c === country;
               return (
                 <button
