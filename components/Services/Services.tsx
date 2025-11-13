@@ -31,7 +31,7 @@ export function Services() {
     {
       id: "fitout",
       title: "Fit-Out Management",
-      image: "/assets/images/Fit-Out-Management.jpg",
+      image: "/assets/images/Fit-Out-Management-new.jpg",
     },
     {
       id: "project",

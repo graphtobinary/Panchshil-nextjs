@@ -21,27 +21,27 @@ ${"\n"}
 `,
       ctaText: "Explore Homes",
     },
-    // {
-    //   image: "/assets/images/banner-image.jpg",
-    //   title: "Global Office Districts",
-    //   description:
-    //     "World-class commercial spaces designed for modern businesses. Our office parks and commercial developments offer cutting-edge facilities and strategic locations that drive success.",
-    //   ctaText: "View Offices",
-    // },
-    // {
-    //   image: "/assets/images/banner-image.jpg",
-    //   title: "Iconic Hospitality Destinations",
-    //   description:
-    //     "From luxury hotels to convention centers, we create memorable experiences. Our hospitality portfolio features award-winning properties that blend elegance with exceptional service.",
-    //   ctaText: "Book Now",
-    // },
-    // {
-    //   image: "/assets/images/banner-image.jpg",
-    //   title: "Sustainable Urban Development",
-    //   description:
-    //     "Building tomorrow's cities today with sustainable practices. Our commitment to green building and environmental responsibility shapes every project we undertake.",
-    //   ctaText: "Learn More",
-    // },
+    {
+      video: "/assets/videos/trump-towers.mp4",
+      title: "Trump Towers",
+      description:
+        "Trump Towers Pune comprises 2 striking glass façade towers of 23 storeys each, offering 46 spectacular single-floor residences. As India’s first ready-to-move-in Trump branded residences, they are located in the heart of Pune",
+      ctaText: "Discover",
+    },
+    {
+      video: "/assets/videos/yoopune.mp4",
+      title: "yoopune",
+      description:
+        "yoopune is India's first ready-to-move-in YOO branded residence. Spanning an impressive ~13 acres, yoopune epitomizes exclusive designer-led living. Nestled amidst 5 acres of historic, lush green landscape, these residences seamlessly blend luxury with nature.",
+      ctaText: "Discover",
+    },
+    {
+      video: "/assets/videos/yoovillas.mp4",
+      title: "YOO Villas",
+      description:
+        "Reinventing new and unique experiences, YOO Villas are distinctively curated to foster a signature lifestyle. Offering beautiful villas at a picturesque location in collaboration with the YOO brand and styled by internationally renowned designer Kelly Hoppen.",
+      ctaText: "Discover",
+    },
   ];
 
   return (

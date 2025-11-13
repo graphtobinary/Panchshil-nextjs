@@ -5,11 +5,11 @@ import { ProjectsCarousel } from "./ProjectsCarousel";
 import { ProjectCardData, RegionKey, TabKey, CountryKey } from "@/interfaces";
 
 const tabs: { key: TabKey; label: string }[] = [
-  { key: "residential", label: "RESIDENTIAL" },
-  { key: "office", label: "OFFICE PARKS" },
-  { key: "hospitality", label: "HOSPITALITY" },
-  { key: "datacenter", label: "DATA CENTER" },
-  { key: "retail", label: "RETAIL & FB" },
+  { key: "residential", label: "Residential" },
+  { key: "office", label: "Office parks" },
+  { key: "hospitality", label: "Hospitality" },
+  { key: "datacenter", label: "Data center" },
+  { key: "retail", label: "Retail & F&B" },
 ];
 
 const indiaDataByTab: Record<TabKey, ProjectCardData[]> = {
@@ -22,14 +22,14 @@ const indiaDataByTab: Record<TabKey, ProjectCardData[]> = {
     },
     {
       id: "yoopune",
-      title: "Yoopune",
+      title: "yoopune",
 
       location: "Pune, India",
       image: "/assets/images/yoopune thumbnil.jpg",
     },
     {
       id: "yoovillas",
-      title: "Yoovillas",
+      title: "YOO Villas",
       location: "Pune, India",
       image: "/assets/images/yoovillas-thumbnil.jpg",
     },
@@ -97,19 +97,19 @@ const indiaDataByTab: Record<TabKey, ProjectCardData[]> = {
       id: "lpanchshil",
       title: "Lumina Panchshil JV LBOM 1",
       location: "Navi Mumbai, India",
-      image: "/assets/images/panchshil-towers.jpg",
+      image: "/assets/images/Lumina-PANCHSHIL-JV-LBOM-I.jpg",
     },
     {
       id: "lpanchshil2",
       title: "Lumina Panchshil JV LBOM 2",
       location: "Navi Mumbai, India",
-      image: "/assets/images/yoo-pune.jpg",
+      image: "/assets/images/Lumina-Panchshil-JV-LBOM-II.jpg",
     },
     {
       id: "airoli",
       title: "NTT NAV - Airoli DC - Phase 1",
       location: "Navi Mumbai, India",
-      image: "/assets/images/waterfront.jpg",
+      image: "/assets/images/Airoli-DC.jpg",
     },
   ],
   retail: [
@@ -358,7 +358,7 @@ export function Projects() {
                   if (r === "india") setActive("residential");
                 }}
                 className={
-                  "text-[12px] md:text-[16px] font-medium tracking-wider uppercase transition-colors " +
+                  "text-[12px] md:text-[16px] font-medium tracking-wider capitalize transition-colors " +
                   (isActive
                     ? "text-gold-beige border-b-3 border-gold-beige"
                     : "text-gold-beige/60 hover:text-gold-beige")
@@ -382,7 +382,7 @@ export function Projects() {
                   key={t.key}
                   onClick={() => setActive(t.key)}
                   className={
-                    "text-[12px] md:text-[16px] font-medium tracking-wider uppercase transition-colors " +
+                    "text-[12px] md:text-[16px] font-medium tracking-wider capitalize transition-colors " +
                     (isActive
                       ? "text-gold-beige border-b-3 border-gold-beige"
                       : "text-gold-beige/60 hover:text-gold-beige")

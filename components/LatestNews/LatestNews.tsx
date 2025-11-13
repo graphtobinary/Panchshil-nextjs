@@ -38,7 +38,7 @@ export function LatestNews() {
     {
       id: "blogs",
       title: "EXPERT BLOGS",
-      image: "/assets/images/Blogs.jpg",
+      image: "/assets/images/expert-blog.jpg",
     },
     {
       id: "sustain",

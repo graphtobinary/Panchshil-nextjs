@@ -96,7 +96,7 @@ export function ServicesCarousel({ items }: ServicesCarouselProps) {
                 />
               </div>
 
-              <div className="p-5">
+              <div className="p-5 flex items-center flex-col">
                 <div className="text-black-chocolate font-display-semi text-[15px] md:text-base">
                   {item.title}
                 </div>

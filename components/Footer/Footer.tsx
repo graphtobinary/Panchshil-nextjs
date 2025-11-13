@@ -28,11 +28,11 @@ export function Footer() {
   return (
     <footer className="w-full bg-[#FFFAF7] text-black-chocolate">
       {/* Row 1: Offices & Sales */}
-      <div className="max-w-[1200px] mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="max-w-[1200px] mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* India office */}
         <div>
           <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
-            INDIA OFFICE
+            HEAD OFFICE
           </div>
           <div className="space-y-2 text-sm">
             <p>Tech Park One,</p>
@@ -70,6 +70,28 @@ export function Footer() {
               height={18}
             />
             <span>+971 04 545 3481</span>
+          </div>
+        </div>
+
+        {/* Corporate office */}
+        <div>
+          <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
+            CORPORATE OFFICE
+          </div>
+          <div className="space-y-2 text-sm">
+            <p>Express Towers,</p>
+            <p>20th Floor, Nariman Point,</p>
+            <p>Mumbai - 400 021</p>
+            <p>India</p>
+          </div>
+          <div className="mt-4 flex items-center gap-2 text-sm">
+            <Image
+              src="/assets/images/call-icon.png"
+              alt="Phone"
+              width={18}
+              height={18}
+            />
+            <span>+91 22 66863939</span>
           </div>
         </div>
 

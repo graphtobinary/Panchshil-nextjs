@@ -105,7 +105,7 @@ export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
 
               {/* text overlay */}
               <div className="absolute left-0 right-0 bottom-0 p-5 text-white">
-                <div className="mt-1 text-[15px] md:text-[16px] font-display-semi capitalize">
+                <div className="mt-1 text-[15px] md:text-[16px] font-display-semi ">
                   {item.title}
                 </div>
                 <div className="text-sm md:text-[12px] tracking-wide opacity-90">

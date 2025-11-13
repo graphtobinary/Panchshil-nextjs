@@ -34,7 +34,7 @@ export function WelcomeSection() {
   }, []);
 
   const stats = [
-    { label: "55", value: "Projects" },
+    { label: "55+", value: "Projects" },
     { label: "23", value: "Years Of Legacy" },
     { label: "35", value: "Million sq.ft developed" },
     { label: "43", value: "Million sq.ft Under Development" },
