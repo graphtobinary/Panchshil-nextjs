@@ -111,7 +111,7 @@ export function WelcomeSection() {
       className="relative w-full min-h-screen overflow-hidden"
     >
       {/* Top Content Area with Background Color */}
-      <div className="relative bg-[#FFFAF7] pt-16 md:pt-24 pb-32 md:pb-0">
+      <div className="relative bg-[#FFFAF7] pt-16 md:pt-24">
         <div className="max-w-[1200px] mx-auto px-6 text-center">
           {/* Title */}
           <h2
