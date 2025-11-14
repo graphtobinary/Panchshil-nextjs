@@ -407,13 +407,13 @@ export function Projects() {
                     setActive("residential");
                   }}
                   className={
-                    "text-[12px] md:text-[16px] font-medium tracking-wider uppercase transition-colors " +
+                    "text-[12px] md:text-[16px] font-medium tracking-wider capitalize transition-colors " +
                     (isActive
                       ? "text-gold-beige border-b-3 border-gold-beige"
                       : "text-gold-beige/60 hover:text-gold-beige")
                   }
                 >
-                  {c}
+                  {c === "srilanka" ? "Sri Lanka" : c}
                 </button>
               );
             })}
