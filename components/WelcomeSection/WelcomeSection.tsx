@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/Button";
 
 type Stat = {
@@ -167,7 +166,7 @@ export function WelcomeSection() {
             size="lg"
             className={`w-56 ${isInView ? "animate-fade-in-up-delay-5" : "opacity-0"}`}
           >
-            View About Us Page
+            Learn More
           </Button>
         </div>
       </div>
@@ -179,12 +178,13 @@ export function WelcomeSection() {
             isInView ? "animate-fade-in-delay" : "opacity-0"
           }`}
         >
-          <Image
-            src="/assets/images/welcome-to-panchshil.jpg"
-            alt="Welcome to Panchshil"
-            fill
-            className="object-cover "
-            priority
+          <video
+            src="/assets/videos/EON-Sky.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
           />
         </div>
 

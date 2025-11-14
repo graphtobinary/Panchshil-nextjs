@@ -8,9 +8,9 @@ export function Footer() {
     "Hospitality",
     "Data Centres",
     "Residential",
-    "Retail & Fb",
+    "Retail & F&B",
   ];
-  const countries: string[] = ["Dubai", "Maldives", "Srilanka"];
+  const countries: string[] = ["Dubai", "Maldives", "Sri Lanka"];
   const quickLinks: string[] = [
     "About Us",
     "Services",
