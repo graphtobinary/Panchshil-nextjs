@@ -25,7 +25,8 @@ export function Signature() {
   const images = [
     {
       id: "raya-1",
-      src: "/assets/images/42east-dubai-project.png",
+      src: "/assets/images/42-EAST-Banner.jpg",
+      mobile_src: "/assets/images/42east-dubai-project.png",
       alt: "Raaya by Atmosphere",
       title: "42 East Residences",
       features: [
@@ -54,7 +55,8 @@ export function Signature() {
     },
     {
       id: "raya-2",
-      src: "/assets/images/raaya-wide.webp",
+      src: "/assets/images/Raaya-banner.jpg",
+      mobile_src: "/assets/images/raaya-wide.webp",
       alt: "Raaya by Atmosphere",
       title: "RAAYA BY ATMOSPHERE",
       features: [
@@ -83,7 +85,8 @@ export function Signature() {
     },
     {
       id: "raya-3",
-      src: "/assets/images/omnia-thumbnil.png",
+      src: "/assets/images/Omnia-banner.jpg",
+      mobile_src: "/assets/images/omnia-thumbnil.png",
       alt: "Omnia",
       title: "Omnia",
       features: [

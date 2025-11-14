@@ -13,9 +13,29 @@ interface Feature {
   text: string;
 }
 
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      if (typeof window !== "undefined") {
+        setIsMobile(window.innerWidth < breakpoint);
+      }
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, [breakpoint]);
+
+  return isMobile;
+}
+
 interface SlideData {
   id: string;
   src: string;
+  mobileSrc?: string;
+  mobile_src?: string;
   alt: string;
   title: string;
   features: Feature[];
@@ -36,6 +56,7 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const isMobile = useIsMobile();
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -84,62 +105,68 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
 
       <div className="embla-signature" ref={emblaRef}>
         <div className="embla-signature__container">
-          {images.map((img) => (
-            <div key={img.id} className="embla-signature__slide">
-              <div className="relative h-[60vh] md:h-[70vh]">
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  priority
-                  className="object-cover"
-                />
-              </div>
+          {images.map((img) => {
+            const imageSrc =
+              isMobile && (img.mobileSrc || img.mobile_src)
+                ? (img.mobileSrc ?? img.mobile_src ?? img.src)
+                : img.src;
+            return (
+              <div key={img.id} className="embla-signature__slide">
+                <div className="relative h-[60vh] md:h-[50vh]">
+                  <Image
+                    src={imageSrc}
+                    alt={img.alt}
+                    fill
+                    priority
+                    className="object-cover"
+                  />
+                </div>
 
-              {/* Text strip */}
-              <div className="bg-[#F5EEE6] py-10">
-                <div className="mx-auto px-2 md:px-6 text-center">
-                  <h3 className="text-black-chocolate text-base font-display-semi md:text-xl tracking-wide mb-6">
-                    {img.title}
-                  </h3>
+                {/* Text strip */}
+                <div className="bg-[#F5EEE6] py-10">
+                  <div className="mx-auto px-2 md:px-6 text-center">
+                    <h3 className="text-black-chocolate text-base font-display-semi md:text-xl tracking-wide mb-6">
+                      {img.title}
+                    </h3>
 
-                  <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 text-gold-beige">
-                    {img.features.flatMap((feature, featureIndex) =>
-                      [
-                        <div
-                          key={`feature-${featureIndex}`}
-                          className="flex items-center md:gap-3 gap-2"
-                        >
-                          <Image
-                            src={feature.icon}
-                            alt={feature.iconAlt}
-                            width={28}
-                            height={28}
-                            className="w-5 h-5 md:w-6 md:h-6"
-                          />
-                          <span className="text-xs md:text-base font-display-semi">
-                            {feature.text}
-                          </span>
-                        </div>,
-                        featureIndex < img.features.length - 1 && (
-                          <span
-                            key={`separator-${featureIndex}`}
-                            className="hidden md:inline h-6 w-px bg-black-chocolate/20"
-                          />
-                        ),
-                      ].filter(Boolean)
-                    )}
-                  </div>
+                    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 text-gold-beige">
+                      {img.features.flatMap((feature, featureIndex) =>
+                        [
+                          <div
+                            key={`feature-${featureIndex}`}
+                            className="flex items-center md:gap-3 gap-2"
+                          >
+                            <Image
+                              src={feature.icon}
+                              alt={feature.iconAlt}
+                              width={28}
+                              height={28}
+                              className="w-5 h-5 md:w-6 md:h-6"
+                            />
+                            <span className="text-xs md:text-base font-display-semi">
+                              {feature.text}
+                            </span>
+                          </div>,
+                          featureIndex < img.features.length - 1 && (
+                            <span
+                              key={`separator-${featureIndex}`}
+                              className="hidden md:inline h-6 w-px bg-black-chocolate/20"
+                            />
+                          ),
+                        ].filter(Boolean)
+                      )}
+                    </div>
 
-                  <div className="mt-8">
-                    <Button variant="signature" className="px-6">
-                      {img.ctaText}
-                    </Button>
+                    <div className="mt-8">
+                      <Button variant="signature" className="px-6">
+                        {img.ctaText}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
