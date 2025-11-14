@@ -65,7 +65,7 @@ export function AccordionItem({
               src={image}
               alt={title}
               fill
-              className="object-fill"
+              className="object-cover md:object-fill"
               priority
             />
           </div>
@@ -77,7 +77,7 @@ export function AccordionItem({
           <div className="relative z-10 h-full flex flex-col justify-end items-center max-w-[1200px] mx-auto px-6 md:px-12 py-16">
             {/* Title */}
             <h3
-              className={`text-5xl uppercase md:text-4xl  font-display-semi text-white mb-6 max-w-3xl ${
+              className={`text-3xl uppercase md:text-4xl  font-display-semi text-white mb-6 max-w-3xl ${
                 isOpen ? "animate-fade-in-up" : "opacity-0"
               }`}
             >
@@ -86,7 +86,7 @@ export function AccordionItem({
 
             {/* Description */}
             <p
-              className={`text-base md:text-lg text-center text-white/95 mb-8 max-w-3xl leading-relaxed ${
+              className={`text-xs md:text-lg text-center text-white/95 mb-8 max-w-3xl md:leading-relaxed ${
                 isOpen ? "animate-fade-in-up-delay-1" : "opacity-0"
               }`}
             >

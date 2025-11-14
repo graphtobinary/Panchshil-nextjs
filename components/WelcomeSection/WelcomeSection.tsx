@@ -4,6 +4,72 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/Button";
 
+type Stat = {
+  value: number;
+  suffix?: string;
+  description: string;
+};
+
+function useCountUp(targetValue: number, isActive: boolean, duration = 2000) {
+  const [currentValue, setCurrentValue] = useState(0);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    let animationFrame: number;
+    const startTime = performance.now();
+
+    const animate = (time: number) => {
+      const elapsed = time - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(easedProgress * targetValue);
+      setCurrentValue(value);
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [targetValue, isActive, duration]);
+
+  return currentValue;
+}
+
+function StatCard({
+  stat,
+  isActive,
+  delayClass,
+}: {
+  stat: Stat;
+  isActive: boolean;
+  delayClass: string;
+}) {
+  const displayValue = useCountUp(stat.value, isActive);
+  const suffix = stat.suffix ?? "";
+
+  return (
+    <div
+      className={`flex flex-col items-center ${
+        isActive ? delayClass : "opacity-0"
+      }`}
+    >
+      <span className="text-4xl md:text-5xl  font-display-semi text-black-chocolate mb-2">
+        {displayValue}
+        {suffix}
+      </span>
+      <span className="text-base md:text-lg font-normal text-black-chocolate">
+        {stat.description}
+      </span>
+    </div>
+  );
+}
+
 export function WelcomeSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
@@ -33,11 +99,11 @@ export function WelcomeSection() {
     };
   }, []);
 
-  const stats = [
-    { label: "55+", value: "Projects" },
-    { label: "23", value: "Years Of Legacy" },
-    { label: "35", value: "Million sq.ft developed" },
-    { label: "43", value: "Million sq.ft Under Development" },
+  const stats: Stat[] = [
+    { value: 55, suffix: "+", description: "Projects" },
+    { value: 23, description: "Years Of Legacy" },
+    { value: 35, description: "Million sq.ft developed" },
+    { value: 43, description: "Million sq.ft Under Development" },
   ];
 
   return (
@@ -83,21 +149,14 @@ export function WelcomeSection() {
                 "animate-fade-in-up-delay-5",
               ];
               return (
-                <div
-                  key={index}
-                  className={`flex flex-col items-center ${
-                    isInView
-                      ? delayClasses[index] || "animate-fade-in-up-delay-5"
-                      : "opacity-0"
-                  }`}
-                >
-                  <span className="text-4xl md:text-5xl  font-display-semi text-black-chocolate mb-2">
-                    {stat.label}
-                  </span>
-                  <span className="text-base md:text-lg font-normal text-black-chocolate">
-                    {stat.value}
-                  </span>
-                </div>
+                <StatCard
+                  key={stat.description}
+                  stat={stat}
+                  isActive={isInView}
+                  delayClass={
+                    delayClasses[index] || "animate-fade-in-up-delay-5"
+                  }
+                />
               );
             })}
           </div>

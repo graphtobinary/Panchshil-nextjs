@@ -91,12 +91,12 @@ export function CustomCarousel({ slides }: CustomCarouselProps) {
       <div className="absolute inset-0 flex items-end justify-center z-40 pb-16 pointer-events-none">
         <div className="max-w-[1200px] mx-auto px-6 text-center">
           {/* Main Title */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-display-semi text-white mb-6 tracking-tight">
+          <h1 className="text-3xl md:text-6xl lg:text-7xl font-display-semi text-white mb-6 tracking-tight">
             {currentSlide.title}
           </h1>
 
           {/* Description */}
-          <p className="text-base md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
+          <p className="text-sm md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
             {currentSlide.description}
           </p>
 
