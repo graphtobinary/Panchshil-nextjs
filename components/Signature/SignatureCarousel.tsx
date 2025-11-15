@@ -134,7 +134,7 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
                         [
                           <div
                             key={`feature-${featureIndex}`}
-                            className="flex items-center md:gap-3 gap-2"
+                            className="flex items-start md:gap-3 gap-2"
                           >
                             <Image
                               src={feature.icon}

@@ -85,12 +85,12 @@ export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
       </div>
 
       {/* Carousel viewport */}
-      <div className="embla-projects" ref={emblaRef}>
-        <div className="embla-projects__container gap-6 md:gap-8">
+      <div className="embla-projects mx-2 md:mx-0" ref={emblaRef}>
+        <div className="embla-projects__container gap-6 md:gap-8 ">
           {items.map((item) => (
             <div
               key={item.id}
-              className="cursor-pointer embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative h-[300px] md:h-[420px] overflow-hidden"
+              className={`cursor-pointer embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative h-[300px] md:h-[420px] overflow-hidden `}
             >
               <Image
                 src={item.image}

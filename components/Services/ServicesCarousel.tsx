@@ -80,7 +80,7 @@ export function ServicesCarousel({ items }: ServicesCarouselProps) {
         </button>
       </div>
 
-      <div className="embla-projects" ref={emblaRef}>
+      <div className="embla-projects mx-2 md:mx-0" ref={emblaRef}>
         <div className="embla-projects__container gap-6 md:gap-8">
           {items.map((item) => (
             <div

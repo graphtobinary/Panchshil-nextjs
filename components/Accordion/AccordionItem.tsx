@@ -74,7 +74,7 @@ export function AccordionItem({
           <div className="absolute inset-0 bg-linear-to-b from-white/60 via-black/40 to-black/80 "></div>
 
           {/* Content Overlay */}
-          <div className="relative z-10 h-full flex flex-col justify-end items-center max-w-[1200px] mx-auto px-6 md:px-12 py-16">
+          <div className="relative z-10 h-full flex flex-col justify-end items-center max-w-[1200px] mx-auto px-6 md:px-12 py-10 md:py-16">
             {/* Title */}
             <h3
               className={`text-3xl uppercase md:text-4xl  font-display-semi text-white mb-6 max-w-3xl ${
@@ -98,10 +98,10 @@ export function AccordionItem({
               className={`${isOpen ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
             >
               {stats && stats.length > 0 && (
-                <div className="flex flex-wrap gap-6 md:gap-8 text-white">
+                <div className="flex flex-wrap gap-2 md:gap-8 text-white justify-center">
                   {stats.map((stat, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <span className="text-lg md:text-xl">•</span>
+                      <span className="text-base md:text-xl">•</span>
                       <span className="text-base md:text-lg font-display-semi">
                         {stat.label}
                       </span>
