@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type Stat = {
   value: number;
@@ -72,6 +73,7 @@ function StatCard({
 export function WelcomeSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -179,7 +181,11 @@ export function WelcomeSection() {
           }`}
         >
           <video
-            src="/assets/videos/EON-Sky.mp4"
+            src={
+              isMobile
+                ? "/assets/videos/EON-Sky.mp4"
+                : "/assets/videos/EOM-Sky-desktop.mp4"
+            }
             autoPlay
             loop
             muted

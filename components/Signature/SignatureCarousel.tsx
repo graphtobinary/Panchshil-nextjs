@@ -6,29 +6,12 @@ import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { Button } from "@/components/Button";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Feature {
   icon: string;
   iconAlt: string;
   text: string;
-}
-
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkIsMobile = () => {
-      if (typeof window !== "undefined") {
-        setIsMobile(window.innerWidth < breakpoint);
-      }
-    };
-
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, [breakpoint]);
-
-  return isMobile;
 }
 
 interface SlideData {
