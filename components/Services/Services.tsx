@@ -1,9 +1,16 @@
 "use client";
 
-import { ServicesCarousel, type ServiceCardData } from "./ServicesCarousel";
+import { ServicesIntroProps, ServicesProps } from "@/interfaces";
+import { ServicesCarousel } from "./ServicesCarousel";
 import { useEffect, useRef, useState } from "react";
 
-export function Services() {
+export function Services({
+  servicesIntro,
+  services,
+}: {
+  servicesIntro: ServicesIntroProps;
+  services: ServicesProps[];
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -22,33 +29,6 @@ export function Services() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
-  const items: ServiceCardData[] = [
-    {
-      id: "facility",
-      title: "Facility Management",
-      image: "/assets/images/Facility-Management.jpg",
-    },
-    {
-      id: "fitout",
-      title: "Fit-Out Management",
-      image: "/assets/images/Fit-Out-Management-new.jpg",
-    },
-    {
-      id: "project",
-      title: "Project Management",
-      image: "/assets/images/Project-Management.jpg",
-    },
-    {
-      id: "residential",
-      title: "Residential Leasing & Resale",
-      image: "/assets/images/Residential-Leasing.jpg",
-    },
-    {
-      id: "development",
-      title: "Development Management",
-      image: "/assets/images/Development-Managment.jpg",
-    },
-  ];
 
   return (
     <section ref={sectionRef} className="w-full bg-[#FFFAF7] py-20">
@@ -57,17 +37,17 @@ export function Services() {
           className={`text-center mb-10 ${isInView ? "animate-fade-in-up" : "opacity-0"}`}
         >
           <div className="text-lg font-medium tracking-[0.2em] text-gold-beige mb-2">
-            OUR SERVICES
+            {servicesIntro.services_intro_heading}
           </div>
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black">
-            EXPLORE OUR SERVICES
+            {servicesIntro.services_intro_sub_heading}
           </h2>
         </div>
 
         <div
           className={`${isInView ? "animate-fade-in-up-delay-1" : "opacity-0"}`}
         >
-          <ServicesCarousel items={items} />
+          <ServicesCarousel items={services} />
         </div>
       </div>
     </section>

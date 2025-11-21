@@ -1,22 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { AccordionItem } from "./AccordionItem";
+import { AccordionProps } from "@/interfaces";
 
-interface AccordionData {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  stats?: Array<{ label: string }>;
-}
+export function Accordion({
+  propertyCategories,
+  defaultOpen = 1,
+}: AccordionProps) {
+  // Transform propertyCategories prop data to match AccordionItem format
+  const transformedData = useMemo(() => {
+    return propertyCategories.map((item, index) => {
+      const stats: Array<{ label: string }> = [];
 
-interface AccordionProps {
-  items: AccordionData[];
-  defaultOpen?: number;
-}
+      // Add developed stat if available
+      if (item.property_category_info?.property_category_developed) {
+        stats.push({
+          label: item.property_category_info.property_category_developed,
+        });
+      }
 
-export function Accordion({ items, defaultOpen = 3 }: AccordionProps) {
+      // Add under development stat if available
+      if (item.property_category_info?.property_category_under_development) {
+        stats.push({
+          label:
+            item.property_category_info.property_category_under_development,
+        });
+      }
+
+      return {
+        id: index + 1,
+        title: item.property_category_title,
+        description: item.property_category_description,
+        image: item.property_category_image,
+        stats: stats.length > 0 ? stats : undefined,
+      };
+    });
+  }, [propertyCategories]);
+
   const [openIndex, setOpenIndex] = useState(defaultOpen);
 
   const handleToggle = (index: number) => {
@@ -26,7 +47,7 @@ export function Accordion({ items, defaultOpen = 3 }: AccordionProps) {
   return (
     <section className="w-full bg-[#FFFAF7]">
       <div className="max-w-[1920px] mx-auto">
-        {items.map((item) => (
+        {transformedData.map((item) => (
           <AccordionItem
             key={item.id}
             id={item.id}

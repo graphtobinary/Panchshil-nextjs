@@ -5,6 +5,7 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
+import { ServicesProps } from "@/interfaces";
 
 export interface ServiceCardData {
   id: string;
@@ -12,11 +13,7 @@ export interface ServiceCardData {
   image: string;
 }
 
-interface ServicesCarouselProps {
-  items: ServiceCardData[];
-}
-
-export function ServicesCarousel({ items }: ServicesCarouselProps) {
+export function ServicesCarousel({ items }: { items: ServicesProps[] }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     loop: false,
@@ -82,15 +79,15 @@ export function ServicesCarousel({ items }: ServicesCarouselProps) {
 
       <div className="embla-projects mx-2 md:mx-0" ref={emblaRef}>
         <div className="embla-projects__container gap-6 md:gap-8">
-          {items.map((item) => (
+          {items.map((item, i) => (
             <div
-              key={item.id}
+              key={i}
               className="cursor-pointer embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative rounded-sm overflow-hidden border border-black-chocolate/10 bg-white"
             >
               <div className="relative h-[260px] md:h-[320px]">
                 <Image
-                  src={item.image}
-                  alt={item.title}
+                  src={item?.service_thumbnail || ""}
+                  alt={item?.service_title || "Service"}
                   fill
                   className="object-cover"
                 />
@@ -98,10 +95,10 @@ export function ServicesCarousel({ items }: ServicesCarouselProps) {
 
               <div className="p-5 flex items-center flex-col">
                 <div className="text-black-chocolate font-display-semi text-[15px] md:text-base">
-                  {item.title}
+                  {item?.service_title}
                 </div>
                 <div className="mt-2 text-[12px] text-gold-beige underline underline-offset-4">
-                  Read More
+                  {item?.service_link_label}
                 </div>
               </div>
             </div>

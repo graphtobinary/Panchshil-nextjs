@@ -1,14 +1,8 @@
 "use client";
 
+import { NewsCard } from "@/interfaces";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-
-type NewsCard = {
-  id: string;
-  title: string;
-  image: string;
-  href?: string;
-};
 
 export function LatestNews() {
   const sectionRef = useRef<HTMLElement>(null);

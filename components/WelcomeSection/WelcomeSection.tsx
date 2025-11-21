@@ -3,12 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
 import { useIsMobile } from "@/hooks/useIsMobile";
-
-type Stat = {
-  value: number;
-  suffix?: string;
-  description: string;
-};
+import { AboutIntroData, Stat } from "@/interfaces";
 
 function useCountUp(targetValue: number, isActive: boolean, duration = 2000) {
   const [currentValue, setCurrentValue] = useState(0);
@@ -70,7 +65,11 @@ function StatCard({
   );
 }
 
-export function WelcomeSection() {
+export function WelcomeSection({
+  aboutIntroData,
+}: {
+  aboutIntroData: AboutIntroData;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
   const isMobile = useIsMobile();
@@ -121,7 +120,7 @@ export function WelcomeSection() {
               isInView ? "animate-fade-in-up" : "opacity-0"
             }`}
           >
-            WELCOME TO PANCHSHIL
+            {aboutIntroData?.about_intro_heading}
           </h2>
 
           {/* Description */}
@@ -130,14 +129,7 @@ export function WelcomeSection() {
               isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
             }`}
           >
-            Panchshil Realty is India&apos;s leading luxury real estate
-            developer, known for award-winning projects that have transformed
-            skylines and redefined urban living. Since 2002, we have delivered
-            over 35 million sq. ft. of prime real estate, with 43 million sq.
-            ft. under development, across various asset classes including
-            high-end residences, IT parks, data centres, built-to-suit offices,
-            SEZs, convention centres, luxury retail malls, and landmark
-            hospitality projects in India, Sri Lanka, Maldives and Dubai.
+            {aboutIntroData?.about_intro_description}
           </p>
 
           {/* Stats Row */}

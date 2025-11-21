@@ -1,0 +1,71 @@
+import { Browser } from "@/interfaces";
+
+interface WindowWithOpera extends Window {
+  opr?: {
+    addons?: unknown;
+  };
+}
+
+interface WindowWithChrome extends Window {
+  chrome?: {
+    runtime?: unknown;
+  };
+}
+
+export const isBrowser = () => typeof window !== "undefined";
+
+export const getBrowserName = (ua: string): Browser => {
+  const agent = ua.toLowerCase();
+  switch (true) {
+    case agent.indexOf("edge") > -1:
+      return "edge";
+    case agent.indexOf("opr") > -1 && !!(window as WindowWithOpera).opr:
+      return "opera";
+    case agent.indexOf("chrome") > -1 && !!(window as WindowWithChrome).chrome:
+      return "chrome";
+    case agent.indexOf("trident") > -1:
+      return "ie";
+    case agent.indexOf("firefox") > -1:
+      return "firefox";
+    case agent.indexOf("safari") > -1:
+      return "safari";
+    default:
+      return "other";
+  }
+};
+
+/**
+ * Maps url value to the provide params object
+ * @param {string} url - url containing the pattern as {} to be replaced by the param value
+ * @param {Object} params - contains the map of key {string} value {string} to be mapped against the string
+ * @returns {string} - replaced with the value matched against the provide url
+ */
+export const replaceParamInString = (
+  str: string,
+  params: { [key: string]: unknown }
+): string => {
+  const regexReqParam = /[^{]+(?=})/g;
+  const matches = str.match(regexReqParam) || [];
+  let changedUrl = str;
+  matches.forEach((match) => {
+    const param = params[match] !== undefined ? String(params[match]) : "";
+    changedUrl = changedUrl.replace(`{${match}}`, param);
+  });
+  return changedUrl;
+};
+
+interface WindowWithMSStream extends Window {
+  MSStream?: unknown;
+}
+
+export const isIos = () => {
+  if (typeof window === "undefined") {
+    // If window object is not available (server-side rendering), assume it's not iOS
+    return false;
+  }
+
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+    !(window as WindowWithMSStream).MSStream
+  );
+};
