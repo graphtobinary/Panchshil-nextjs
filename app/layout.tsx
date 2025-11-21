@@ -7,6 +7,8 @@ import {
   zapfHumanist601Semi,
   zapfHumanist601Ultra,
 } from "./fonts";
+import { AuthProvider } from "@/contexts/AuthProvider";
+import { getAuthToken } from "@/api/CMS.api";
 
 // Open Sans as default font
 const openSans = Open_Sans({
@@ -19,39 +21,58 @@ export const metadata: Metadata = {
   title: "Panchshil - India's Leading Luxury Developer",
   description:
     "Since 2002, Panchshil Realty has set benchmarks in design, delivery and urban placemaking. From landmark residences and global office districts to iconic hospitality and convention destinations.",
+  icons: {
+    apple: "/assets/images/apple-touch-icon.png",
+    icon: [
+      {
+        url: "/assets/images/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/assets/images/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+    ],
+  },
+  manifest: "/assets/site.webmanifest",
 };
 
-export default function RootLayout({
+interface AuthTokenResponse {
+  token: string;
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let initialToken: string | null = null;
+  let initialError: string | null = null;
+
+  try {
+    const response = (await getAuthToken()) as AuthTokenResponse;
+    if (response?.token && typeof response.token === "string") {
+      initialToken = response.token;
+    } else {
+      initialError = "Token not found in response";
+    }
+  } catch (err) {
+    initialError =
+      err instanceof Error ? err.message : "Failed to fetch auth token";
+    console.error("Error fetching auth token in layout:", err);
+  }
+
   return (
-    <html lang="en">
-      <head>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/assets/images/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/assets/images/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/assets/images/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/assets/site.webmanifest" />
-      </head>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${openSans.variable} ${zapfHumanist601Roman.variable} ${zapfHumanist601Bold.variable} ${zapfHumanist601Semi.variable} ${zapfHumanist601Ultra.variable} antialiased`}
+        suppressHydrationWarning
       >
-        {children}
+        <AuthProvider initialToken={initialToken} initialError={initialError}>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

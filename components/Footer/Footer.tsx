@@ -1,8 +1,13 @@
 "use client";
 
+import { ContactDetailsProps } from "@/interfaces";
 import Image from "next/image";
 
-export function Footer() {
+export function Footer({
+  contactDetails,
+}: {
+  contactDetails: ContactDetailsProps;
+}) {
   const verticals: string[] = [
     "Office Parks",
     "Hospitality",
@@ -29,8 +34,30 @@ export function Footer() {
     <footer className="w-full bg-[#FFFAF7] text-black-chocolate">
       {/* Row 1: Offices & Sales */}
       <div className="max-w-[1200px] mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
+        {contactDetails.map((contact) => (
+          <div key={contact.contact_title}>
+            <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
+              {contact.contact_title}
+            </div>
+            <div
+              className="space-y-2 text-sm"
+              dangerouslySetInnerHTML={{ __html: contact.contact_details }}
+            />
+            {contact.contact_number && (
+              <div className="mt-2 flex items-center gap-2 text-sm">
+                <Image
+                  src="/assets/images/call-icon.png"
+                  alt="Phone"
+                  width={18}
+                  height={18}
+                />
+                <span>{contact.contact_number}</span>
+              </div>
+            )}
+          </div>
+        ))}
         {/* India office */}
-        <div>
+        {/* <div>
           <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
             HEAD OFFICE
           </div>
@@ -49,10 +76,10 @@ export function Footer() {
             />
             <span>+91 20 66473200</span>
           </div>
-        </div>
+        </div> */}
 
         {/* International office */}
-        <div>
+        {/* <div>
           <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
             INTERNATIONAL OFFICE
           </div>
@@ -71,10 +98,10 @@ export function Footer() {
             />
             <span>+971 04 545 3481</span>
           </div>
-        </div>
+        </div> */}
 
         {/* Corporate office */}
-        <div>
+        {/* <div>
           <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
             CORPORATE OFFICE
           </div>
@@ -93,10 +120,10 @@ export function Footer() {
             />
             <span>+91 22 66863939</span>
           </div>
-        </div>
+        </div> */}
 
         {/* Sales enquiry */}
-        <div>
+        {/* <div>
           <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
             SALES ENQUIRY
           </div>
@@ -114,7 +141,7 @@ export function Footer() {
               <div>+971 04 545 3481</div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Row 2: Menus & Newsletter */}

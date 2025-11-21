@@ -2,8 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { SignatureCarousel } from "./SignatureCarousel";
+import {
+  FeaturedPropertiesIntroProps,
+  // FeaturedPropertiesProps,
+} from "@/interfaces";
 
-export function Signature() {
+export function Signature({
+  featuredPropertiesIntro,
+  // featuredProperties,
+}: {
+  featuredPropertiesIntro: FeaturedPropertiesIntroProps;
+  // featuredProperties: FeaturedPropertiesProps;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -122,10 +132,10 @@ export function Signature() {
           className={`text-center mb-10 ${isInView ? "animate-fade-in-up" : "opacity-0"}`}
         >
           <div className="text-lg font-medium tracking-[0.2em] text-gold-beige mb-2">
-            MASTERPIECES
+            {featuredPropertiesIntro?.featured_properties_intro_heading}
           </div>
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black">
-            EXPLORE OUR SIGNATURE DEVELOPMENTS
+            {featuredPropertiesIntro?.featured_properties_intro_sub_heading}
           </h2>
         </div>
 
