@@ -95,6 +95,15 @@ export type ContactDetailsProps = {
   contact_number: string;
 }[];
 
+export type MetaDataProps = {
+  canonical_tag: string;
+  meta_description: string;
+  meta_title: string;
+};
+
+export type BannersProps = {
+  banner_image: string;
+};
 export type FeaturedPropertiesIntroProps = {
   featured_properties_intro_heading: string;
   featured_properties_intro_sub_heading: string;
@@ -113,6 +122,8 @@ export type ServicesProps = {
 };
 
 export interface HomeClientProps {
+  metaData: MetaDataProps;
+  banner: BannersProps;
   contactDetails: ContactDetailsProps;
   servicesIntro: ServicesIntroProps;
   services: ServicesProps[];

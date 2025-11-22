@@ -1,5 +1,5 @@
 import API_CONSTANTS from "./constants";
-import { doGet } from "@/api";
+import { doGet, doPost } from "@/api";
 
 export const getAuthToken = () => {
   return doGet(
@@ -9,6 +9,68 @@ export const getAuthToken = () => {
       headers: {
         "x-secret-key": process.env.X_SECRET_KEY || "",
       },
+    }
+  );
+};
+
+export const getMetaData = (token: string, pageName: string = "Home") => {
+  const formData = new URLSearchParams();
+  formData.append("page_name", pageName);
+
+  return doPost(
+    API_CONSTANTS.META_DATA,
+    {},
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData.toString(),
+    }
+  );
+};
+
+export const getBanner = (token: string, pageName: string = "Home") => {
+  const formData = new URLSearchParams();
+  formData.append("page_name", pageName);
+
+  return doPost(
+    API_CONSTANTS.BANNER,
+    {},
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData.toString(),
+    }
+  );
+};
+
+export const updateSubscriberFormDetailsAPI = (formData: FormData) => {
+  return fetch(API_CONSTANTS.SUBSCRIBER_FORM_DETAILS_API, {
+    method: "POST",
+    body: formData,
+  });
+};
+
+export const updateSubscriberFormDetails = (
+  token: string,
+  subscriberEmailId: string,
+  ipAddress: string
+) => {
+  const formData = new URLSearchParams();
+  formData.append("subscriber_email_id", subscriberEmailId);
+  formData.append("ip_address", ipAddress);
+  return doPost(
+    API_CONSTANTS.SUBSCRIBER_FORM_DETAILS,
+    {},
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData.toString(),
     }
   );
 };

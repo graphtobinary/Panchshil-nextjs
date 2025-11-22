@@ -11,6 +11,7 @@ const API_CONSTANTS = {
   HOME_ABOUT_INTRO: `/home/about-intro`,
   HOME_MASTER_SLIDER: `/home/master-slider`,
   SUBSCRIBER_FORM_DETAILS: `/subscriber-form-details`,
+  SUBSCRIBER_FORM_DETAILS_API: "/api/subscriber-form-details",
   BANNER: `/banner`,
   META_DATA: `/meta-data`,
 };

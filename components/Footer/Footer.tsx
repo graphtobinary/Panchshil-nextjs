@@ -1,7 +1,9 @@
 "use client";
 
+import { updateSubscriberFormDetailsAPI } from "@/api/CMS.api";
 import { ContactDetailsProps } from "@/interfaces";
 import Image from "next/image";
+import { useState } from "react";
 
 export function Footer({
   contactDetails,
@@ -30,6 +32,46 @@ export function Footer({
     "Clients",
     "Awards",
   ];
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage(null);
+
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const subscriberEmailId = formData.get("subscriber_email_id") as string;
+
+      if (!subscriberEmailId) {
+        throw new Error("Email is required");
+      }
+
+      // Call the proxy route
+      const response = (await updateSubscriberFormDetailsAPI(
+        formData
+      )) as Response;
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to submit form");
+      }
+
+      setSubmitMessage("Thank you for subscribing!");
+      // Reset form
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      console.error("Error updating subscriber form details:", error);
+      setSubmitMessage(
+        error instanceof Error ? error.message : "Failed to submit form"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="w-full bg-[#FFFAF7] text-black-chocolate">
       {/* Row 1: Offices & Sales */}
@@ -56,92 +98,6 @@ export function Footer({
             )}
           </div>
         ))}
-        {/* India office */}
-        {/* <div>
-          <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
-            HEAD OFFICE
-          </div>
-          <div className="space-y-2 text-sm">
-            <p>Tech Park One,</p>
-            <p>Tower E, 191 Yerwada,</p>
-            <p>Pune - 411 006.</p>
-            <p>India</p>
-          </div>
-          <div className="mt-4 flex items-center gap-2 text-sm">
-            <Image
-              src="/assets/images/call-icon.png"
-              alt="Phone"
-              width={18}
-              height={18}
-            />
-            <span>+91 20 66473200</span>
-          </div>
-        </div> */}
-
-        {/* International office */}
-        {/* <div>
-          <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
-            INTERNATIONAL OFFICE
-          </div>
-          <div className="space-y-2 text-sm">
-            <p>One Offices,</p>
-            <p>Level 5 office 5.11,</p>
-            <p>One Za&apos;abeel, Za&apos;abeel Palace Street,</p>
-            <p>Dubai, UAE</p>
-          </div>
-          <div className="mt-4 flex items-center gap-2 text-sm">
-            <Image
-              src="/assets/images/call-icon.png"
-              alt="Phone"
-              width={18}
-              height={18}
-            />
-            <span>+971 04 545 3481</span>
-          </div>
-        </div> */}
-
-        {/* Corporate office */}
-        {/* <div>
-          <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
-            CORPORATE OFFICE
-          </div>
-          <div className="space-y-2 text-sm">
-            <p>Express Towers,</p>
-            <p>20th Floor, Nariman Point,</p>
-            <p>Mumbai - 400 021</p>
-            <p>India</p>
-          </div>
-          <div className="mt-4 flex items-center gap-2 text-sm">
-            <Image
-              src="/assets/images/call-icon.png"
-              alt="Phone"
-              width={18}
-              height={18}
-            />
-            <span>+91 22 66863939</span>
-          </div>
-        </div> */}
-
-        {/* Sales enquiry */}
-        {/* <div>
-          <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
-            SALES ENQUIRY
-          </div>
-          <div className="space-y-3 text-sm">
-            <div>
-              <div className="uppercase font-display-semi text-sm text-black mb-3">
-                India
-              </div>
-              <div>+91 897 000 7700</div>
-            </div>
-            <div>
-              <div className="uppercase font-display-semi text-sm text-black mb-3">
-                Dubai
-              </div>
-              <div>+971 04 545 3481</div>
-            </div>
-          </div>
-        </div> */}
       </div>
 
       {/* Row 2: Menus & Newsletter */}
@@ -216,20 +172,34 @@ export function Footer({
             <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
               STAY IN THE KNOW
             </div>
-            <form className="space-y-4">
+            <form className="space-y-1" onSubmit={handleSubmit}>
               <div className="flex items-center gap-3  pb-2">
                 <input
                   type="email"
+                  name="subscriber_email_id"
                   placeholder="Email Address"
+                  required
                   className="bg-transparent outline-none text-sm flex-1 placeholder-black/50 border-b border-gold-beige"
                 />
                 <button
                   type="submit"
-                  className="text-sm text-gold-beige underline cursor-pointer"
+                  disabled={isSubmitting}
+                  className="text-sm text-gold-beige underline cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Submit
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
               </div>
+              {submitMessage && (
+                <p
+                  className={`text-[11px] ${
+                    submitMessage.includes("Thank you")
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {submitMessage}
+                </p>
+              )}
               <p className="text-[11px] text-black-chocolate/70 leading-relaxed tracking-wider">
                 By signing up I want to hear about new updates and masterpieces
                 and agree with the{" "}

@@ -1,5 +1,6 @@
 "use client";
 
+import { MetaDataProps } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -15,7 +16,7 @@ interface NavItem {
   child?: NavItemChild[];
 }
 
-export function Header() {
+export function Header({ metaData }: { metaData: MetaDataProps }) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -42,6 +43,9 @@ export function Header() {
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50">
+      <title>{metaData.meta_title}</title>
+      <meta name="description" content={metaData.meta_description} />
+      <meta name="canonical" content={metaData.canonical_tag} />
       <div className="max-w-[1920px] mx-auto px-6 lg:px-12">
         {/* Logo and Mobile Menu Button */}
         <div className="relative flex justify-center items-center pt-8 pb-4">
