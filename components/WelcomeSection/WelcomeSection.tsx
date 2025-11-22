@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { AboutIntroData, Stat } from "@/interfaces";
+import { AboutIntroData, BannersProps, Stat } from "@/interfaces";
 
 function useCountUp(targetValue: number, isActive: boolean, duration = 2000) {
   const [currentValue, setCurrentValue] = useState(0);
@@ -67,8 +67,10 @@ function StatCard({
 
 export function WelcomeSection({
   aboutIntroData,
+  // banner,
 }: {
   aboutIntroData: AboutIntroData;
+  banner: BannersProps;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);

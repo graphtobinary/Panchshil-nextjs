@@ -10,6 +10,8 @@ import {
   getFeaturedPropertiesIntro,
   getFeaturedProperties,
   getMasterSlider,
+  getMetaData,
+  getBanner,
 } from "@/api/CMS.api";
 import HomeClient from "./HomeClient";
 import {
@@ -23,6 +25,8 @@ import {
   ContactDetailsProps,
   AboutIntroData,
   AuthTokenResponse,
+  MetaDataProps,
+  BannersProps,
 } from "@/interfaces";
 import { MasterSliderData } from "@/components/Hero/CustomCarousel";
 
@@ -41,6 +45,8 @@ export default async function Home() {
   // Fetch all data in parallel if token is available, otherwise return null promises
   const apiCalls = token
     ? [
+        getMetaData(token, "Home"),
+        getBanner(token, "Home"),
         getContactDetails(token),
         getServicesIntro(token),
         getServices(token),
@@ -55,6 +61,8 @@ export default async function Home() {
     : Array.from({ length: 10 }, () => Promise.resolve(null));
 
   const [
+    metaData,
+    banner,
     contactDetails,
     servicesIntro,
     services,
@@ -69,20 +77,26 @@ export default async function Home() {
 
   // Extract data from settled promises with type assertions
   const data = {
+    metaData:
+      metaData.status === "fulfilled"
+        ? (metaData.value as MetaDataProps)
+        : { meta_data_heading: "", meta_data_sub_heading: "" },
+    banner:
+      banner?.status === "fulfilled" ? (banner.value as BannersProps) : [],
     contactDetails:
-      contactDetails.status === "fulfilled"
+      contactDetails?.status === "fulfilled"
         ? (contactDetails.value as ContactDetailsProps)
         : [],
     servicesIntro:
-      servicesIntro.status === "fulfilled"
+      servicesIntro?.status === "fulfilled"
         ? (servicesIntro.value as ServicesIntroProps)
         : { services_intro_heading: "", services_intro_sub_heading: "" },
     services:
-      services.status === "fulfilled"
+      services?.status === "fulfilled"
         ? (services.value as ServicesProps[])
         : [],
     aboutIntro:
-      aboutIntro.status === "fulfilled"
+      aboutIntro?.status === "fulfilled"
         ? (aboutIntro.value as AboutIntroData)
         : {
             about_intro_heading: "",
@@ -93,36 +107,38 @@ export default async function Home() {
             about_intro_button_caption: "",
           },
     propertyCategories:
-      propertyCategories.status === "fulfilled"
+      propertyCategories?.status === "fulfilled"
         ? (propertyCategories.value as PropertyCategories[])
         : [],
     propertiesIntro:
-      propertiesIntro.status === "fulfilled"
+      propertiesIntro?.status === "fulfilled"
         ? (propertiesIntro.value as PropertiesIntroProps)
         : { properties_intro_heading: "", properties_intro_sub_heading: "" },
     properties:
-      properties.status === "fulfilled"
+      properties?.status === "fulfilled"
         ? (properties.value as PropertiesData | null)
         : null,
     featuredPropertiesIntro:
-      featuredPropertiesIntro.status === "fulfilled"
+      featuredPropertiesIntro?.status === "fulfilled"
         ? (featuredPropertiesIntro.value as FeaturedPropertiesIntroProps)
         : {
             featured_properties_intro_heading: "",
             featured_properties_intro_sub_heading: "",
           },
     featuredProperties:
-      featuredProperties.status === "fulfilled"
+      featuredProperties?.status === "fulfilled"
         ? (featuredProperties.value as FeaturedPropertiesProps)
         : [],
     masterSlider:
-      masterSlider.status === "fulfilled"
+      masterSlider?.status === "fulfilled"
         ? (masterSlider.value as MasterSliderData[])
         : [],
   };
 
   return (
     <HomeClient
+      metaData={data.metaData as MetaDataProps}
+      banner={data.banner as BannersProps}
       contactDetails={data.contactDetails}
       servicesIntro={data.servicesIntro}
       services={data.services}
