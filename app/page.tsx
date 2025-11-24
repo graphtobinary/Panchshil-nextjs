@@ -12,6 +12,8 @@ import {
   getMasterSlider,
   getMetaData,
   getBanner,
+  getFooterBlocks,
+  getMilestones,
 } from "@/api/CMS.api";
 import HomeClient from "./HomeClient";
 import {
@@ -27,6 +29,8 @@ import {
   AuthTokenResponse,
   MetaDataProps,
   BannersProps,
+  FooterBlocksProps,
+  MilestonesProps,
 } from "@/interfaces";
 import { MasterSliderData } from "@/components/Hero/CustomCarousel";
 
@@ -51,12 +55,14 @@ export default async function Home() {
         getServicesIntro(token),
         getServices(token),
         getAboutIntro(token),
+        getMilestones(token),
         getPropertyCategories(token),
         getPropertiesIntro(token),
         getProperties(token),
         getFeaturedPropertiesIntro(token),
         getFeaturedProperties(token),
         getMasterSlider(token),
+        getFooterBlocks(token),
       ]
     : Array.from({ length: 10 }, () => Promise.resolve(null));
 
@@ -67,12 +73,14 @@ export default async function Home() {
     servicesIntro,
     services,
     aboutIntro,
+    milestones,
     propertyCategories,
     propertiesIntro,
     properties,
     featuredPropertiesIntro,
     featuredProperties,
     masterSlider,
+    footerBlocks,
   ] = await Promise.allSettled(apiCalls);
 
   // Extract data from settled promises with type assertions
@@ -106,6 +114,10 @@ export default async function Home() {
             about_intro_video: "",
             about_intro_button_caption: "",
           },
+    milestones:
+      milestones?.status === "fulfilled"
+        ? (milestones.value as MilestonesProps[])
+        : [],
     propertyCategories:
       propertyCategories?.status === "fulfilled"
         ? (propertyCategories.value as PropertyCategories[])
@@ -127,11 +139,15 @@ export default async function Home() {
           },
     featuredProperties:
       featuredProperties?.status === "fulfilled"
-        ? (featuredProperties.value as FeaturedPropertiesProps)
+        ? (featuredProperties.value as FeaturedPropertiesProps[])
         : [],
     masterSlider:
       masterSlider?.status === "fulfilled"
         ? (masterSlider.value as MasterSliderData[])
+        : [],
+    footerBlocks:
+      footerBlocks?.status === "fulfilled"
+        ? (footerBlocks.value as FooterBlocksProps[])
         : [],
   };
 
@@ -143,12 +159,14 @@ export default async function Home() {
       servicesIntro={data.servicesIntro}
       services={data.services}
       aboutIntro={data.aboutIntro}
+      milestones={data.milestones}
       propertyCategories={data.propertyCategories}
       propertiesIntro={data.propertiesIntro}
       properties={data.properties}
       featuredPropertiesIntro={data.featuredPropertiesIntro}
       featuredProperties={data.featuredProperties}
       masterSlider={data.masterSlider}
+      footerBlocks={data.footerBlocks}
     />
   );
 }

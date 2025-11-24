@@ -3,7 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { AboutIntroData, BannersProps, Stat } from "@/interfaces";
+import {
+  AboutIntroData,
+  BannersProps,
+  MilestonesProps,
+  Stat,
+} from "@/interfaces";
 
 function useCountUp(targetValue: number, isActive: boolean, duration = 2000) {
   const [currentValue, setCurrentValue] = useState(0);
@@ -67,14 +72,32 @@ function StatCard({
 
 export function WelcomeSection({
   aboutIntroData,
+  milestones,
   // banner,
 }: {
   aboutIntroData: AboutIntroData;
   banner: BannersProps;
+  milestones: MilestonesProps[];
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
   const isMobile = useIsMobile();
+
+  // Helper function to get video URL (proxy if external or from API)
+  const getVideoUrl = (videoUrl: string): string => {
+    if (!videoUrl) return "";
+
+    // Check if URL is absolute (starts with http:// or https://)
+    const isAbsoluteUrl = /^https?:\/\//i.test(videoUrl);
+
+    // If it's an absolute URL (external), use the proxy to handle CORS
+    if (isAbsoluteUrl) {
+      return `/api/video-proxy?url=${encodeURIComponent(videoUrl)}`;
+    }
+
+    // For relative URLs, use directly (they're from the same origin)
+    return videoUrl;
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -101,12 +124,31 @@ export function WelcomeSection({
     };
   }, []);
 
-  const stats: Stat[] = [
-    { value: 55, suffix: "+", description: "Projects" },
-    { value: 23, description: "Years Of Legacy" },
-    { value: 35, description: "Million sq.ft developed" },
-    { value: 43, description: "Million sq.ft Under Development" },
-  ];
+  // Convert milestones to stats format with countdown animation support
+  const stats: Stat[] = (milestones || []).map((milestone) => {
+    // Parse milestone_title to extract number and suffix
+    // Examples: "55+" -> value: 55, suffix: "+"
+    //          "23" -> value: 23, suffix: ""
+    const title = milestone.milestone_title || "";
+    const match = title.match(/^(\d+)(.*)$/);
+
+    if (match) {
+      const value = parseInt(match[1], 10);
+      const suffix = match[2] || ""; // Extract any suffix like "+"
+      return {
+        value,
+        suffix,
+        description: milestone.milestone_caption || "",
+      };
+    }
+
+    // Fallback if parsing fails
+    return {
+      value: 0,
+      suffix: "",
+      description: milestone.milestone_caption || "",
+    };
+  });
 
   return (
     <section
@@ -145,7 +187,7 @@ export function WelcomeSection({
               ];
               return (
                 <StatCard
-                  key={stat.description}
+                  key={`${stat.description}-${index}`}
                   stat={stat}
                   isActive={isInView}
                   delayClass={
@@ -178,13 +220,31 @@ export function WelcomeSection({
             src={
               isMobile
                 ? "/assets/videos/EON-Sky.mp4"
-                : "/assets/videos/EOM-Sky-desktop.mp4"
+                : getVideoUrl(aboutIntroData.about_intro_video)
             }
             autoPlay
             loop
             muted
             playsInline
+            preload="metadata"
+            crossOrigin="anonymous"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              console.error(
+                "Video failed to load:",
+                aboutIntroData.about_intro_video,
+                e
+              );
+            }}
+            onLoadedData={() => {
+              console.log(
+                "Video loaded successfully:",
+                aboutIntroData.about_intro_video
+              );
+            }}
+            onCanPlay={() => {
+              console.log("Video can play:", aboutIntroData.about_intro_video);
+            }}
           />
         </div>
 

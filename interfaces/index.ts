@@ -87,7 +87,16 @@ export type InternationalRegion = {
 // Complete Properties Data Structure
 export type PropertiesData = Array<IndiaRegion & InternationalRegion>;
 
-export type FeaturedPropertiesProps = Property[];
+export type PropertyHighlight = {
+  property_highlight_caption: string;
+  property_highlight_icon: string;
+};
+
+export type FeaturedPropertiesProps = {
+  property_name: string;
+  property_background_image: string;
+  property_highlights: PropertyHighlight[];
+};
 
 export type ContactDetailsProps = {
   contact_title: string;
@@ -128,12 +137,14 @@ export interface HomeClientProps {
   servicesIntro: ServicesIntroProps;
   services: ServicesProps[];
   aboutIntro: AboutIntroData;
+  milestones: MilestonesProps[];
   propertyCategories: PropertyCategories[];
   propertiesIntro: PropertiesIntroProps;
   properties: PropertiesData | null;
   featuredPropertiesIntro: FeaturedPropertiesIntroProps;
-  featuredProperties: FeaturedPropertiesProps;
+  featuredProperties: FeaturedPropertiesProps[];
   masterSlider: MasterSliderData[];
+  footerBlocks: FooterBlocksProps[];
 }
 
 export interface AccordionProps {
@@ -160,9 +171,13 @@ export interface AuthTokenResponse {
   token: string;
 }
 
-export type NewsCard = {
-  id: string;
-  title: string;
-  image: string;
-  href?: string;
-};
+export interface FooterBlocksProps {
+  footer_block_title: string;
+  footer_block_link: string;
+  footer_block_thumbnail: string;
+}
+
+export interface MilestonesProps {
+  milestone_title: string;
+  milestone_caption: string;
+}
