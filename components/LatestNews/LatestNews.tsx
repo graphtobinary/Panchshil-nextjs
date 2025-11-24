@@ -1,10 +1,14 @@
 "use client";
 
-import { NewsCard } from "@/interfaces";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { FooterBlocksProps } from "@/interfaces";
 
-export function LatestNews() {
+export function LatestNews({
+  footerBlocks,
+}: {
+  footerBlocks: FooterBlocksProps[];
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -23,23 +27,6 @@ export function LatestNews() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
-  const items: NewsCard[] = [
-    {
-      id: "latest",
-      title: "LATEST NEWS",
-      image: "/assets/images/news.jpg",
-    },
-    {
-      id: "blogs",
-      title: "EXPERT BLOGS",
-      image: "/assets/images/expert-blog.jpg",
-    },
-    {
-      id: "sustain",
-      title: "SUSTANIBILITY",
-      image: "/assets/images/Sustainability.jpg",
-    },
-  ];
 
   return (
     <section ref={sectionRef} className="w-full bg-[#FFFAF7] py-10">
@@ -49,16 +36,16 @@ export function LatestNews() {
           className={`grid grid-cols-1  md:grid-cols-3  mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none [scrollbar-width:none] [-ms-overflow-style:none] ${isInView ? "animate-fade-in-up" : "opacity-0"}`}
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          {items.map((item) => (
+          {footerBlocks?.map((item, i) => (
             <a
-              key={item.id}
-              href={item.href || "#"}
+              key={i}
+              href={item.footer_block_link || "#"}
               className="relative min-w-[80%] snap-center md:min-w-0 group"
             >
               <div className="relative h-[340px] md:h-[420px] overflow-hidden">
                 <Image
-                  src={item.image}
-                  alt={item.title}
+                  src={item.footer_block_thumbnail}
+                  alt={item.footer_block_title}
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 33vw, 80vw"
@@ -68,7 +55,7 @@ export function LatestNews() {
 
                 <div className="absolute inset-0 flex flex-col items-center justify-end p-6 text-white">
                   <div className="text-base md:text-lg font-display-semi tracking-wide">
-                    {item.title}
+                    {item.footer_block_title}
                   </div>
 
                   <div className="mt-4">

@@ -18,26 +18,32 @@ export default function HomeClient({
   servicesIntro,
   services,
   aboutIntro,
+  milestones,
   propertyCategories,
   propertiesIntro,
   properties,
   featuredPropertiesIntro,
-  // featuredProperties,
+  featuredProperties,
   masterSlider,
+  footerBlocks,
 }: HomeClientProps) {
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
       <Header metaData={metaData} />
       <Hero masterSliderData={masterSlider} />
-      <WelcomeSection aboutIntroData={aboutIntro} banner={banner} />
+      <WelcomeSection
+        aboutIntroData={aboutIntro}
+        banner={banner}
+        milestones={milestones}
+      />
       <Accordion propertyCategories={propertyCategories} defaultOpen={1} />
       <Projects propertiesIntro={propertiesIntro} properties={properties} />
       <Signature
         featuredPropertiesIntro={featuredPropertiesIntro}
-        // featuredProperties={featuredProperties}
+        featuredProperties={featuredProperties}
       />
       <Services servicesIntro={servicesIntro} services={services} />
-      <LatestNews />
+      <LatestNews footerBlocks={footerBlocks} />
       <Footer contactDetails={contactDetails} />
     </main>
   );

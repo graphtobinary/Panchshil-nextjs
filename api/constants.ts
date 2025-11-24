@@ -1,9 +1,11 @@
 const API_CONSTANTS = {
   AUTH_TOKEN: `/auth/token`,
   CONTACT_DETAILS: `/contact-details`,
+  FOOTER_BLOCKS: `/home/footer-blocks`,
+  HOME_MILESTONES: `/home/milestones`,
   HOME_SERVICES: `/home/services`,
   HOME_SERVICES_INTRO: "/home/services-intro",
-  HOME_FEATURED_PROPERTIES: `home/featured-properties`,
+  HOME_FEATURED_PROPERTIES: `/home/featured-properties`,
   HOME_FEATURED_PROPERTIES_INTRO: `/home/featured-properties-intro`,
   HOME_PROPERTIES: `/home/properties`,
   HOME_PROPERTIES_INTRO: `/home/properties-intro`,

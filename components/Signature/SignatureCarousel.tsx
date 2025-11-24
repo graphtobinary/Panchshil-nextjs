@@ -6,30 +6,16 @@ import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { Button } from "@/components/Button";
-import { useIsMobile } from "@/hooks/useIsMobile";
 
-interface Feature {
-  icon: string;
-  iconAlt: string;
-  text: string;
-}
-
-interface SlideData {
-  id: string;
-  src: string;
-  mobileSrc?: string;
-  mobile_src?: string;
-  alt: string;
-  title: string;
-  features: Feature[];
-  ctaText: string;
-}
+import { FeaturedPropertiesProps, PropertyHighlight } from "@/interfaces";
 
 interface SignatureCarouselProps {
-  images: SlideData[];
+  featuredProperties: FeaturedPropertiesProps[];
 }
 
-export function SignatureCarousel({ images }: SignatureCarouselProps) {
+export function SignatureCarousel({
+  featuredProperties,
+}: SignatureCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     loop: false,
@@ -39,7 +25,7 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const isMobile = useIsMobile();
+  // const isMobile = useIsMobile();
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -88,74 +74,76 @@ export function SignatureCarousel({ images }: SignatureCarouselProps) {
 
       <div className="embla-signature" ref={emblaRef}>
         <div className="embla-signature__container">
-          {images.map((img) => {
-            const imageSrc =
-              isMobile && (img.mobileSrc || img.mobile_src)
-                ? (img.mobileSrc ?? img.mobile_src ?? img.src)
-                : img.src;
-            return (
-              <div key={img.id} className="embla-signature__slide">
-                <div className="relative h-[60vh] md:h-[50vh]">
-                  <Image
-                    src={imageSrc}
-                    alt={img.alt}
-                    fill
-                    priority
-                    className="object-cover"
-                  />
-                </div>
+          {featuredProperties?.map(
+            (property: FeaturedPropertiesProps, i: number) => {
+              const imageSrc = property.property_background_image;
 
-                {/* Text strip */}
-                <div className="bg-[#F5EEE6] py-10">
-                  <div className="mx-auto px-2 md:px-6 text-center">
-                    <h3 className="text-black-chocolate text-base font-display-semi md:text-xl tracking-wide mb-6">
-                      {img.title}
-                    </h3>
+              return (
+                <div key={i} className="embla-signature__slide">
+                  <div className="relative h-[60vh] md:h-[50vh]">
+                    <Image
+                      src={imageSrc}
+                      alt={property.property_name}
+                      fill
+                      priority
+                      className="object-cover"
+                    />
+                  </div>
 
-                    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 text-gold-beige">
-                      {img.features.flatMap((feature, featureIndex) =>
-                        [
-                          <div
-                            key={`feature-${featureIndex}`}
-                            className="flex items-start md:gap-3 gap-2"
-                          >
-                            <Image
-                              src={feature.icon}
-                              alt={feature.iconAlt}
-                              width={28}
-                              height={28}
-                              className="w-5 h-5 md:w-6 md:h-6"
-                            />
-                            <span className="text-xs md:text-base font-display-semi">
-                              {feature.text}
-                            </span>
-                          </div>,
-                          featureIndex < img.features.length - 1 && (
-                            <span
-                              key={`separator-${featureIndex}`}
-                              className="hidden md:inline h-6 w-px bg-black-chocolate/20"
-                            />
-                          ),
-                        ].filter(Boolean)
-                      )}
-                    </div>
+                  {/* Text strip */}
+                  <div className="bg-[#F5EEE6] py-10">
+                    <div className="mx-auto px-2 md:px-6 text-center">
+                      <h3 className="text-black-chocolate text-base font-display-semi md:text-xl tracking-wide mb-6">
+                        {property.property_name}
+                      </h3>
 
-                    <div className="mt-8">
-                      <Button variant="signature" className="px-6">
-                        {img.ctaText}
-                      </Button>
+                      <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 text-gold-beige">
+                        {property.property_highlights.flatMap(
+                          (feature: PropertyHighlight, featureIndex: number) =>
+                            [
+                              <div
+                                key={`feature-${featureIndex}`}
+                                className="flex items-start md:gap-3 gap-2"
+                              >
+                                <Image
+                                  src={feature.property_highlight_icon}
+                                  alt={feature.property_highlight_caption}
+                                  width={28}
+                                  height={28}
+                                  className="w-5 h-5 md:w-6 md:h-6"
+                                />
+                                <span className="text-xs md:text-base font-display-semi">
+                                  {feature.property_highlight_caption}
+                                </span>
+                              </div>,
+                              featureIndex <
+                                property.property_highlights.length - 1 && (
+                                <span
+                                  key={`separator-${featureIndex}`}
+                                  className="hidden md:inline h-6 w-px bg-black-chocolate/20"
+                                />
+                              ),
+                            ].filter(Boolean)
+                        )}
+                      </div>
+
+                      <div className="mt-8">
+                        <Button variant="signature" className="px-6">
+                          {"Discover"}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            }
+          )}
         </div>
       </div>
 
       {/* Carousel Dots */}
       <div className="flex items-center justify-center gap-2 mt-8 md:hidden">
-        {images.map((_, index) => (
+        {featuredProperties?.map((_, index) => (
           <button
             key={index}
             onClick={() => emblaApi?.scrollTo(index)}

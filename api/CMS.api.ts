@@ -159,6 +159,18 @@ export const getAboutIntro = (token: string) => {
   );
 };
 
+export const getMilestones = (token: string) => {
+  return doGet(
+    API_CONSTANTS.HOME_MILESTONES,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
 export const getServices = (token: string) => {
   return doGet(
     API_CONSTANTS.HOME_SERVICES,
@@ -186,6 +198,18 @@ export const getServicesIntro = (token: string) => {
 export const getContactDetails = (token: string) => {
   return doGet(
     API_CONSTANTS.CONTACT_DETAILS,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getFooterBlocks = (token: string) => {
+  return doGet(
+    API_CONSTANTS.FOOTER_BLOCKS,
     {},
     {
       headers: {
