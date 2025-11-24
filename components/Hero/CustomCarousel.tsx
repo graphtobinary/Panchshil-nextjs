@@ -164,7 +164,7 @@ export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
       </div>
 
       {/* Progress Bar */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-[1200px] px-6 pointer-events-none">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 w-full max-w-[1200px] px-6 pointer-events-none">
         <div className="h-0.5 bg-white/30 overflow-hidden">
           <div
             className="h-full bg-white transition-all duration-500 ease-out"
