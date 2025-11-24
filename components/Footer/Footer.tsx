@@ -28,7 +28,7 @@ export function Footer({
   const usefulLinks: string[] = [
     "Panchshil Privilege",
     "Meet The City",
-    "Prec",
+    "PREC",
     "Clients",
     "Awards",
   ];

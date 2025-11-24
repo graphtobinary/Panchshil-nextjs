@@ -1,9 +1,10 @@
 "use client";
 
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { MetaDataProps } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface NavItemChild {
   label: string;
@@ -19,9 +20,29 @@ interface NavItem {
 export function Header({ metaData }: { metaData: MetaDataProps }) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      // Trigger sticky effect after scrolling 50px
+      setIsScrolled(scrollPosition > 50);
+    };
+
+    // Initial check
+    handleScroll();
+
+    // Add scroll event listener
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const navItems: NavItem[] = [
     { label: "About", href: "/about" },
@@ -40,51 +61,81 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
       ],
     },
   ];
+  const isMobile = useIsMobile();
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50">
+    <header
+      className={`${
+        isScrolled ? "fixed" : "absolute"
+      } top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out`}
+    >
       <title>{metaData.meta_title}</title>
       <meta name="description" content={metaData.meta_description} />
       <meta name="canonical" content={metaData.canonical_tag} />
-      <div className="max-w-[1920px] mx-auto px-6 lg:px-12">
+
+      {/* Background overlay with fade effect */}
+      <div
+        className={`absolute shadow inset-0 bg-white/95 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${
+          isScrolled ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      <div className="relative max-w-[1920px] mx-auto px-6 lg:px-12">
         {/* Logo and Mobile Menu Button */}
-        <div className="relative flex justify-center items-center pt-8 pb-4">
+        <div
+          className={`relative flex justify-center items-center transition-all duration-300 ease-in-out ${
+            isScrolled ? "pt-4 pb-3" : "pt-8 pb-4"
+          }`}
+        >
           <Link href="/" className="flex flex-col items-center">
-            <Image
-              src="/assets/images/panchshil-logo.png"
-              alt="Panchshil"
-              width={98}
-              height={98}
-            />
+            <div
+              className={`transition-transform duration-300 ease-in-out ${
+                isScrolled ? "scale-75" : "scale-100"
+              }`}
+            >
+              <Image
+                src="/assets/images/panchshil-logo.png"
+                alt="Panchshil"
+                width={isMobile ? 70 : 98}
+                height={isMobile ? 70 : 98}
+                className="transition-all duration-300"
+              />
+            </div>
           </Link>
 
           <button
             type="button"
-            className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 items-center justify-center w-12 h-12 rounded-full   text-white"
+            className={`md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 items-center justify-center w-12 h-12 rounded-full transition-colors duration-300 ${
+              isScrolled ? "text-black-chocolate" : "text-white"
+            }`}
             aria-label="Toggle navigation menu"
             onClick={toggleMobileMenu}
           >
             <span
-              className={`block w-6 h-0.5 bg-white transition-transform duration-300 ${
-                isMobileMenuOpen ? "translate-y-[6px] rotate-45" : ""
-              }`}
+              className={`block w-6 h-0.5 transition-transform duration-300 ${
+                isScrolled ? "bg-black-chocolate" : "bg-white"
+              } ${isMobileMenuOpen ? "translate-y-[6px] rotate-45" : ""}`}
             ></span>
             <span
-              className={`block w-6 h-0.5 bg-white transition-opacity duration-300 ${
-                isMobileMenuOpen ? "opacity-0" : "opacity-100"
-              }`}
+              className={`block w-6 h-0.5 transition-opacity duration-300 ${
+                isScrolled ? "bg-black-chocolate" : "bg-white"
+              } ${isMobileMenuOpen ? "opacity-0" : "opacity-100"}`}
             ></span>
             <span
-              className={`block w-6 h-0.5 bg-white transition-transform duration-300 ${
-                isMobileMenuOpen ? "-translate-y-[6px] -rotate-45" : ""
-              }`}
+              className={`block w-6 h-0.5 transition-transform duration-300 ${
+                isScrolled ? "bg-black-chocolate" : "bg-white"
+              } ${isMobileMenuOpen ? "-translate-y-[6px] -rotate-45" : ""}`}
             ></span>
           </button>
         </div>
 
         {/* Navigation Menu */}
         <nav className="hidden md:flex justify-center">
-          <ul className="flex flex-wrap justify-center gap-3 lg:gap-12 text-white">
+          <ul
+            className={`flex flex-wrap justify-center gap-3 lg:gap-12 transition-colors duration-300 ${
+              isScrolled ? "text-black-chocolate" : "text-white"
+            }`}
+          >
             {navItems.map((item) => (
               <li key={item.href} className="relative">
                 <div
