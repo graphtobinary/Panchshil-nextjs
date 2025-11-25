@@ -112,13 +112,13 @@ export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
                       setVideoErrors((prev) => new Set(prev).add(index));
                     }}
                     onLoadedData={() => {
-                      console.log(
-                        "Video loaded successfully:",
-                        slide.master_slider_video
-                      );
+                      // console.log(
+                      //   "Video loaded successfully:",
+                      //   slide.master_slider_video
+                      // );
                     }}
                     onCanPlay={() => {
-                      console.log("Video can play:", slide.master_slider_video);
+                      // console.log("Video can play:", slide.master_slider_video);
                     }}
                   />
                 ) : (

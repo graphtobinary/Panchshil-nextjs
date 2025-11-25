@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Button } from "../Button";
+import Link from "next/link";
 
 interface AccordionItemProps {
   id: number;
@@ -11,6 +12,7 @@ interface AccordionItemProps {
   image: string;
   stats?: Array<{ label: string }>;
   isOpen: boolean;
+  link: string;
   onToggle: () => void;
 }
 
@@ -21,6 +23,7 @@ export function AccordionItem({
   image,
   stats,
   isOpen,
+  link,
   onToggle,
 }: AccordionItemProps) {
   const itemRef = useRef<HTMLDivElement>(null);
@@ -112,9 +115,11 @@ export function AccordionItem({
               )}
               {/* CTA Button */}
               <div className="flex justify-center pt-5">
-                <Button variant="hero" size="lg" className="w-48">
-                  Learn More
-                </Button>
+                <Link href={link}>
+                  <Button variant="hero" size="lg" className="w-48">
+                    Learn More
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

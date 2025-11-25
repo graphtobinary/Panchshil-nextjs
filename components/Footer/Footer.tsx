@@ -84,7 +84,7 @@ export function Footer({
       setIsSubmitting(false);
     }
   };
-  console.log(navigationMenu[6]?.menu, "navigationMenu[6]?.menu");
+
   return (
     <footer className="w-full bg-[#FFFAF7] text-black-chocolate">
       {/* Row 1: Offices & Sales */}
@@ -125,7 +125,11 @@ export function Footer({
             </div>
             <ul className="space-y-3 text-sm">
               {navigationMenu?.map((item, i) => {
-                if (item?.menuTitle === "About") return null;
+                if (
+                  item?.menuTitle === "About" ||
+                  item?.menuTitle === "International Projects"
+                )
+                  return null;
                 return (
                   <li key={item.menuTitle + i}>
                     <Link
@@ -183,7 +187,13 @@ export function Footer({
             <ul className="space-y-3 text-sm">
               {usefulLinks.map((u) => (
                 <li key={u.title}>
-                  <Link className="hover:text-gold-beige" href={u.link}>
+                  <Link
+                    className="hover:text-gold-beige"
+                    href={u.link}
+                    target={
+                      u.title === "Panchshil Privilege" ? "_blank" : "_self"
+                    }
+                  >
                     {u.title}
                   </Link>
                 </li>
@@ -241,7 +251,7 @@ export function Footer({
       <div className="bg-[#35393B] text-white">
         <div className=" mx-auto px-6 py-4 flex items-center justify-between gap-6">
           <div className="text-[12px] font-display-semi">
-            PANCHSHIL &copy; 2025
+            PANCHSHIL &copy; {new Date().getFullYear()}
           </div>
           <div className="hidden md:flex items-center gap-6 text-[12px] opacity-90">
             <Link

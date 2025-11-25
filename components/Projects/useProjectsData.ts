@@ -23,8 +23,8 @@ const TAB_LABELS: Record<TabKey, string> = {
   residential: "Residential",
   office: "Office parks",
   hospitality: "Hospitality",
-  datacenter: "Data center",
   retail: "Retail & F&B",
+  datacenter: "Data Centres",
 };
 
 // Country labels
@@ -144,8 +144,8 @@ export function useProjectsData(properties: PropertiesData | null) {
       residential: [],
       office: [],
       hospitality: [],
-      datacenter: [],
       retail: [],
+      datacenter: [],
     };
 
     const internationalData: Record<
