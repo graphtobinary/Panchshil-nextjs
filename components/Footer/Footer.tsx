@@ -239,7 +239,7 @@ export function Footer({
                 and agree with the{" "}
                 <Link
                   className="underline"
-                  href="/privacy-policy"
+                  href="https://www.panchshil.com/privacy-policy"
                   target="_blank"
                 >
                   data protection policy
