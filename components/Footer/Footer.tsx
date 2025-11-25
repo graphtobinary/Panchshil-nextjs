@@ -1,37 +1,49 @@
 "use client";
 
 import { updateSubscriberFormDetailsAPI } from "@/api/CMS.api";
-import { ContactDetailsProps } from "@/interfaces";
+import { ContactDetailsProps, NavigationMenuProps } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 export function Footer({
   contactDetails,
+  navigationMenu,
 }: {
   contactDetails: ContactDetailsProps;
+  navigationMenu: NavigationMenuProps[];
 }) {
-  const verticals: string[] = [
-    "Office Parks",
-    "Hospitality",
-    "Data Centres",
-    "Residential",
-    "Retail & F&B",
+  const verticals: { title: string; link: string }[] = [
+    { title: "Office Parks", link: "/office-parks" },
+    { title: "Hospitality", link: "/hospitality" },
+    { title: "Data Centres", link: "/data-centres" },
+    { title: "Residential", link: "/residential" },
+    { title: "Retail & F&B", link: "/retail-and-f&b" },
   ];
-  const countries: string[] = ["Dubai", "Maldives", "Sri Lanka"];
-  const quickLinks: string[] = [
-    "About Us",
-    "Services",
-    "Testimonials",
-    "Media",
-    "Blogs",
+  const countries: { title: string; link: string }[] = [
+    { title: "Dubai", link: "/dubai" },
+    { title: "Maldives", link: "/maldives" },
+    { title: "Sri Lanka", link: "/sri-lanka" },
   ];
-  const usefulLinks: string[] = [
-    "Panchshil Privilege",
-    "Meet The City",
-    "PREC",
-    "Clients",
-    "Awards",
+  const quickLinks: { title: string; link: string }[] = [
+    { title: "About Us", link: "https://www.panchshil.com/about" },
+    { title: "Services", link: "https://www.panchshil.com/services" },
+    { title: "Testimonials", link: "https://www.panchshil.com/testimonials" },
+    { title: "Media", link: "https://www.panchshil.com/press" },
+    { title: "Blogs", link: "https://www.panchshil.com/blog" },
+  ];
+  const usefulLinks: { title: string; link: string }[] = [
+    {
+      title: "Panchshil Privilege",
+      link: "https://www.panchshilprivilege.com/",
+    },
+    { title: "Meet The City", link: "https://www.panchshil.com/meet-the-city" },
+    { title: "PREC", link: "https://www.panchshil.com/prec" },
+    { title: "Clients", link: "https://www.panchshil.com/clients" },
+    {
+      title: "Awards",
+      link: "https://www.panchshil.com/awards-and-recognitions",
+    },
   ];
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
@@ -72,7 +84,7 @@ export function Footer({
       setIsSubmitting(false);
     }
   };
-
+  console.log(navigationMenu[6]?.menu, "navigationMenu[6]?.menu");
   return (
     <footer className="w-full bg-[#FFFAF7] text-black-chocolate">
       {/* Row 1: Offices & Sales */}
@@ -112,13 +124,19 @@ export function Footer({
               VERTICALS
             </div>
             <ul className="space-y-3 text-sm">
-              {verticals.map((v) => (
-                <li key={v}>
-                  <a className="hover:text-gold-beige" href="">
-                    {v}
-                  </a>
-                </li>
-              ))}
+              {navigationMenu?.map((item, i) => {
+                if (item?.menuTitle === "About") return null;
+                return (
+                  <li key={item.menuTitle + i}>
+                    <Link
+                      className="hover:text-gold-beige"
+                      href={item.menuURL || ""}
+                    >
+                      {item.menuTitle}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -128,11 +146,14 @@ export function Footer({
               COUNTRIES
             </div>
             <ul className="space-y-3 text-sm">
-              {countries.map((c) => (
-                <li key={c}>
-                  <a className="hover:text-gold-beige" href="">
-                    {c}
-                  </a>
+              {navigationMenu[6]?.menu?.map((item, i) => (
+                <li key={item.menuTitle + i}>
+                  <Link
+                    className="hover:text-gold-beige"
+                    href={item.menuURL || ""}
+                  >
+                    {item.menuTitle}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -145,10 +166,10 @@ export function Footer({
             </div>
             <ul className="space-y-3 text-sm">
               {quickLinks.map((q) => (
-                <li key={q}>
-                  <a className="hover:text-gold-beige" href="">
-                    {q}
-                  </a>
+                <li key={q.title}>
+                  <Link className="hover:text-gold-beige" href={q.link}>
+                    {q.title}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -161,10 +182,10 @@ export function Footer({
             </div>
             <ul className="space-y-3 text-sm">
               {usefulLinks.map((u) => (
-                <li key={u}>
-                  <a className="hover:text-gold-beige" href="">
-                    {u}
-                  </a>
+                <li key={u.title}>
+                  <Link className="hover:text-gold-beige" href={u.link}>
+                    {u.title}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -223,16 +244,28 @@ export function Footer({
             PANCHSHIL &copy; 2025
           </div>
           <div className="hidden md:flex items-center gap-6 text-[12px] opacity-90">
-            <a className="hover:text-gold-beige" href="">
+            <Link
+              target="_blank"
+              className="hover:text-gold-beige"
+              href="https://www.panchshil.com/terms-and-conditions"
+            >
               {" "}
               Term Of Use
-            </a>
-            <a className="hover:text-gold-beige" href="">
+            </Link>
+            <Link
+              target="_blank"
+              className="hover:text-gold-beige"
+              href="https://www.panchshil.com/privacy-policy"
+            >
               Privacy
-            </a>
-            <a className="hover:text-gold-beige" href="">
+            </Link>
+            <Link
+              target="_blank"
+              className="hover:text-gold-beige"
+              href="https://www.panchshil.com/disclaimer"
+            >
               Disclaimer
-            </a>
+            </Link>
           </div>
           <div className="flex items-center gap-3">
             <Image
