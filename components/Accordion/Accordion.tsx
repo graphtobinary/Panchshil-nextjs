@@ -34,6 +34,7 @@ export function Accordion({
         description: item.property_category_description,
         image: item.property_category_image,
         stats: stats.length > 0 ? stats : undefined,
+        link: item.property_category_link,
       };
     });
   }, [propertyCategories]);
@@ -55,6 +56,7 @@ export function Accordion({
             description={item.description}
             image={item.image}
             stats={item.stats}
+            link={item.link}
             isOpen={openIndex === item.id}
             onToggle={() => handleToggle(item.id)}
           />
