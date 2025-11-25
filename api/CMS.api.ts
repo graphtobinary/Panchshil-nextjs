@@ -230,3 +230,15 @@ export const getSubscriberFormDetails = (token: string) => {
     }
   );
 };
+
+export const getNavigationMenu = (token: string) => {
+  return doGet(
+    API_CONSTANTS.NAVIGATION_MENU,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};

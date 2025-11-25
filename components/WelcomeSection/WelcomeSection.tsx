@@ -219,8 +219,8 @@ export function WelcomeSection({
           <video
             src={
               isMobile
-                ? "/assets/videos/EON-Sky.mp4"
-                : getVideoUrl(aboutIntroData.about_intro_video)
+                ? getVideoUrl(aboutIntroData.about_intro_mobile_video)
+                : getVideoUrl(aboutIntroData.about_intro_desktop_video)
             }
             autoPlay
             loop
@@ -232,18 +232,21 @@ export function WelcomeSection({
             onError={(e) => {
               console.error(
                 "Video failed to load:",
-                aboutIntroData.about_intro_video,
+                aboutIntroData.about_intro_desktop_video,
                 e
               );
             }}
             onLoadedData={() => {
               console.log(
                 "Video loaded successfully:",
-                aboutIntroData.about_intro_video
+                aboutIntroData.about_intro_desktop_video
               );
             }}
             onCanPlay={() => {
-              console.log("Video can play:", aboutIntroData.about_intro_video);
+              console.log(
+                "Video can play:",
+                aboutIntroData.about_intro_desktop_video
+              );
             }}
           />
         </div>

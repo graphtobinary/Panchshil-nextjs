@@ -1,7 +1,7 @@
 "use client";
 
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { MetaDataProps } from "@/interfaces";
+import { MetaDataProps, NavigationMenuProps } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -17,7 +17,13 @@ interface NavItem {
   child?: NavItemChild[];
 }
 
-export function Header({ metaData }: { metaData: MetaDataProps }) {
+export function Header({
+  metaData,
+  navigationMenu,
+}: {
+  metaData: MetaDataProps;
+  navigationMenu: NavigationMenuProps[];
+}) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -62,7 +68,6 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
     },
   ];
   const isMobile = useIsMobile();
-
   return (
     <header
       className={`${
@@ -136,25 +141,27 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
               isScrolled ? "text-black-chocolate" : "text-white"
             }`}
           >
-            {navItems.map((item) => (
-              <li key={item.href} className="relative">
+            {navigationMenu?.map((item, i) => (
+              <li key={item?.menuURL + i} className="relative">
                 <div
-                  className={`relative ${item.child ? "pb-3" : ""}`}
-                  onMouseEnter={() => item.child && setHoveredItem(item.href)}
+                  className={`relative ${item?.menu ? "pb-3" : ""}`}
+                  onMouseEnter={() =>
+                    item?.menu && setHoveredItem(item.menuURL)
+                  }
                   onMouseLeave={() => setHoveredItem(null)}
                 >
                   <Link
-                    href={item.href}
+                    href={item?.menuURL || ""}
                     className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light block"
                   >
-                    {item.label}
+                    {item.menuTitle}
                   </Link>
 
                   {/* Dropdown Menu */}
-                  {item.child && (
+                  {item?.menu && (
                     <div
                       className={`absolute top-full left-1/2 -translate-x-1/2 z-50 transition-all duration-200 ${
-                        hoveredItem === item.href
+                        hoveredItem === item?.menuURL
                           ? "opacity-100 visible"
                           : "opacity-0 invisible pointer-events-none"
                       }`}
@@ -162,14 +169,14 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
                     >
                       <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg min-w-[160px] py-2">
                         <ul className="flex flex-col">
-                          {item.child.map((childItem) => (
-                            <li key={childItem.href}>
+                          {item?.menu.map((childItem) => (
+                            <li key={childItem?.menuURL}>
                               <Link
-                                href={childItem.href}
+                                href={childItem?.menuURL}
                                 className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 transition-colors hover:font-medium"
                                 onClick={closeMobileMenu}
                               >
-                                {childItem.label}
+                                {childItem.menuTitle}
                               </Link>
                             </li>
                           ))}

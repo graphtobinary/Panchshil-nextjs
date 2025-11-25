@@ -16,6 +16,7 @@ const API_CONSTANTS = {
   SUBSCRIBER_FORM_DETAILS_API: "/api/subscriber-form-details",
   BANNER: `/banner`,
   META_DATA: `/meta-data`,
+  NAVIGATION_MENU: `/navigation-menu`,
 };
 
 export default API_CONSTANTS;

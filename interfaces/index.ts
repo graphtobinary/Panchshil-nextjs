@@ -94,7 +94,8 @@ export type PropertyHighlight = {
 
 export type FeaturedPropertiesProps = {
   property_name: string;
-  property_background_image: string;
+  property_background_desktop_image: string;
+  property_background_mobile_image: string;
   property_highlights: PropertyHighlight[];
 };
 
@@ -108,6 +109,15 @@ export type MetaDataProps = {
   canonical_tag: string;
   meta_description: string;
   meta_title: string;
+};
+
+export type NavigationMenuProps = {
+  menuTitle: string;
+  menuURL: string;
+  menu: {
+    menuTitle: string;
+    menuURL: string;
+  }[];
 };
 
 export type BannersProps = {
@@ -131,6 +141,7 @@ export type ServicesProps = {
 };
 
 export interface HomeClientProps {
+  navigationMenu: NavigationMenuProps[];
   metaData: MetaDataProps;
   banner: BannersProps;
   contactDetails: ContactDetailsProps;
@@ -163,7 +174,8 @@ export type AboutIntroData = {
   about_intro_description: string;
   about_intro_link: string;
   about_intro_image: string;
-  about_intro_video: string;
+  about_intro_desktop_video: string;
+  about_intro_mobile_video: string;
   about_intro_button_caption: string;
 };
 

@@ -8,6 +8,7 @@ import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { Button } from "@/components/Button";
 
 import { FeaturedPropertiesProps, PropertyHighlight } from "@/interfaces";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface SignatureCarouselProps {
   featuredProperties: FeaturedPropertiesProps[];
@@ -45,6 +46,7 @@ export function SignatureCarousel({
       emblaApi.off("reInit", onSelect);
     };
   }, [emblaApi, onSelect]);
+  const isMobile = useIsMobile();
 
   return (
     <div className="relative w-full">
@@ -76,7 +78,9 @@ export function SignatureCarousel({
         <div className="embla-signature__container">
           {featuredProperties?.map(
             (property: FeaturedPropertiesProps, i: number) => {
-              const imageSrc = property.property_background_image;
+              const imageSrc = !isMobile
+                ? property.property_background_desktop_image
+                : property.property_background_mobile_image;
 
               return (
                 <div key={i} className="embla-signature__slide">
