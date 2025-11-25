@@ -9,6 +9,7 @@ import {
   MilestonesProps,
   Stat,
 } from "@/interfaces";
+import Link from "next/link";
 
 function useCountUp(targetValue: number, isActive: boolean, duration = 2000) {
   const [currentValue, setCurrentValue] = useState(0);
@@ -199,13 +200,15 @@ export function WelcomeSection({
           </div>
 
           {/* CTA Button */}
-          <Button
-            variant="overlay"
-            size="lg"
-            className={`w-56 ${isInView ? "animate-fade-in-up-delay-5" : "opacity-0"}`}
-          >
-            Learn More
-          </Button>
+          <Link href={aboutIntroData.about_intro_link}>
+            <Button
+              variant="overlay"
+              size="lg"
+              className={`w-56 ${isInView ? "animate-fade-in-up-delay-5" : "opacity-0"}`}
+            >
+              Learn More
+            </Button>
+          </Link>
         </div>
       </div>
 
