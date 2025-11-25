@@ -237,9 +237,13 @@ export function Footer({
               <p className="text-[11px] text-black-chocolate/70 leading-relaxed tracking-wider">
                 By signing up I want to hear about new updates and masterpieces
                 and agree with the{" "}
-                <a className="underline" href="/privacy-policy">
+                <Link
+                  className="underline"
+                  href="/privacy-policy"
+                  target="_blank"
+                >
                   data protection policy
-                </a>{" "}
+                </Link>{" "}
                 of panchshil
               </p>
             </form>
