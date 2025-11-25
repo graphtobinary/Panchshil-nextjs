@@ -169,10 +169,10 @@ export function Header({
                     >
                       <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg min-w-[160px] py-2">
                         <ul className="flex flex-col">
-                          {item?.menu.map((childItem) => (
-                            <li key={childItem?.menuURL}>
+                          {item?.menu.map((childItem, j) => (
+                            <li key={childItem?.menuURL + i + j}>
                               <Link
-                                href={childItem?.menuURL}
+                                href={childItem?.menuURL || ""}
                                 className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 transition-colors hover:font-medium"
                                 onClick={closeMobileMenu}
                               >
@@ -219,25 +219,25 @@ export function Header({
           </div>
           <nav className="p-6">
             <ul className="flex flex-col gap-4 text-black-chocolate">
-              {navItems.map((item) => (
-                <li key={item.href}>
+              {navigationMenu?.map((item, i) => (
+                <li key={item?.menuURL + i}>
                   <Link
-                    href={item.href}
+                    href={item?.menuURL || ""}
                     className="text-lg font-light hover:text-gray-600 transition-colors block"
                     onClick={closeMobileMenu}
                   >
-                    {item.label}
+                    {item?.menuTitle}
                   </Link>
-                  {item.child && (
+                  {item?.menu && (
                     <ul className="mt-2 ml-4 space-y-2 text-sm text-gray-600">
-                      {item.child.map((childItem) => (
-                        <li key={childItem.href}>
+                      {item?.menu.map((childItem, k) => (
+                        <li key={childItem?.menuURL + k + i}>
                           <Link
-                            href={childItem.href}
+                            href={childItem?.menuURL || ""}
                             className="block hover:text-black transition-colors"
                             onClick={closeMobileMenu}
                           >
-                            {childItem.label}
+                            {childItem?.menuTitle}
                           </Link>
                         </li>
                       ))}
