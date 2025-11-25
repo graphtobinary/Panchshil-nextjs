@@ -14,6 +14,7 @@ import {
   getBanner,
   getFooterBlocks,
   getMilestones,
+  getNavigationMenu,
 } from "@/api/CMS.api";
 import HomeClient from "./HomeClient";
 import {
@@ -31,6 +32,7 @@ import {
   BannersProps,
   FooterBlocksProps,
   MilestonesProps,
+  NavigationMenuProps,
 } from "@/interfaces";
 import { MasterSliderData } from "@/components/Hero/CustomCarousel";
 
@@ -49,6 +51,7 @@ export default async function Home() {
   // Fetch all data in parallel if token is available, otherwise return null promises
   const apiCalls = token
     ? [
+        getNavigationMenu(token),
         getMetaData(token, "Home"),
         getBanner(token, "Home"),
         getContactDetails(token),
@@ -67,6 +70,7 @@ export default async function Home() {
     : Array.from({ length: 10 }, () => Promise.resolve(null));
 
   const [
+    navigationMenu,
     metaData,
     banner,
     contactDetails,
@@ -85,6 +89,10 @@ export default async function Home() {
 
   // Extract data from settled promises with type assertions
   const data = {
+    navigationMenu:
+      navigationMenu?.status === "fulfilled"
+        ? (navigationMenu.value as NavigationMenuProps[])
+        : [],
     metaData:
       metaData.status === "fulfilled"
         ? (metaData.value as MetaDataProps)
@@ -111,7 +119,8 @@ export default async function Home() {
             about_intro_description: "",
             about_intro_link: "",
             about_intro_image: "",
-            about_intro_video: "",
+            about_intro_desktop_video: "",
+            about_intro_mobile_video: "",
             about_intro_button_caption: "",
           },
     milestones:
@@ -153,6 +162,7 @@ export default async function Home() {
 
   return (
     <HomeClient
+      navigationMenu={data.navigationMenu as NavigationMenuProps[]}
       metaData={data.metaData as MetaDataProps}
       banner={data.banner as BannersProps}
       contactDetails={data.contactDetails}
