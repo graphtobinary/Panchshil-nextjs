@@ -228,7 +228,7 @@ export function WelcomeSection({
             playsInline
             preload="metadata"
             crossOrigin="anonymous"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             onError={(e) => {
               console.error(
                 "Video failed to load:",
