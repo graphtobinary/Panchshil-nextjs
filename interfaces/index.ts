@@ -11,6 +11,7 @@ export interface ProjectCardData {
   title: string;
   location: string;
   image: string;
+  link: string;
 }
 
 export interface ProjectsCarouselProps {
@@ -97,6 +98,7 @@ export type FeaturedPropertiesProps = {
   property_background_desktop_image: string;
   property_background_mobile_image: string;
   property_highlights: PropertyHighlight[];
+  property_link: string;
 };
 
 export type ContactDetailsProps = {

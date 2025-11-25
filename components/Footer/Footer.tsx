@@ -3,6 +3,7 @@
 import { updateSubscriberFormDetailsAPI } from "@/api/CMS.api";
 import { ContactDetailsProps } from "@/interfaces";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 export function Footer({
@@ -93,7 +94,9 @@ export function Footer({
                   width={18}
                   height={18}
                 />
-                <span>{contact.contact_number}</span>
+                <Link href={`tel:${contact.contact_number}`}>
+                  <span>{contact.contact_number}</span>
+                </Link>
               </div>
             )}
           </div>

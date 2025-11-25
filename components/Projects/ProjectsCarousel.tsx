@@ -6,6 +6,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { ProjectsCarouselProps } from "@/interfaces";
+import Link from "next/link";
 
 export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -15,6 +16,14 @@ export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
     loop: false,
     containScroll: "trimSnaps",
   });
+
+  // Reset carousel to start when items change
+  useEffect(() => {
+    if (emblaApi && items.length > 0) {
+      emblaApi.reInit();
+      emblaApi.scrollTo(0);
+    }
+  }, [emblaApi, items]);
 
   const [scrollProgress, setScrollProgress] = useState(0);
   const [canPrev, setCanPrev] = useState(false);
@@ -87,9 +96,10 @@ export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
       {/* Carousel viewport */}
       <div className="embla-projects mx-2 md:mx-0" ref={emblaRef}>
         <div className="embla-projects__container gap-6 md:gap-8 ">
-          {items.map((item) => (
-            <div
-              key={item.id}
+          {items.map((item, i) => (
+            <Link
+              key={item.id + i}
+              href={item.link}
               className={`cursor-pointer embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative h-[300px] md:h-[420px] overflow-hidden `}
             >
               <Image
@@ -112,7 +122,7 @@ export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
                   {item.location}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

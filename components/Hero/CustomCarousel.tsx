@@ -5,6 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { Button } from "../Button/Button";
+import Link from "next/link";
 
 export interface SlideData {
   image?: string;
@@ -130,7 +131,7 @@ export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
                   />
                 )}
                 {/* Overlay for better text readability */}
-                <div className="absolute inset-0 bg-black/20"></div>
+                <div className="absolute inset-0 bg-black/20 pointer-events-none"></div>
               </div>
             );
           })}
@@ -151,9 +152,14 @@ export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
           </p>
 
           {/* CTA Button */}
-          <Button variant="hero" size="lg" className="w-48">
-            {currentSlide?.master_slider_button_caption}
-          </Button>
+          <Link
+            href={currentSlide?.master_slider_link || "#"}
+            className="pointer-events-auto z-50 relative"
+          >
+            <Button variant="hero" size="lg" className="w-48">
+              {currentSlide?.master_slider_button_caption}
+            </Button>
+          </Link>
           {/* <button className="relative w-36 h-12 pointer-events-auto">
               <span className="absolute top-0 left-0 right-0 bottom-0 bg-white opacity-40 hover:opacity-50 cursor-pointer text-white transition-opacity font-medium text-lg"></span>
               <div className=" w-full absolute z-10 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">

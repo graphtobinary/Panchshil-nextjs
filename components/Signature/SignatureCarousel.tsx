@@ -9,6 +9,7 @@ import { Button } from "@/components/Button";
 
 import { FeaturedPropertiesProps, PropertyHighlight } from "@/interfaces";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import Link from "next/link";
 
 interface SignatureCarouselProps {
   featuredProperties: FeaturedPropertiesProps[];
@@ -132,9 +133,11 @@ export function SignatureCarousel({
                       </div>
 
                       <div className="mt-8">
-                        <Button variant="signature" className="px-6">
-                          {"Discover"}
-                        </Button>
+                        <Link href={property.property_link}>
+                          <Button variant="signature" className="px-6">
+                            {"Discover"}
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                   </div>
