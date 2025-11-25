@@ -69,12 +69,27 @@ const doCall = async (
     url = process.env.NEXT_PUBLIC_BASE_API_ENDPOINT + uri.replace(/^\/api/, "");
   }
 
-  return fetch(url, {
+  // Add Next.js caching support for server-side requests
+  // In Next.js 13+, fetch requests are cached by default
+  // For POST requests, we need to explicitly disable caching
+  const fetchOptions: RequestInit = {
     ...option,
     headers: {
       ...option.headers,
     },
-  }).then((response: Response) => {
+  };
+
+  // Only add caching options on server-side (not in browser)
+  if (!isBrowser()) {
+    // For GET requests, use default caching (respects page revalidate)
+    // For POST/PATCH/DELETE, disable caching
+    if (option.method && ["POST", "PATCH", "DELETE"].includes(option.method)) {
+      fetchOptions.cache = "no-store";
+    }
+    // GET requests will use Next.js default caching behavior
+  }
+
+  return fetch(url, fetchOptions).then((response: Response) => {
     if (response.ok === false) {
       return response.json().then((res) => {
         let message;
