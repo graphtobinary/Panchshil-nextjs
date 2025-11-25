@@ -279,7 +279,7 @@ export function Footer({
           </div>
           <div className="flex items-center gap-3">
             <Image
-              src="/assets/images/social-icons.png"
+              src="/assets/images/social-icons.webp"
               alt="social"
               width={140}
               height={24}
