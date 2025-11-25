@@ -33,6 +33,7 @@ export function AccordionItem({
       clickRef.current = false; // reset after scroll
     }
   }, [isOpen]);
+
   return (
     <div ref={itemRef}>
       {/* Accordion Header */}

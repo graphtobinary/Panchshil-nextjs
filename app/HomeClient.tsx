@@ -45,7 +45,7 @@ export default function HomeClient({
       />
       <Services servicesIntro={servicesIntro} services={services} />
       <LatestNews footerBlocks={footerBlocks} />
-      <Footer contactDetails={contactDetails} />
+      <Footer contactDetails={contactDetails} navigationMenu={navigationMenu} />
     </main>
   );
 }
