@@ -73,7 +73,7 @@ export function Projects({ properties, propertiesIntro }: ProjectsProps) {
     setSelectedCountry(country);
     setSelectedCategory("residential"); // Reset to default category
   };
-  console.log(carouselItems, "carouselItems");
+
   return (
     <section ref={sectionRef} className="w-full bg-[#FFFAF7] py-20">
       <div className="mx-auto">

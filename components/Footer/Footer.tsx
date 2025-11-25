@@ -84,7 +84,7 @@ export function Footer({
       setIsSubmitting(false);
     }
   };
-  console.log(navigationMenu[6]?.menu, "navigationMenu[6]?.menu");
+
   return (
     <footer className="w-full bg-[#FFFAF7] text-black-chocolate">
       {/* Row 1: Offices & Sales */}
