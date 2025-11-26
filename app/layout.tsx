@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import {
   zapfHumanist601Roman,
@@ -64,8 +65,103 @@ export default async function RootLayout({
     console.error("Error fetching auth token in layout:", err);
   }
 
+  const structuredData = [
+    {
+      "@context": "http://schema.org",
+      "@type": "LocalBusiness",
+      name: "Panchshil Realty",
+      image: "https://www.panchshil.com/assets/images/home/logo.png",
+      telephone: "+912066473200",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Tech Park One, Tower E, 191",
+        addressLocality: "Yerwada",
+        addressCountry: "INDIA",
+        postalCode: "411 006",
+      },
+      url: "https://www.panchshil.com/",
+    },
+    {
+      "@context": "http://schema.org",
+      "@type": "LocalBusiness",
+      name: "Panchshil",
+      image: "https://www.panchshil.com/assets/images/home/logo.png",
+      telephone: "+912066473200",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Tech Park One, Tower E, 191",
+        addressLocality: "Pune",
+        addressCountry: "INDIA",
+        postalCode: "411 006",
+      },
+      url: "https://www.panchshil.com/",
+    },
+  ];
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=UA-102870459-1"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics-1" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-102870459-1');
+          `}
+        </Script>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-778184038"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics-2" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-778184038');
+          `}
+        </Script>
+        <Script id="google-conversion" strategy="afterInteractive">
+          {`
+            gtag('event', 'conversion', {'send_to': 'AW-778184038/o_MwCIXvypMBEObKiPMC'});
+          `}
+        </Script>
+        <Script id="google-tag-manager" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-KSDBCQ8');
+          `}
+        </Script>
+        <Script id="facebook-pixel" strategy="afterInteractive">
+          {`
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window,document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '474815303023180'); 
+            fbq('track', 'PageView');
+          `}
+        </Script>
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+      </head>
       <body
         className={`${openSans.variable} ${zapfHumanist601Roman.variable} ${zapfHumanist601Bold.variable} ${zapfHumanist601Semi.variable} ${zapfHumanist601Ultra.variable} antialiased`}
         suppressHydrationWarning
