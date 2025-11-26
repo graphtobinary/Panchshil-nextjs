@@ -103,7 +103,7 @@ export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
                   src={item.image}
                   alt={item.title}
                   fill
-                  className="object-cover"
+                  className="object-fill"
                   sizes="(min-width: 1024px) 28vw, 80vw"
                 />
 
