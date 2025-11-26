@@ -282,12 +282,59 @@ export function Footer({
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <Image
-              src="/assets/images/social-icons.webp"
-              alt="social"
-              width={140}
-              height={24}
-            />
+            <Link
+              href="https://www.facebook.com/panchshilrealty/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <Image
+                src="/assets/images/facebook.svg"
+                alt="Facebook"
+                width={30}
+                height={30}
+              />
+            </Link>
+            <Link
+              href="https://www.instagram.com/panchshilrealty/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <Image
+                src="/assets/images/instagram.svg"
+                alt="Instagram"
+                width={30}
+                height={30}
+              />
+            </Link>
+            <Link
+              href="https://www.linkedin.com/company/panchshilrealty/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
+              <Image
+                src="/assets/images/linked in.svg"
+                alt="LinkedIn"
+                width={30}
+                height={30}
+              />
+            </Link>
+
+            <Link
+              href="https://www.youtube.com/user/panchshilrealtypune"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube"
+            >
+              <Image
+                src="/assets/images/youtube.svg"
+                alt="YouTube"
+                width={30}
+                height={30}
+              />
+            </Link>
           </div>
         </div>
       </div>
