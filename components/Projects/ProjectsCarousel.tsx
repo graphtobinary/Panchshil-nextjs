@@ -96,34 +96,50 @@ export function ProjectsCarousel({ items }: ProjectsCarouselProps) {
       {/* Carousel viewport */}
       <div className="embla-projects mx-2 md:mx-0" ref={emblaRef}>
         <div className="embla-projects__container gap-6 md:gap-8 ">
-          {items.map((item, i) => (
-            <Link
-              key={item.id + i}
-              href={item.link}
-              className={`cursor-pointer embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative h-[300px] md:h-[420px] overflow-hidden `}
-            >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover"
-                sizes="(min-width: 1024px) 28vw, 80vw"
-              />
+          {items.map((item, i) => {
+            const slideContent = (
+              <>
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 28vw, 80vw"
+                />
 
-              {/* bottom gradient */}
-              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+                {/* bottom gradient */}
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
 
-              {/* text overlay */}
-              <div className="absolute left-0 right-0 bottom-0 p-5 text-white">
-                <div className="mt-1 text-[15px] md:text-[16px] font-display-semi ">
-                  {item.title}
+                {/* text overlay */}
+                <div className="absolute left-0 right-0 bottom-0 p-5 text-white">
+                  <div className="mt-1 text-[15px] md:text-[16px] font-display-semi ">
+                    {item.title}
+                  </div>
+                  <div className="text-sm md:text-[12px] tracking-wide opacity-90">
+                    {item.location}
+                  </div>
                 </div>
-                <div className="text-sm md:text-[12px] tracking-wide opacity-90">
-                  {item.location}
-                </div>
+              </>
+            );
+
+            const slideClassName = `embla-projects__slide basis-[80%] md:basis-[28.571%] shrink-0 grow-0 relative h-[300px] md:h-[420px] overflow-hidden ${
+              item.link ? "cursor-pointer" : ""
+            }`;
+
+            return item.link ? (
+              <Link
+                key={item.id + i}
+                href={item.link}
+                className={slideClassName}
+              >
+                {slideContent}
+              </Link>
+            ) : (
+              <div key={item.id + i} className={slideClassName}>
+                {slideContent}
               </div>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
 
