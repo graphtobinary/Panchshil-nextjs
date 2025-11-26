@@ -130,6 +130,45 @@ export default async function RootLayout({
             gtag('event', 'conversion', {'send_to': 'AW-778184038/o_MwCIXvypMBEObKiPMC'});
           `}
         </Script>
+        <Script id="jquery-fallback" strategy="beforeInteractive">
+          {`
+            // Prevent jQuery errors if GTM tags require it
+            (function() {
+              if (typeof window.jQuery === 'undefined' && typeof window.$ === 'undefined') {
+                var createNoop = function() {
+                  var noop = function() { return noop; };
+                  noop.ready = function(fn) { 
+                    if (document.readyState === 'complete') { 
+                      setTimeout(fn, 0); 
+                    } else { 
+                      document.addEventListener('DOMContentLoaded', fn); 
+                    }
+                    return noop;
+                  };
+                  noop.on = noop.off = noop.click = noop.each = noop.find = 
+                  noop.addClass = noop.removeClass = noop.hide = noop.show = 
+                  noop.fadeIn = noop.fadeOut = noop.slideDown = noop.slideUp = 
+                  noop.val = noop.text = noop.html = noop.attr = noop.data = 
+                  noop.append = noop.prepend = noop.remove = noop.empty = noop;
+                  noop.is = function() { return false; };
+                  noop.length = 0;
+                  return noop;
+                };
+                var noop = createNoop();
+                window.jQuery = window.$ = function(selector) {
+                  if (typeof selector === 'function') {
+                    noop.ready(selector);
+                    return noop;
+                  }
+                  return noop;
+                };
+                window.jQuery.fn = window.$.fn = {};
+                window.jQuery.ajax = function() { return Promise.resolve({}); };
+                window.jQuery.when = function() { return Promise.resolve({}); };
+              }
+            })();
+          `}
+        </Script>
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

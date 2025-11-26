@@ -1,14 +1,12 @@
-import { TabKey } from "@/interfaces";
-
 interface Category {
-  key: TabKey;
+  key: string;
   label: string;
 }
 
 interface CategoryTabsProps {
   categories: Category[];
-  selectedCategory: TabKey;
-  onCategoryChange: (category: TabKey) => void;
+  selectedCategory: string;
+  onCategoryChange: (category: string) => void;
   isInView: boolean;
 }
 

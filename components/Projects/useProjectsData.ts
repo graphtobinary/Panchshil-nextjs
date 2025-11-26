@@ -1,38 +1,6 @@
 import { useMemo } from "react";
 import { PropertiesData, Property } from "@/interfaces";
-import { RegionKey, TabKey, CountryKey, ProjectCardData } from "@/interfaces";
-
-// Map API category names to TabKey
-const CATEGORY_MAP: Record<string, TabKey> = {
-  Residential: "residential",
-  "Office Parks": "office",
-  Hospitality: "hospitality",
-  "Data Centres": "datacenter",
-  "Retail & F&B": "retail",
-};
-
-// Map API country names to CountryKey
-const COUNTRY_MAP: Record<string, CountryKey> = {
-  "United Arab Emirates": "dubai",
-  Maldives: "maldives",
-  "Sri Lanka": "srilanka",
-};
-
-// Tab labels
-const TAB_LABELS: Record<TabKey, string> = {
-  residential: "Residential",
-  office: "Office parks",
-  hospitality: "Hospitality",
-  retail: "Retail & F&B",
-  datacenter: "Data Centres",
-};
-
-// Country labels
-const COUNTRY_LABELS: Record<CountryKey, string> = {
-  dubai: "Dubai",
-  maldives: "Maldives",
-  srilanka: "Sri Lanka",
-};
+import { RegionKey, ProjectCardData } from "@/interfaces";
 
 // Convert Property to ProjectCardData
 function propertyToProjectCard(property: Property): ProjectCardData {
@@ -50,81 +18,9 @@ function propertyToProjectCard(property: Property): ProjectCardData {
   };
 }
 
-// Process India region data
-function processIndiaData(
-  indiaData: Array<Record<string, Property[]>>
-): Record<TabKey, ProjectCardData[]> {
-  const result: Record<TabKey, ProjectCardData[]> = {
-    residential: [],
-    office: [],
-    hospitality: [],
-    datacenter: [],
-    retail: [],
-  };
-
-  indiaData.forEach((categoryGroup) => {
-    Object.entries(categoryGroup).forEach(([categoryName, properties]) => {
-      const tabKey = CATEGORY_MAP[categoryName];
-      if (tabKey && Array.isArray(properties)) {
-        result[tabKey] = properties.map(propertyToProjectCard);
-      }
-    });
-  });
-
-  return result;
-}
-
-// Process International region data
-function processInternationalData(
-  internationalData: Array<
-    Record<string, Property[] | Record<string, Property[]>>
-  >
-): Record<CountryKey, Record<TabKey, ProjectCardData[]>> {
-  const result: Record<CountryKey, Record<TabKey, ProjectCardData[]>> = {
-    dubai: {
-      residential: [],
-      office: [],
-      hospitality: [],
-      datacenter: [],
-      retail: [],
-    },
-    maldives: {
-      residential: [],
-      office: [],
-      hospitality: [],
-      datacenter: [],
-      retail: [],
-    },
-    srilanka: {
-      residential: [],
-      office: [],
-      hospitality: [],
-      datacenter: [],
-      retail: [],
-    },
-  };
-
-  internationalData.forEach((countryGroup) => {
-    Object.entries(countryGroup).forEach(([countryName, countryData]) => {
-      const countryKey = COUNTRY_MAP[countryName];
-      if (!countryKey) return;
-
-      if (Array.isArray(countryData)) {
-        // Direct array of properties - assign to residential
-        result[countryKey].residential = countryData.map(propertyToProjectCard);
-      } else if (typeof countryData === "object" && countryData !== null) {
-        // Object with categories
-        Object.entries(countryData).forEach(([categoryName, properties]) => {
-          const tabKey = CATEGORY_MAP[categoryName];
-          if (tabKey && Array.isArray(properties)) {
-            result[countryKey][tabKey] = properties.map(propertyToProjectCard);
-          }
-        });
-      }
-    });
-  });
-
-  return result;
+// Create a normalized key from category/country name (for consistent keys)
+function normalizeKey(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "and");
 }
 
 export function useProjectsData(properties: PropertiesData | null) {
@@ -132,74 +28,120 @@ export function useProjectsData(properties: PropertiesData | null) {
     if (!properties || properties.length === 0) {
       return {
         regions: [] as RegionKey[],
-        indiaData: {} as Record<TabKey, ProjectCardData[]>,
+        indiaData: {} as Record<string, ProjectCardData[]>,
         internationalData: {} as Record<
-          CountryKey,
-          Record<TabKey, ProjectCardData[]>
+          string,
+          Record<string, ProjectCardData[]>
         >,
+        indiaCategories: [] as Array<{ key: string; label: string }>,
+        internationalCountries: [] as Array<{ key: string; label: string }>,
+        internationalCategoryMaps: {} as Record<string, Record<string, string>>,
       };
     }
 
-    const indiaData: Record<TabKey, ProjectCardData[]> = {
-      residential: [],
-      office: [],
-      hospitality: [],
-      retail: [],
-      datacenter: [],
-    };
-
+    // Dynamic data structures
+    const indiaData: Record<string, ProjectCardData[]> = {};
     const internationalData: Record<
-      CountryKey,
-      Record<TabKey, ProjectCardData[]>
-    > = {
-      dubai: {
-        residential: [],
-        office: [],
-        hospitality: [],
-        datacenter: [],
-        retail: [],
-      },
-      maldives: {
-        residential: [],
-        office: [],
-        hospitality: [],
-        datacenter: [],
-        retail: [],
-      },
-      srilanka: {
-        residential: [],
-        office: [],
-        hospitality: [],
-        datacenter: [],
-        retail: [],
-      },
-    };
+      string,
+      Record<string, ProjectCardData[]>
+    > = {};
+    // Use arrays to preserve insertion order
+    const indiaCategoryNames: string[] = [];
+    const countryNames: string[] = [];
+    // Map to store category names per country (countryKey -> Map<categoryKey, originalName>)
+    const countryCategoryMaps = new Map<string, Map<string, string>>();
 
     // Process each region data
     properties.forEach((regionData) => {
+      // Process India region
       if (regionData.India && Array.isArray(regionData.India)) {
-        const processed = processIndiaData(regionData.India);
-        Object.keys(processed).forEach((key) => {
-          const tabKey = key as TabKey;
-          // Accumulate data from multiple entries, creating fresh arrays
-          if (processed[tabKey].length > 0) {
-            indiaData[tabKey] = [...indiaData[tabKey], ...processed[tabKey]];
-          }
+        regionData.India.forEach((categoryGroup) => {
+          Object.entries(categoryGroup).forEach(
+            ([categoryName, properties]) => {
+              if (!Array.isArray(properties)) return;
+
+              const normalizedKey = normalizeKey(categoryName);
+              // Preserve order - only add if not already in array
+              if (!indiaCategoryNames.includes(categoryName)) {
+                indiaCategoryNames.push(categoryName);
+              }
+
+              if (!indiaData[normalizedKey]) {
+                indiaData[normalizedKey] = [];
+              }
+
+              // Accumulate properties for this category
+              indiaData[normalizedKey] = [
+                ...indiaData[normalizedKey],
+                ...properties.map(propertyToProjectCard),
+              ];
+            }
+          );
         });
       }
 
+      // Process International region
       if (regionData.International && Array.isArray(regionData.International)) {
-        const processed = processInternationalData(regionData.International);
-        Object.keys(processed).forEach((countryKey) => {
-          const key = countryKey as CountryKey;
-          Object.keys(processed[key]).forEach((tabKey) => {
-            const categoryKey = tabKey as TabKey;
-            // Accumulate data from multiple entries, creating fresh arrays
-            if (processed[key][categoryKey].length > 0) {
-              internationalData[key][categoryKey] = [
-                ...internationalData[key][categoryKey],
-                ...processed[key][categoryKey],
+        regionData.International.forEach((countryGroup) => {
+          Object.entries(countryGroup).forEach(([countryName, countryData]) => {
+            const normalizedCountryKey = normalizeKey(countryName);
+            // Preserve order - only add if not already in array
+            if (!countryNames.includes(countryName)) {
+              countryNames.push(countryName);
+            }
+
+            if (!internationalData[normalizedCountryKey]) {
+              internationalData[normalizedCountryKey] = {};
+            }
+
+            if (Array.isArray(countryData)) {
+              // Direct array of properties - assign to a default category
+              const defaultCategory = "properties";
+              if (!internationalData[normalizedCountryKey][defaultCategory]) {
+                internationalData[normalizedCountryKey][defaultCategory] = [];
+              }
+              internationalData[normalizedCountryKey][defaultCategory] = [
+                ...internationalData[normalizedCountryKey][defaultCategory],
+                ...countryData.map(propertyToProjectCard),
               ];
+            } else if (
+              typeof countryData === "object" &&
+              countryData !== null
+            ) {
+              // Object with categories
+              if (!countryCategoryMaps.has(normalizedCountryKey)) {
+                countryCategoryMaps.set(normalizedCountryKey, new Map());
+              }
+              const countryCategories =
+                countryCategoryMaps.get(normalizedCountryKey)!;
+
+              Object.entries(countryData).forEach(
+                ([categoryName, properties]) => {
+                  if (!Array.isArray(properties)) return;
+
+                  const normalizedCategoryKey = normalizeKey(categoryName);
+                  countryCategories.set(normalizedCategoryKey, categoryName);
+
+                  if (
+                    !internationalData[normalizedCountryKey][
+                      normalizedCategoryKey
+                    ]
+                  ) {
+                    internationalData[normalizedCountryKey][
+                      normalizedCategoryKey
+                    ] = [];
+                  }
+
+                  internationalData[normalizedCountryKey][
+                    normalizedCategoryKey
+                  ] = [
+                    ...internationalData[normalizedCountryKey][
+                      normalizedCategoryKey
+                    ],
+                    ...properties.map(propertyToProjectCard),
+                  ];
+                }
+              );
             }
           });
         });
@@ -221,62 +163,133 @@ export function useProjectsData(properties: PropertiesData | null) {
     if (hasIndiaData) regions.push("india");
     if (hasInternationalData) regions.push("international");
 
+    // Build category list for India (with original names) - preserve order
+    const indiaCategories = indiaCategoryNames
+      .map((categoryName) => {
+        const normalizedKey = normalizeKey(categoryName);
+        return {
+          key: normalizedKey,
+          label: categoryName,
+        };
+      })
+      .filter((cat) => indiaData[cat.key] && indiaData[cat.key].length > 0);
+
+    // Build country list for International (with original names) - preserve order
+    const internationalCountries = countryNames
+      .map((countryName) => {
+        const normalizedKey = normalizeKey(countryName);
+        return {
+          key: normalizedKey,
+          label: countryName,
+        };
+      })
+      .filter((country) => {
+        const countryData = internationalData[country.key];
+        return (
+          countryData &&
+          Object.values(countryData).some((data) => data.length > 0)
+        );
+      });
+
+    // Store category name mappings for International countries
+    const internationalCategoryMaps: Record<
+      string,
+      Record<string, string>
+    > = {};
+    Object.entries(internationalData).forEach(([countryKey, categories]) => {
+      internationalCategoryMaps[countryKey] = {};
+      const countryCategoryMap = countryCategoryMaps.get(countryKey);
+      Object.keys(categories).forEach((categoryKey) => {
+        // Get original name from the country-specific map
+        const originalName = countryCategoryMap?.get(categoryKey);
+        if (originalName) {
+          internationalCategoryMaps[countryKey][categoryKey] = originalName;
+        } else {
+          // Fallback: format the key
+          internationalCategoryMaps[countryKey][categoryKey] = categoryKey
+            .split("-")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")
+            .replace(/And/g, "&");
+        }
+      });
+    });
+
     return {
       regions: regions.length > 0 ? regions : (["india"] as RegionKey[]),
       indiaData,
       internationalData,
+      indiaCategories,
+      internationalCountries,
+      internationalCategoryMaps,
     };
   }, [properties]);
 
-  // Get available categories for India
-  const indiaCategories = useMemo(() => {
-    return (Object.keys(transformedData.indiaData) as TabKey[])
-      .filter((key) => transformedData.indiaData[key].length > 0)
-      .map((key) => ({
-        key,
-        label: TAB_LABELS[key],
-      }));
-  }, [transformedData.indiaData]);
-
-  // Get available countries for International
-  const internationalCountries = useMemo(() => {
-    return (Object.keys(transformedData.internationalData) as CountryKey[])
-      .filter((countryKey) => {
-        const countryData = transformedData.internationalData[countryKey];
-        return Object.values(countryData).some((data) => data.length > 0);
-      })
-      .map((key) => ({
-        key,
-        label: COUNTRY_LABELS[key],
-      }));
-  }, [transformedData.internationalData]);
-
   // Get carousel items based on selections
-  // Memoize this function to ensure stable reference and return fresh array
   const getCarouselItems = useMemo(
     () =>
       (
         region: RegionKey,
-        category: TabKey,
-        country: CountryKey
+        category: string,
+        country: string
       ): ProjectCardData[] => {
         if (region === "india") {
           const items = transformedData.indiaData[category] || [];
-          // Return a fresh array copy to prevent reference issues
           return [...items];
         }
         const items =
           transformedData.internationalData[country]?.[category] || [];
-        // Return a fresh array copy to prevent reference issues
         return [...items];
+      },
+    [transformedData]
+  );
+
+  // Get available categories for a specific country (for International) - preserve order
+  const getCountryCategories = useMemo(
+    () =>
+      (country: string): Array<{ key: string; label: string }> => {
+        const countryData = transformedData.internationalData[country];
+        if (!countryData) return [];
+
+        const categoryMap =
+          transformedData.internationalCategoryMaps?.[country] || {};
+
+        // Use Object.entries which preserves insertion order in modern JS
+        // Filter and map while preserving order
+        return Object.entries(countryData)
+          .filter(([categoryKey, properties]) => {
+            // Filter out "properties" or "all-properties" category (hide "All Properties" tab)
+            const normalizedKey = categoryKey.toLowerCase();
+            return (
+              properties.length > 0 &&
+              normalizedKey !== "properties" &&
+              normalizedKey !== "all-properties"
+            );
+          })
+          .map(([categoryKey]) => {
+            // Use stored original name or fallback to formatted key
+            const label =
+              categoryMap[categoryKey] ||
+              categoryKey
+                .split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+                .replace(/And/g, "&");
+
+            return {
+              key: categoryKey,
+              label,
+            };
+          });
       },
     [transformedData]
   );
 
   return {
     regions: transformedData.regions,
-    indiaCategories,
-    internationalCountries,
+    indiaCategories: transformedData.indiaCategories,
+    internationalCountries: transformedData.internationalCountries,
     getCarouselItems,
+    getCountryCategories,
   };
 }

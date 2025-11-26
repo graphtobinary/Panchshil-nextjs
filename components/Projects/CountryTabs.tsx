@@ -1,14 +1,12 @@
-import { CountryKey } from "@/interfaces";
-
 interface Country {
-  key: CountryKey;
+  key: string;
   label: string;
 }
 
 interface CountryTabsProps {
   countries: Country[];
-  selectedCountry: CountryKey;
-  onCountryChange: (country: CountryKey) => void;
+  selectedCountry: string;
+  onCountryChange: (country: string) => void;
   isInView: boolean;
 }
 
