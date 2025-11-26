@@ -8,7 +8,7 @@ import { CountryTabs } from "./CountryTabs";
 import { useProjectsData } from "./useProjectsData";
 import { useIntersectionObserver } from "./useIntersectionObserver";
 import { PropertiesData, PropertiesIntroProps } from "@/interfaces";
-import { RegionKey, TabKey, CountryKey } from "@/interfaces";
+import { RegionKey } from "@/interfaces";
 
 interface ProjectsProps {
   properties: PropertiesData | null;
@@ -22,29 +22,109 @@ export function Projects({ properties, propertiesIntro }: ProjectsProps) {
   );
 
   // Transform and organize data
-  const { regions, indiaCategories, internationalCountries, getCarouselItems } =
-    useProjectsData(properties);
+  const {
+    regions,
+    indiaCategories,
+    internationalCountries,
+    getCarouselItems,
+    getCountryCategories,
+  } = useProjectsData(properties);
 
-  // State management
+  // State management with lazy initialization
   const [selectedRegion, setSelectedRegion] = useState<RegionKey>(() =>
     regions.length > 0 ? regions[0] : "india"
   );
+
+  // Initialize category and country based on region
+  const getInitialCategory = () => {
+    if (regions.length === 0) return "";
+    const initialRegion = regions[0];
+    if (initialRegion === "india" && indiaCategories.length > 0) {
+      return indiaCategories[0].key;
+    }
+    return "";
+  };
+
+  const getInitialCountry = () => {
+    if (regions.length === 0) return "";
+    const initialRegion = regions[0];
+    if (
+      initialRegion === "international" &&
+      internationalCountries.length > 0
+    ) {
+      return internationalCountries[0].key;
+    }
+    return "";
+  };
+
   const [selectedCategory, setSelectedCategory] =
-    useState<TabKey>("residential");
-  const [selectedCountry, setSelectedCountry] = useState<CountryKey>("dubai");
+    useState<string>(getInitialCategory);
+  const [selectedCountry, setSelectedCountry] =
+    useState<string>(getInitialCountry);
+
+  // Get available categories for selected country (International only)
+  const countryCategories = useMemo(() => {
+    if (selectedRegion === "international" && selectedCountry) {
+      return getCountryCategories(selectedCountry);
+    }
+    return [];
+  }, [selectedRegion, selectedCountry, getCountryCategories]);
 
   // Get available second-level tabs based on selected region
-  // Note: Type is different for India (categories) vs International (countries)
   const secondLevelTabs = useMemo(() => {
-    return selectedRegion === "india"
-      ? indiaCategories
-      : internationalCountries;
+    if (selectedRegion === "india") {
+      return indiaCategories;
+    }
+    // For International, show countries first, then categories when country is selected
+    return internationalCountries;
   }, [selectedRegion, indiaCategories, internationalCountries]);
 
-  // Get carousel items based on current selections
+  // Ensure valid category is selected - use computed value if current is invalid
+  const effectiveCategory = useMemo(() => {
+    if (selectedRegion === "india") {
+      const categoryExists = indiaCategories.some(
+        (cat) => cat.key === selectedCategory
+      );
+      if (categoryExists || !selectedCategory) {
+        return (
+          selectedCategory ||
+          (indiaCategories.length > 0 ? indiaCategories[0].key : "")
+        );
+      }
+      return indiaCategories.length > 0 ? indiaCategories[0].key : "";
+    }
+    if (selectedRegion === "international" && selectedCountry) {
+      const categories = getCountryCategories(selectedCountry);
+
+      // If no categories after filtering, check if country has "properties" category (direct array)
+      if (categories.length === 0) {
+        // Use "properties" as fallback if it exists (for countries with direct property arrays)
+        return "properties";
+      }
+
+      const categoryExists = categories.some(
+        (cat) => cat.key === selectedCategory
+      );
+      if (categoryExists || !selectedCategory) {
+        return (
+          selectedCategory || (categories.length > 0 ? categories[0].key : "")
+        );
+      }
+      return categories.length > 0 ? categories[0].key : "";
+    }
+    return selectedCategory;
+  }, [
+    selectedRegion,
+    selectedCountry,
+    selectedCategory,
+    indiaCategories,
+    getCountryCategories,
+  ]);
+
+  // Get carousel items based on current selections (use effective category)
   const carouselItems = useMemo(() => {
-    return getCarouselItems(selectedRegion, selectedCategory, selectedCountry);
-  }, [selectedRegion, selectedCategory, selectedCountry, getCarouselItems]);
+    return getCarouselItems(selectedRegion, effectiveCategory, selectedCountry);
+  }, [selectedRegion, effectiveCategory, selectedCountry, getCarouselItems]);
 
   // Handle region change
   const handleRegionChange = (region: RegionKey) => {
@@ -53,25 +133,43 @@ export function Projects({ properties, propertiesIntro }: ProjectsProps) {
       // Reset to first available category for India
       if (indiaCategories.length > 0) {
         setSelectedCategory(indiaCategories[0].key);
+      } else {
+        setSelectedCategory("");
       }
+      setSelectedCountry("");
     } else {
       // Reset to first available country for International
       if (internationalCountries.length > 0) {
-        setSelectedCountry(internationalCountries[0].key);
-        setSelectedCategory("residential"); // Default category for international
+        const firstCountry = internationalCountries[0].key;
+        setSelectedCountry(firstCountry);
+        const categories = getCountryCategories(firstCountry);
+        if (categories.length > 0) {
+          setSelectedCategory(categories[0].key);
+        } else {
+          setSelectedCategory("");
+        }
+      } else {
+        setSelectedCountry("");
+        setSelectedCategory("");
       }
     }
   };
 
   // Handle category change (for India)
-  const handleCategoryChange = (category: TabKey) => {
+  const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
   };
 
   // Handle country change (for International)
-  const handleCountryChange = (country: CountryKey) => {
+  const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
-    setSelectedCategory("residential"); // Reset to default category
+    // Set first available category for the selected country
+    const categories = getCountryCategories(country);
+    if (categories.length > 0) {
+      setSelectedCategory(categories[0].key);
+    } else {
+      setSelectedCategory("");
+    }
   };
 
   return (
@@ -98,21 +196,31 @@ export function Projects({ properties, propertiesIntro }: ProjectsProps) {
         {selectedRegion === "india" ? (
           <CategoryTabs
             categories={
-              secondLevelTabs as Array<{ key: TabKey; label: string }>
+              secondLevelTabs as Array<{ key: string; label: string }>
             }
-            selectedCategory={selectedCategory}
+            selectedCategory={effectiveCategory}
             onCategoryChange={handleCategoryChange}
             isInView={isInView}
           />
         ) : (
-          <CountryTabs
-            countries={
-              secondLevelTabs as Array<{ key: CountryKey; label: string }>
-            }
-            selectedCountry={selectedCountry}
-            onCountryChange={handleCountryChange}
-            isInView={isInView}
-          />
+          <>
+            <CountryTabs
+              countries={
+                secondLevelTabs as Array<{ key: string; label: string }>
+              }
+              selectedCountry={selectedCountry}
+              onCountryChange={handleCountryChange}
+              isInView={isInView}
+            />
+            {selectedCountry && countryCategories.length > 0 && (
+              <CategoryTabs
+                categories={countryCategories}
+                selectedCategory={effectiveCategory}
+                onCategoryChange={handleCategoryChange}
+                isInView={isInView}
+              />
+            )}
+          </>
         )}
 
         {/* Carousel */}
@@ -120,7 +228,7 @@ export function Projects({ properties, propertiesIntro }: ProjectsProps) {
           className={`relative ${isInView ? "animate-fade-in-up-delay-3" : "opacity-0"}`}
         >
           <ProjectsCarousel
-            key={`${selectedRegion}-${selectedCategory}-${selectedCountry}`}
+            key={`${selectedRegion}-${effectiveCategory}-${selectedCountry}`}
             items={carouselItems}
           />
         </div>
