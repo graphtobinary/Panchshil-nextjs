@@ -6,6 +6,8 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { Button } from "../Button/Button";
 import Link from "next/link";
+import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
+import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 
 export interface SlideData {
   image?: string;
@@ -63,17 +65,32 @@ export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) {
+      emblaApi.scrollPrev();
+      autoplay.current?.reset();
+    }
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) {
+      emblaApi.scrollNext();
+      autoplay.current?.reset();
+    }
+  }, [emblaApi]);
+
   useEffect(() => {
     if (!emblaApi) return;
 
     emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
     onSelect(); // Call once to set initial state
 
     return () => {
       emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [emblaApi]);
+  }, [emblaApi, onSelect]);
 
   const currentSlide = slides?.[selectedIndex];
 
@@ -136,6 +153,24 @@ export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
             );
           })}
         </div>
+      </div>
+
+      {/* Navigation Arrows */}
+      <div className="absolute inset-0 flex items-center justify-between z-30 px-4 md:px-8 pointer-events-none">
+        <button
+          aria-label="Previous slide"
+          onClick={scrollPrev}
+          className="pointer-events-auto w-12 h-12 md:w-14 md:h-14 border border-[#9E8C70] rounded-full   flex items-center justify-center transition-all hover:bg-white/30 active:scale-95"
+        >
+          <ArrowLeftIcon fill="#9E8C70" width={24} height={24} />
+        </button>
+        <button
+          aria-label="Next slide"
+          onClick={scrollNext}
+          className="pointer-events-auto w-12 h-12 md:w-14 md:h-14 rounded-full  border border-[#9E8C70] flex items-center justify-center transition-all hover:bg-white/30 active:scale-95"
+        >
+          <ArrowRightIcon fill="#9E8C70" width={24} height={24} />
+        </button>
       </div>
 
       {/* Content Overlay */}
