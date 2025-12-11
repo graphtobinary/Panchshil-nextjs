@@ -108,9 +108,9 @@ export type ContactDetailsProps = {
 }[];
 
 export type MetaDataProps = {
-  canonical_tag: string;
-  meta_description: string;
-  meta_title: string;
+  canonical_tag?: string;
+  meta_description?: string;
+  meta_title?: string;
 };
 
 export type NavigationMenuProps = {
@@ -143,10 +143,8 @@ export type ServicesProps = {
 };
 
 export interface HomeClientProps {
-  navigationMenu: NavigationMenuProps[];
   metaData: MetaDataProps;
   banner: BannersProps;
-  contactDetails: ContactDetailsProps;
   servicesIntro: ServicesIntroProps;
   services: ServicesProps[];
   aboutIntro: AboutIntroData;

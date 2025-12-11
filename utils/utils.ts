@@ -69,3 +69,9 @@ export const isIos = () => {
     !(window as WindowWithMSStream).MSStream
   );
 };
+
+// create util function to check allowed list of pages for dark/light mode
+export const isAllowedPageForTheme = (page: string) => {
+  const allowedPages = ["/list"];
+  return allowedPages.includes(page);
+};

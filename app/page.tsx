@@ -1,6 +1,5 @@
 import {
   getAuthToken,
-  getContactDetails,
   getServicesIntro,
   getServices,
   getAboutIntro,
@@ -14,7 +13,6 @@ import {
   getBanner,
   getFooterBlocks,
   getMilestones,
-  getNavigationMenu,
 } from "@/api/CMS.api";
 import HomeClient from "./HomeClient";
 import {
@@ -25,19 +23,17 @@ import {
   FeaturedPropertiesProps,
   ServicesIntroProps,
   ServicesProps,
-  ContactDetailsProps,
   AboutIntroData,
   AuthTokenResponse,
   MetaDataProps,
   BannersProps,
   FooterBlocksProps,
   MilestonesProps,
-  NavigationMenuProps,
 } from "@/interfaces";
 import { MasterSliderData } from "@/components/Hero/CustomCarousel";
 
 // Disable page-level caching - we'll handle caching per API call
-// Only getNavigationMenu and getContactDetails will be cached
+// Only getNavigationMenu and getContactDetails will be cached (in layout)
 export const revalidate = 0; // Always fetch fresh data
 
 export default async function Home() {
@@ -55,10 +51,8 @@ export default async function Home() {
   // Fetch all data in parallel if token is available, otherwise return null promises
   const apiCalls = token
     ? [
-        getNavigationMenu(token),
         getMetaData(token, "Home"),
         getBanner(token, "Home"),
-        getContactDetails(token),
         getServicesIntro(token),
         getServices(token),
         getAboutIntro(token),
@@ -71,13 +65,11 @@ export default async function Home() {
         getMasterSlider(token),
         getFooterBlocks(token),
       ]
-    : Array.from({ length: 10 }, () => Promise.resolve(null));
+    : Array.from({ length: 13 }, () => Promise.resolve(null));
 
   const [
-    navigationMenu,
     metaData,
     banner,
-    contactDetails,
     servicesIntro,
     services,
     aboutIntro,
@@ -93,20 +85,12 @@ export default async function Home() {
 
   // Extract data from settled promises with type assertions
   const data = {
-    navigationMenu:
-      navigationMenu?.status === "fulfilled"
-        ? (navigationMenu.value as NavigationMenuProps[])
-        : [],
     metaData:
       metaData.status === "fulfilled"
         ? (metaData.value as MetaDataProps)
         : { meta_data_heading: "", meta_data_sub_heading: "" },
     banner:
       banner?.status === "fulfilled" ? (banner.value as BannersProps) : [],
-    contactDetails:
-      contactDetails?.status === "fulfilled"
-        ? (contactDetails.value as ContactDetailsProps)
-        : [],
     servicesIntro:
       servicesIntro?.status === "fulfilled"
         ? (servicesIntro.value as ServicesIntroProps)
@@ -166,10 +150,8 @@ export default async function Home() {
 
   return (
     <HomeClient
-      navigationMenu={data.navigationMenu as NavigationMenuProps[]}
       metaData={data.metaData as MetaDataProps}
       banner={data.banner as BannersProps}
-      contactDetails={data.contactDetails}
       servicesIntro={data.servicesIntro}
       services={data.services}
       aboutIntro={data.aboutIntro}

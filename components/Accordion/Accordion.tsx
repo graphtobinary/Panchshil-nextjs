@@ -3,6 +3,9 @@
 import { useState, useMemo } from "react";
 import { AccordionItem } from "./AccordionItem";
 import { AccordionProps } from "@/interfaces";
+import { useThemeStore } from "@/store/themeStore";
+import { isAllowedPageForTheme } from "@/utils/utils";
+import { usePathname } from "next/navigation";
 
 export function Accordion({
   propertyCategories,
@@ -45,8 +48,16 @@ export function Accordion({
     setOpenIndex(index);
   };
 
+  const { theme } = useThemeStore();
+  const pathname = usePathname();
+  const isAllowedPage = isAllowedPageForTheme(pathname);
+  const isDarkMode = isAllowedPage ? theme === "night" : false;
   return (
-    <section className="w-full bg-[#FFFAF7]">
+    <section
+      className={`w-full transition-colors ${
+        !isDarkMode ? "bg-[#FFFAF7]" : "bg-gray-600"
+      }`}
+    >
       <div className="max-w-[1920px] mx-auto">
         {transformedData.map((item) => (
           <AccordionItem

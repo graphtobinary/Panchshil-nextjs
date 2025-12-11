@@ -1,7 +1,8 @@
 "use client";
 
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { MetaDataProps, NavigationMenuProps } from "@/interfaces";
+import { useNavigationMenu } from "@/hooks/useNavigationMenu";
+import { MetaDataProps } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -17,13 +18,8 @@ interface NavItem {
   child?: NavItemChild[];
 }
 
-export function Header({
-  metaData,
-  navigationMenu,
-}: {
-  metaData: MetaDataProps;
-  navigationMenu: NavigationMenuProps[];
-}) {
+export function Header({ metaData }: { metaData: MetaDataProps }) {
+  const navigationMenu = useNavigationMenu();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -50,23 +46,6 @@ export function Header({
     };
   }, []);
 
-  const navItems: NavItem[] = [
-    { label: "About", href: "/about" },
-    { label: "Residential", href: "/residential" },
-    { label: "Office Parks", href: "/office-parks" },
-    { label: "Data Centres", href: "/data-centres" },
-    { label: "Hospitality", href: "/hospitality" },
-    { label: "Retail & F&B", href: "/retail" },
-    {
-      label: "International Projects",
-      href: "/international-projects",
-      child: [
-        { label: "Dubai", href: "/dubai" },
-        { label: "Maldives", href: "/maldives" },
-        { label: "Sri Lanka", href: "/sri-lanka" },
-      ],
-    },
-  ];
   const isMobile = useIsMobile();
   return (
     <header
@@ -74,9 +53,9 @@ export function Header({
         isScrolled ? "fixed" : "absolute"
       } top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out`}
     >
-      <title>{metaData.meta_title}</title>
-      <meta name="description" content={metaData.meta_description} />
-      <meta name="canonical" content={metaData.canonical_tag} />
+      <title>{metaData?.meta_title}</title>
+      <meta name="description" content={metaData?.meta_description} />
+      <meta name="canonical" content={metaData?.canonical_tag} />
 
       {/* Background overlay with fade effect */}
       <div

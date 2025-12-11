@@ -4,6 +4,9 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Button } from "../Button";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useThemeStore } from "@/store/themeStore";
+import { isAllowedPageForTheme } from "@/utils/utils";
 
 interface AccordionItemProps {
   id: number;
@@ -37,6 +40,11 @@ export function AccordionItem({
     }
   }, [isOpen]);
 
+  const { theme } = useThemeStore();
+  const pathname = usePathname();
+  const isAllowedPage = isAllowedPageForTheme(pathname);
+  const isDarkMode = isAllowedPage ? theme === "night" : false;
+
   return (
     <div ref={itemRef}>
       {/* Accordion Header */}
@@ -45,17 +53,33 @@ export function AccordionItem({
           clickRef.current = true;
           onToggle();
         }}
-        className="flex cursor-pointer items-center gap-4 justify-between py-6 px-4 md:px-8 bg-[#FFFAF7] border-b border-gray-200 hover:bg-gray-50 transition-colors w-4/5 mx-auto"
+        className={`flex cursor-pointer items-center gap-4 justify-between py-6 px-4 md:px-8 border-b  w-4/5 mx-auto transition-colors ${
+          !isDarkMode
+            ? "bg-[#FFFAF7] border-gray-200"
+            : "bg-gray-600 border-gray-400"
+        }`}
       >
         <div className="flex items-center gap-6 w-full justify-between">
-          <span className="text-2xl font-display-semi text-black-chocolate">
+          <span
+            className={`text-2xl font-display-semi transition-colors ${
+              !isDarkMode ? "text-black-chocolate" : "text-white"
+            }`}
+          >
             {String(id).padStart(2, "0")}
           </span>
-          <span className="text-lg md:text-xl font-display-semi text-black-chocolate">
+          <span
+            className={`text-lg md:text-xl font-display-semi transition-colors ${
+              !isDarkMode ? "text-black-chocolate" : "text-white"
+            }`}
+          >
             {title}
           </span>
         </div>
-        <span className="text-xl  font-light text-black-chocolate">
+        <span
+          className={`text-xl  font-light transition-colors ${
+            !isDarkMode ? "text-black-chocolate" : "text-white"
+          }`}
+        >
           {isOpen ? "−" : "+"}
         </span>
       </button>
