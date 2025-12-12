@@ -3,6 +3,9 @@
 import { useState, useMemo } from "react";
 import { AccordionItem } from "./AccordionItem";
 import { AccordionProps } from "@/interfaces";
+import { useThemeStore } from "@/store/themeStore";
+import { isAllowedPageForTheme } from "@/utils/utils";
+import { usePathname } from "next/navigation";
 
 export function Accordion({
   propertyCategories,
@@ -46,7 +49,7 @@ export function Accordion({
   };
 
   return (
-    <section className="w-full bg-[#FFFAF7]">
+    <section className={`w-full transition-colors `}>
       <div className="max-w-[1920px] mx-auto">
         {transformedData.map((item) => (
           <AccordionItem

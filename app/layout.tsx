@@ -9,7 +9,13 @@ import {
   zapfHumanist601Ultra,
 } from "./fonts";
 import { AuthProvider } from "@/contexts/AuthProvider";
-import { getAuthToken } from "@/api/CMS.api";
+import { NavigationMenuProvider } from "@/components/NavigationMenuProvider";
+import {
+  getAuthToken,
+  getNavigationMenu,
+  getContactDetails,
+} from "@/api/CMS.api";
+import { NavigationMenuProps, ContactDetailsProps } from "@/interfaces";
 
 // Open Sans as default font
 const openSans = Open_Sans({
@@ -51,11 +57,42 @@ export default async function RootLayout({
 }>) {
   let initialToken: string | null = null;
   let initialError: string | null = null;
+  let initialNavigationMenu: NavigationMenuProps[] = [];
+  let initialContactDetails: ContactDetailsProps = [];
 
   try {
     const response = (await getAuthToken()) as AuthTokenResponse;
     if (response?.token && typeof response.token === "string") {
       initialToken = response.token;
+
+      // Fetch navigation menu and contact details at build time
+      try {
+        const [menuResponse, contactDetailsResponse] = await Promise.allSettled(
+          [getNavigationMenu(initialToken), getContactDetails(initialToken)]
+        );
+
+        if (
+          menuResponse.status === "fulfilled" &&
+          menuResponse.value &&
+          Array.isArray(menuResponse.value)
+        ) {
+          initialNavigationMenu = menuResponse.value as NavigationMenuProps[];
+        }
+
+        if (
+          contactDetailsResponse.status === "fulfilled" &&
+          contactDetailsResponse.value &&
+          Array.isArray(contactDetailsResponse.value)
+        ) {
+          initialContactDetails =
+            contactDetailsResponse.value as ContactDetailsProps;
+        }
+      } catch (menuError) {
+        console.error(
+          "Error fetching navigation menu or contact details in layout:",
+          menuError
+        );
+      }
     } else {
       initialError = "Token not found in response";
     }
@@ -221,7 +258,12 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider initialToken={initialToken} initialError={initialError}>
-          {children}
+          <NavigationMenuProvider
+            initialNavigationMenu={initialNavigationMenu}
+            initialContactDetails={initialContactDetails}
+          >
+            {children}
+          </NavigationMenuProvider>
         </AuthProvider>
       </body>
     </html>

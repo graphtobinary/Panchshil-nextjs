@@ -1,29 +1,14 @@
 "use client";
 
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { MetaDataProps, NavigationMenuProps } from "@/interfaces";
+import { useNavigationMenu } from "@/hooks/useNavigationMenu";
+import { MetaDataProps } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-interface NavItemChild {
-  label: string;
-  href: string;
-}
-
-interface NavItem {
-  label: string;
-  href: string;
-  child?: NavItemChild[];
-}
-
-export function Header({
-  metaData,
-  navigationMenu,
-}: {
-  metaData: MetaDataProps;
-  navigationMenu: NavigationMenuProps[];
-}) {
+export function Header({ metaData }: { metaData: MetaDataProps }) {
+  const navigationMenu = useNavigationMenu();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -50,23 +35,6 @@ export function Header({
     };
   }, []);
 
-  const navItems: NavItem[] = [
-    { label: "About", href: "/about" },
-    { label: "Residential", href: "/residential" },
-    { label: "Office Parks", href: "/office-parks" },
-    { label: "Data Centres", href: "/data-centres" },
-    { label: "Hospitality", href: "/hospitality" },
-    { label: "Retail & F&B", href: "/retail" },
-    {
-      label: "International Projects",
-      href: "/international-projects",
-      child: [
-        { label: "Dubai", href: "/dubai" },
-        { label: "Maldives", href: "/maldives" },
-        { label: "Sri Lanka", href: "/sri-lanka" },
-      ],
-    },
-  ];
   const isMobile = useIsMobile();
   return (
     <header
@@ -74,9 +42,9 @@ export function Header({
         isScrolled ? "fixed" : "absolute"
       } top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out`}
     >
-      <title>{metaData.meta_title}</title>
-      <meta name="description" content={metaData.meta_description} />
-      <meta name="canonical" content={metaData.canonical_tag} />
+      <title>{metaData?.meta_title}</title>
+      <meta name="description" content={metaData?.meta_description} />
+      <meta name="canonical" content={metaData?.canonical_tag} />
 
       {/* Background overlay with fade effect */}
       <div
@@ -141,52 +109,58 @@ export function Header({
               isScrolled ? "text-black-chocolate" : "text-white"
             }`}
           >
-            {navigationMenu?.map((item, i) => (
-              <li key={item?.menuURL + i} className="relative">
-                <div
-                  className={`relative ${item?.menu ? "pb-3" : ""}`}
-                  onMouseEnter={() =>
-                    item?.menu && setHoveredItem(item.menuURL)
-                  }
-                  onMouseLeave={() => setHoveredItem(null)}
-                >
-                  <Link
-                    href={item?.menuURL || ""}
-                    className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light block"
+            {navigationMenu?.map((item, i) => {
+              const link =
+                item?.menuURL === "about"
+                  ? "https://www.panchshil.com/about"
+                  : item?.menuURL;
+              return (
+                <li key={item?.menuURL + i} className="relative">
+                  <div
+                    className={`relative ${item?.menu ? "pb-3" : ""}`}
+                    onMouseEnter={() =>
+                      item?.menu && setHoveredItem(item.menuURL)
+                    }
+                    onMouseLeave={() => setHoveredItem(null)}
                   >
-                    {item.menuTitle}
-                  </Link>
-
-                  {/* Dropdown Menu */}
-                  {item?.menu && (
-                    <div
-                      className={`absolute top-full left-1/2 -translate-x-1/2 z-50 transition-all duration-200 ${
-                        hoveredItem === item?.menuURL
-                          ? "opacity-100 visible"
-                          : "opacity-0 invisible pointer-events-none"
-                      }`}
-                      style={{ marginTop: "-0.5rem" }}
+                    <Link
+                      href={link || ""}
+                      className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light block"
                     >
-                      <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg min-w-[160px] py-2">
-                        <ul className="flex flex-col">
-                          {item?.menu.map((childItem, j) => (
-                            <li key={childItem?.menuURL + i + j}>
-                              <Link
-                                href={childItem?.menuURL || ""}
-                                className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 transition-colors hover:font-medium"
-                                onClick={closeMobileMenu}
-                              >
-                                {childItem.menuTitle}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
+                      {item.menuTitle}
+                    </Link>
+
+                    {/* Dropdown Menu */}
+                    {item?.menu && (
+                      <div
+                        className={`absolute top-full left-1/2 -translate-x-1/2 z-50 transition-all duration-200 ${
+                          hoveredItem === item?.menuURL
+                            ? "opacity-100 visible"
+                            : "opacity-0 invisible pointer-events-none"
+                        }`}
+                        style={{ marginTop: "-0.5rem" }}
+                      >
+                        <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg min-w-[160px] py-2">
+                          <ul className="flex flex-col">
+                            {item?.menu.map((childItem, j) => (
+                              <li key={childItem?.menuURL + i + j}>
+                                <Link
+                                  href={childItem?.menuURL || ""}
+                                  className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 transition-colors hover:font-medium"
+                                  onClick={closeMobileMenu}
+                                >
+                                  {childItem.menuTitle}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </li>
-            ))}
+                    )}
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>

@@ -12,10 +12,8 @@ import { Footer } from "@/components/Footer";
 import { HomeClientProps } from "@/interfaces";
 
 export default function HomeClient({
-  navigationMenu,
   metaData,
   banner,
-  contactDetails,
   servicesIntro,
   services,
   aboutIntro,
@@ -30,7 +28,7 @@ export default function HomeClient({
 }: HomeClientProps) {
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
-      <Header metaData={metaData} navigationMenu={navigationMenu} />
+      <Header metaData={metaData} />
       <Hero masterSliderData={masterSlider} />
       <WelcomeSection
         aboutIntroData={aboutIntro}
@@ -45,7 +43,7 @@ export default function HomeClient({
       />
       <Services servicesIntro={servicesIntro} services={services} />
       <LatestNews footerBlocks={footerBlocks} />
-      <Footer contactDetails={contactDetails} navigationMenu={navigationMenu} />
+      <Footer />
     </main>
   );
 }

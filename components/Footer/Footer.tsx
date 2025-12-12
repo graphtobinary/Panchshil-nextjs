@@ -1,30 +1,27 @@
 "use client";
 
 import { updateSubscriberFormDetailsAPI } from "@/api/CMS.api";
-import { ContactDetailsProps, NavigationMenuProps } from "@/interfaces";
+import { useNavigationMenu } from "@/hooks/useNavigationMenu";
+import { useNavigationMenuStore } from "@/store/navigationMenuStore";
+import { useThemeStore } from "@/store/themeStore";
+import { isAllowedPageForTheme } from "@/utils/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useState, forwardRef } from "react";
 
-export function Footer({
-  contactDetails,
-  navigationMenu,
-}: {
-  contactDetails: ContactDetailsProps;
-  navigationMenu: NavigationMenuProps[];
-}) {
-  const verticals: { title: string; link: string }[] = [
-    { title: "Office Parks", link: "/office-parks" },
-    { title: "Hospitality", link: "/hospitality" },
-    { title: "Data Centres", link: "/data-centres" },
-    { title: "Residential", link: "/residential" },
-    { title: "Retail & F&B", link: "/retail-and-f&b" },
-  ];
-  const countries: { title: string; link: string }[] = [
-    { title: "Dubai", link: "/dubai" },
-    { title: "Maldives", link: "/maldives" },
-    { title: "Sri Lanka", link: "/sri-lanka" },
-  ];
+export const Footer = forwardRef<HTMLElement>((props, ref) => {
+  const { theme } = useThemeStore();
+  const params = useParams();
+  const isAllowedPage = isAllowedPageForTheme(
+    params as { [key: string]: string }
+  );
+  const isDarkMode = isAllowedPage ? theme === "night" : false;
+  const navigationMenu = useNavigationMenu();
+  const contactDetails = useNavigationMenuStore(
+    (state) => state.contactDetails
+  );
+
   const quickLinks: { title: string; link: string }[] = [
     { title: "About Us", link: "https://www.panchshil.com/about" },
     { title: "Services", link: "https://www.panchshil.com/services" },
@@ -86,26 +83,45 @@ export function Footer({
   };
 
   return (
-    <footer className="w-full bg-[#FFFAF7] text-black-chocolate">
+    <footer
+      ref={ref}
+      className={`w-full transition-colors ${
+        !isDarkMode
+          ? "bg-[#FFFAF7] text-black-chocolate"
+          : "bg-black text-gray-200"
+      }`}
+    >
       {/* Row 1: Offices & Sales */}
       <div className="max-w-[1200px] mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
         {contactDetails.map((contact) => (
           <div key={contact.contact_title}>
-            <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
+            <div
+              className={`text-sm font-display-semi tracking-[0.2em] mb-4 transition-colors ${
+                !isDarkMode ? "text-black" : "text-gray-200"
+              }`}
+            >
               {contact.contact_title}
             </div>
             <div
-              className="space-y-2 text-sm"
+              className={`space-y-2 text-sm transition-colors ${
+                !isDarkMode ? "text-black-chocolate" : "text-gray-200"
+              }`}
               dangerouslySetInnerHTML={{ __html: contact.contact_details }}
             />
             {contact.contact_number && (
-              <div className="mt-2 flex items-center gap-2 text-sm">
-                <Image
-                  src="/assets/images/call-icon.png"
-                  alt="Phone"
-                  width={18}
-                  height={18}
-                />
+              <div
+                className={`mt-2 flex items-center gap-2 text-sm transition-colors ${
+                  !isDarkMode ? "text-black-chocolate" : "text-gray-200"
+                }`}
+              >
+                <div className={isDarkMode ? "brightness-0 invert" : ""}>
+                  <Image
+                    src="/assets/images/call-icon.png"
+                    alt="Phone"
+                    width={18}
+                    height={18}
+                  />
+                </div>
                 <Link href={`tel:${contact.contact_number}`}>
                   <span>{contact.contact_number}</span>
                 </Link>
@@ -116,14 +132,26 @@ export function Footer({
       </div>
 
       {/* Row 2: Menus & Newsletter */}
-      <div className="bg-[#F9F0E9]">
+      <div
+        className={`transition-colors ${
+          !isDarkMode ? "bg-[#F9F0E9]" : "bg-black"
+        }`}
+      >
         <div className="px-4 md:px-12 py-12 grid grid-cols-1 md:grid-cols-[0.8fr_0.8fr_0.8fr_1fr_2fr] gap-10">
           {/* Verticals */}
           <div>
-            <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
+            <div
+              className={`text-sm font-display-semi tracking-[0.2em] mb-4 transition-colors ${
+                !isDarkMode ? "text-black" : "text-gray-200"
+              }`}
+            >
               VERTICALS
             </div>
-            <ul className="space-y-3 text-sm">
+            <ul
+              className={`space-y-3 text-sm transition-colors ${
+                !isDarkMode ? "text-black-chocolate" : "text-gray-200"
+              }`}
+            >
               {navigationMenu?.map((item, i) => {
                 if (
                   item?.menuTitle === "About" ||
@@ -133,7 +161,11 @@ export function Footer({
                 return (
                   <li key={item.menuTitle + i}>
                     <Link
-                      className="hover:text-gold-beige"
+                      className={
+                        !isDarkMode
+                          ? "hover:text-gold-beige"
+                          : "hover:opacity-80"
+                      }
                       href={item.menuURL || ""}
                     >
                       {item.menuTitle}
@@ -146,14 +178,24 @@ export function Footer({
 
           {/* Countries */}
           <div>
-            <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
+            <div
+              className={`text-sm font-display-semi tracking-[0.2em] mb-4 transition-colors ${
+                !isDarkMode ? "text-black" : "text-gray-200"
+              }`}
+            >
               COUNTRIES
             </div>
-            <ul className="space-y-3 text-sm">
+            <ul
+              className={`space-y-3 text-sm transition-colors ${
+                !isDarkMode ? "text-black-chocolate" : "text-gray-200"
+              }`}
+            >
               {navigationMenu[6]?.menu?.map((item, i) => (
                 <li key={item.menuTitle + i}>
                   <Link
-                    className="hover:text-gold-beige"
+                    className={
+                      !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
+                    }
                     href={item.menuURL || ""}
                   >
                     {item.menuTitle}
@@ -165,13 +207,26 @@ export function Footer({
 
           {/* Quick Links */}
           <div>
-            <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
+            <div
+              className={`text-sm font-display-semi tracking-[0.2em] mb-4 transition-colors ${
+                !isDarkMode ? "text-black" : "text-gray-200"
+              }`}
+            >
               QUICK LINKS
             </div>
-            <ul className="space-y-3 text-sm">
+            <ul
+              className={`space-y-3 text-sm transition-colors ${
+                !isDarkMode ? "text-black-chocolate" : "text-gray-200"
+              }`}
+            >
               {quickLinks.map((q) => (
                 <li key={q.title}>
-                  <Link className="hover:text-gold-beige" href={q.link}>
+                  <Link
+                    className={
+                      !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
+                    }
+                    href={q.link}
+                  >
                     {q.title}
                   </Link>
                 </li>
@@ -181,14 +236,24 @@ export function Footer({
 
           {/* Useful Links */}
           <div>
-            <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
+            <div
+              className={`text-sm font-display-semi tracking-[0.2em] mb-4 transition-colors ${
+                !isDarkMode ? "text-black" : "text-gray-200"
+              }`}
+            >
               USEFUL LINKS
             </div>
-            <ul className="space-y-3 text-sm">
+            <ul
+              className={`space-y-3 text-sm transition-colors ${
+                !isDarkMode ? "text-black-chocolate" : "text-gray-200"
+              }`}
+            >
               {usefulLinks.map((u) => (
                 <li key={u.title}>
                   <Link
-                    className="hover:text-gold-beige"
+                    className={
+                      !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
+                    }
                     href={u.link}
                     target={
                       u.title === "Panchshil Privilege" ? "_blank" : "_self"
@@ -203,7 +268,11 @@ export function Footer({
 
           {/* Newsletter */}
           <div>
-            <div className="text-sm font-display-semi tracking-[0.2em] text-black mb-4">
+            <div
+              className={`text-sm font-display-semi tracking-[0.2em] mb-4 transition-colors ${
+                !isDarkMode ? "text-black" : "text-gray-200"
+              }`}
+            >
               STAY IN THE KNOW
             </div>
             <form className="space-y-1" onSubmit={handleSubmit}>
@@ -213,12 +282,18 @@ export function Footer({
                   name="subscriber_email_id"
                   placeholder="Email Address"
                   required
-                  className="bg-transparent outline-none text-sm flex-1 placeholder-black/50 border-b border-gold-beige"
+                  className={`bg-transparent outline-none text-sm flex-1 border-b transition-colors ${
+                    !isDarkMode
+                      ? "placeholder-black/50 border-gold-beige text-black-chocolate"
+                      : "placeholder-gray-400 border-gray-200 text-gray-200"
+                  }`}
                 />
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="text-sm text-gold-beige underline cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`text-sm underline cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
+                    !isDarkMode ? "text-gold-beige" : "text-gray-200"
+                  }`}
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
@@ -234,7 +309,11 @@ export function Footer({
                   {submitMessage}
                 </p>
               )}
-              <p className="text-[11px] text-black-chocolate/70 leading-relaxed tracking-wider">
+              <p
+                className={`text-[11px] leading-relaxed tracking-wider transition-colors ${
+                  !isDarkMode ? "text-black-chocolate/70" : "text-gray-200/70"
+                }`}
+              >
                 By signing up I want to hear about new updates and masterpieces
                 and agree with the{" "}
                 <Link
@@ -252,15 +331,25 @@ export function Footer({
       </div>
 
       {/* Row 3: Copyright */}
-      <div className="bg-[#35393B] text-white">
+      <div
+        className={`transition-colors ${
+          !isDarkMode ? "bg-[#35393B] text-white" : "bg-[#35393B] text-gray-200"
+        }`}
+      >
         <div className=" mx-auto px-6 py-4 flex items-center justify-between gap-6">
           <div className="text-[12px] font-display-semi">
             PANCHSHIL &copy; {new Date().getFullYear()}
           </div>
-          <div className="hidden md:flex items-center gap-6 text-[12px] opacity-90">
+          <div
+            className={`hidden md:flex items-center gap-6 text-[12px] transition-colors ${
+              !isDarkMode ? "opacity-90" : "text-gray-200"
+            }`}
+          >
             <Link
               target="_blank"
-              className="hover:text-gold-beige"
+              className={
+                !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
+              }
               href="https://www.panchshil.com/terms-and-conditions"
             >
               {" "}
@@ -268,14 +357,18 @@ export function Footer({
             </Link>
             <Link
               target="_blank"
-              className="hover:text-gold-beige"
+              className={
+                !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
+              }
               href="https://www.panchshil.com/privacy-policy"
             >
               Privacy
             </Link>
             <Link
               target="_blank"
-              className="hover:text-gold-beige"
+              className={
+                !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
+              }
               href="https://www.panchshil.com/disclaimer"
             >
               Disclaimer
@@ -288,12 +381,14 @@ export function Footer({
               rel="noopener noreferrer"
               aria-label="Facebook"
             >
-              <Image
-                src="/assets/images/facebook.svg"
-                alt="Facebook"
-                width={30}
-                height={30}
-              />
+              <div className={isDarkMode ? "brightness-0 invert" : ""}>
+                <Image
+                  src="/assets/images/facebook.svg"
+                  alt="Facebook"
+                  width={30}
+                  height={30}
+                />
+              </div>
             </Link>
             <Link
               href="https://www.instagram.com/panchshilrealty/"
@@ -301,12 +396,14 @@ export function Footer({
               rel="noopener noreferrer"
               aria-label="Instagram"
             >
-              <Image
-                src="/assets/images/instagram.svg"
-                alt="Instagram"
-                width={30}
-                height={30}
-              />
+              <div className={isDarkMode ? "brightness-0 invert" : ""}>
+                <Image
+                  src="/assets/images/instagram.svg"
+                  alt="Instagram"
+                  width={30}
+                  height={30}
+                />
+              </div>
             </Link>
             <Link
               href="https://www.linkedin.com/company/panchshilrealty/"
@@ -314,12 +411,14 @@ export function Footer({
               rel="noopener noreferrer"
               aria-label="LinkedIn"
             >
-              <Image
-                src="/assets/images/linked in.svg"
-                alt="LinkedIn"
-                width={30}
-                height={30}
-              />
+              <div className={isDarkMode ? "brightness-0 invert" : ""}>
+                <Image
+                  src="/assets/images/linked in.svg"
+                  alt="LinkedIn"
+                  width={30}
+                  height={30}
+                />
+              </div>
             </Link>
 
             <Link
@@ -328,16 +427,20 @@ export function Footer({
               rel="noopener noreferrer"
               aria-label="YouTube"
             >
-              <Image
-                src="/assets/images/youtube.svg"
-                alt="YouTube"
-                width={30}
-                height={30}
-              />
+              <div className={isDarkMode ? "brightness-0 invert" : ""}>
+                <Image
+                  src="/assets/images/youtube.svg"
+                  alt="YouTube"
+                  width={30}
+                  height={30}
+                />
+              </div>
             </Link>
           </div>
         </div>
       </div>
     </footer>
   );
-}
+});
+
+Footer.displayName = "Footer";
