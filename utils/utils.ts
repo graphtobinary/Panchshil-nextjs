@@ -71,7 +71,15 @@ export const isIos = () => {
 };
 
 // create util function to check allowed list of pages for dark/light mode
-export const isAllowedPageForTheme = (page: string) => {
-  const allowedPages = ["/list"];
+export const isAllowedPageForTheme = (params: { [key: string]: string }) => {
+  // console.log(page, "page");
+  const page = params?.["category-slug"];
+  const allowedPages = [
+    "luxury-residences",
+    "office-parks",
+    "hospitality",
+    "data-centres",
+    "retail",
+  ];
   return allowedPages.includes(page);
 };

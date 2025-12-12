@@ -116,10 +116,7 @@ export type MetaDataProps = {
 export type NavigationMenuProps = {
   menuTitle: string;
   menuURL: string;
-  menu: {
-    menuTitle: string;
-    menuURL: string;
-  }[];
+  menu: NavigationMenuItemProps[];
 };
 
 export type BannersProps = {
@@ -192,4 +189,114 @@ export interface FooterBlocksProps {
 export interface MilestonesProps {
   milestone_title: string;
   milestone_caption: string;
+}
+
+export interface PropertyCategoryMilestonesProps {
+  milestone_count: string;
+  milestone_title: string;
+}
+export interface PropertyCategoryProps {
+  banner_image_caption: string;
+  banner_image_description: string;
+  meta_description: string;
+  meta_title: string;
+  property_category_title: string;
+  property_category_og_image: string;
+  banner_image: string;
+  canonical_tag: string;
+  property_category_milestones: PropertyCategoryMilestonesProps[];
+}
+
+export interface PropertyBasicInformationProps {
+  property_basic_information_icon: string;
+  property_basic_information_caption: string;
+}
+export interface PropertyProps {
+  property_name: string;
+  property_thumbnail: string;
+  property_thumbnail_night_mode: string;
+  property_location: string;
+  property_link: string;
+  property_status: string;
+  image_gallery?: string[];
+  property_city_name: string;
+  property_brochure: string;
+  property_tagline: string;
+  property_url: string;
+  property_basic_information: PropertyBasicInformationProps[];
+}
+
+export interface PropertyListProps {
+  properties: PropertyProps[];
+}
+
+export interface PropertyItemProps {
+  property: PropertyProps;
+}
+
+export interface ActionButtonProps {
+  children: React.ReactNode;
+  href?: string;
+  onClick?: () => void;
+  isDarkMode: boolean;
+}
+
+export interface CategoryFooterBlocksProps {
+  footer_block_title: string;
+  footer_block_description: string;
+  footer_block_image: string;
+  footer_block_cta_label: string;
+  footer_block_cta_value: string;
+}
+
+export interface DevelopmentForYouProps {
+  propertyCategory: PropertyCategoryProps;
+}
+
+export interface ListContactBannerProps {
+  propertyFooterBlocks: CategoryFooterBlocksProps;
+}
+
+export interface NavigationMenuItemProps {
+  menuTitle: string;
+  menuURL: string;
+  menuDayThumbnail: string;
+  menuNightThumbnail: string;
+}
+
+export interface StickyBottomBarProps {
+  projectCount?: number;
+  selectedLocation?: string | string[];
+  selectedProperty?: string | string[];
+  onLocationChange?: (value: string[] | null) => void;
+  onPropertyChange?: (value: string[] | null) => void;
+  isVisible?: boolean;
+  propertyCities?: string[];
+  propertyStatuses?: string[];
+}
+
+export interface DropdownMenuProps {
+  options?: string[];
+  selectedValues?: string | string[];
+  isOpen: boolean;
+  onSelect: (value: string) => void;
+  onClose: () => void;
+  theme: "day" | "night";
+  isProperty?: boolean;
+}
+
+export interface PropertyCategoryMilestonesProps {
+  milestone_count: string;
+  milestone_title: string;
+}
+export interface PropertyCategoryProps {
+  banner_image_caption: string;
+  banner_image_description: string;
+  meta_description: string;
+  meta_title: string;
+  property_category_title: string;
+  property_category_og_image: string;
+  banner_image: string;
+  canonical_tag: string;
+  property_category_milestones: PropertyCategoryMilestonesProps[];
 }

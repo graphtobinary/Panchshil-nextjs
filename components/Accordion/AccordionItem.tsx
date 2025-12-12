@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Button } from "../Button";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useThemeStore } from "@/store/themeStore";
 import { isAllowedPageForTheme } from "@/utils/utils";
 
@@ -41,8 +41,10 @@ export function AccordionItem({
   }, [isOpen]);
 
   const { theme } = useThemeStore();
-  const pathname = usePathname();
-  const isAllowedPage = isAllowedPageForTheme(pathname);
+  const params = useParams();
+  const isAllowedPage = isAllowedPageForTheme(
+    params as { [key: string]: string }
+  );
   const isDarkMode = isAllowedPage ? theme === "night" : false;
 
   return (
@@ -55,8 +57,8 @@ export function AccordionItem({
         }}
         className={`flex cursor-pointer items-center gap-4 justify-between py-6 px-4 md:px-8 border-b  w-4/5 mx-auto transition-colors ${
           !isDarkMode
-            ? "bg-[#FFFAF7] border-gray-200"
-            : "bg-gray-600 border-gray-400"
+            ? "bg-[#FFFAF7] border-[rgba(255, 255, 255, 0.42)]"
+            : "bg-[#232323] border-gray-400"
         }`}
       >
         <div className="flex items-center gap-6 w-full justify-between">

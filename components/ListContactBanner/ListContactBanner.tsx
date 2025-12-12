@@ -1,21 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../Button";
+import { ListContactBannerProps } from "@/interfaces";
 
-const stats = [
-  { title: "11.21mn", subtitle: "Sq.ft Delivered" },
-  { title: "4.07mn", subtitle: "Sq.ft Under Construction" },
-  { title: "23+", subtitle: "Years of Excellence" },
-];
-
-const ListContactBanner = () => {
+const ListContactBanner = ({
+  propertyFooterBlocks,
+}: ListContactBannerProps) => {
   return (
     <div className="relative w-full h-[70vh] md:h-[80vh] overflow-hidden bg-black-chocolate">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src={"/assets/images/our-residental-developments.png"}
-          alt={"List Hero Banner"}
+          src={propertyFooterBlocks?.footer_block_image}
+          alt={propertyFooterBlocks?.footer_block_title}
           fill
           className="object-cover md:object-fill"
           priority
@@ -33,8 +30,7 @@ const ListContactBanner = () => {
                animate-fade-in-up
               `}
         >
-          Our Residential Developments set new benchmarks in architecture,
-          construction and lifestyle design.
+          {propertyFooterBlocks?.footer_block_title}
         </h3>
 
         {/* Description */}
@@ -43,17 +39,13 @@ const ListContactBanner = () => {
                  animate-fade-in-up-delay-1
               `}
         >
-          With collaboration global architects, brands and engineering frims
-          each developments priorities craftmanship, sustainability and long
-          term value. From high rise residence to private enclaves, every
-          project reflects panchsil&apos;s commitment to premium living and
-          enduring value form homeowner.
+          {propertyFooterBlocks?.footer_block_description}
         </p>
         {/* CTA Button */}
         <div className="flex justify-center pt-5">
-          <Link href={"https://www.panchshil.com/luxury-residences"}>
+          <Link href={propertyFooterBlocks?.footer_block_cta_value || "#"}>
             <Button variant="hero" size="sm" className="w-48">
-              Contact Our Sales Team
+              {propertyFooterBlocks?.footer_block_cta_label}
             </Button>
           </Link>
         </div>

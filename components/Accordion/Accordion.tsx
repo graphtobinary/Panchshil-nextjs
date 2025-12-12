@@ -48,16 +48,8 @@ export function Accordion({
     setOpenIndex(index);
   };
 
-  const { theme } = useThemeStore();
-  const pathname = usePathname();
-  const isAllowedPage = isAllowedPageForTheme(pathname);
-  const isDarkMode = isAllowedPage ? theme === "night" : false;
   return (
-    <section
-      className={`w-full transition-colors ${
-        !isDarkMode ? "bg-[#FFFAF7]" : "bg-gray-600"
-      }`}
-    >
+    <section className={`w-full transition-colors `}>
       <div className="max-w-[1920px] mx-auto">
         {transformedData.map((item) => (
           <AccordionItem

@@ -17,6 +17,12 @@ const API_CONSTANTS = {
   BANNER: `/banner`,
   META_DATA: `/meta-data`,
   NAVIGATION_MENU: `/navigation-menu`,
+  PROPERTY_CATEGORY: `/property-category/{property_category_url_slug}`,
+  PROPERTY_CITIES: `/property-cities/{property_category_url_slug}`,
+  PROPERTY_STATUSES: `/property-statuses/{property_category_url_slug}`,
+  PROPERTIES_BY_CATEGORY: `/properties/{property_category_url_slug}`,
+  OTHER_PROPERTY_CATEGORIES: `/other-property-categories/{property_category_url_slug}`,
+  PROPERTY_FOOTER_BLOCKS: `/property-category/footer-block`,
 };
 
 export default API_CONSTANTS;

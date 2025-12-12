@@ -1,20 +1,21 @@
+import {
+  PropertyCategoryMilestonesProps,
+  PropertyCategoryProps,
+} from "@/interfaces";
 import Image from "next/image";
-import Link from "next/link";
 
-const stats = [
-  { title: "11.21mn", subtitle: "Sq.ft Delivered" },
-  { title: "4.07mn", subtitle: "Sq.ft Under Construction" },
-  { title: "23+", subtitle: "Years of Excellence" },
-];
-
-const ListHeroBanner = () => {
+const ListHeroBanner = ({
+  propertyCategory,
+}: {
+  propertyCategory: PropertyCategoryProps;
+}) => {
   return (
-    <div className="relative w-full h-[70vh] md:h-[80vh] overflow-hidden bg-black-chocolate">
+    <div className="relative w-full h-[calc(100vh-170px)] md:h-[calc(100vh-89px)] overflow-hidden bg-black-chocolate">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src={"/assets/images/list-hero-banner.png"}
-          alt={"List Hero Banner"}
+          src={propertyCategory?.banner_image}
+          alt={propertyCategory.banner_image_caption}
           fill
           className="object-cover md:object-fill"
           priority
@@ -32,7 +33,7 @@ const ListHeroBanner = () => {
                animate-fade-in-up
               `}
         >
-          Residential Projects
+          {propertyCategory?.property_category_title}
         </h3>
 
         {/* Description */}
@@ -41,24 +42,29 @@ const ListHeroBanner = () => {
                  animate-fade-in-up-delay-1
               `}
         >
-          Explore premium residence designed for refined living across the most
-          sought-after neighborhood
+          {propertyCategory.banner_image_description}
         </p>
         <div className={`animate-fade-in-up-delay-2`}>
-          {stats && stats.length > 0 && (
-            <div className="flex flex-wrap gap-2 md:gap-8 text-white justify-center">
-              {stats.map((stat, index) => (
-                <div key={index} className="flex items-center gap-2 flex-col">
-                  <span className="text-base md:text-4xl font-display-semi">
-                    {stat.title}
-                  </span>
-                  <span className="text-base md:text-lg font-display-semi">
-                    {stat.subtitle}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+          {propertyCategory?.property_category_milestones &&
+            propertyCategory?.property_category_milestones.length > 0 && (
+              <div className="flex flex-wrap gap-2 md:gap-8 text-white justify-center">
+                {propertyCategory?.property_category_milestones.map(
+                  (stat: PropertyCategoryMilestonesProps, index: number) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 flex-col"
+                    >
+                      <span className="text-base md:text-4xl font-display-semi">
+                        {stat.milestone_count}
+                      </span>
+                      <span className="text-base md:text-lg font-display-semi">
+                        {stat.milestone_title}
+                      </span>
+                    </div>
+                  )
+                )}
+              </div>
+            )}
         </div>
       </div>
     </div>

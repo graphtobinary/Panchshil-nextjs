@@ -7,13 +7,15 @@ import { useThemeStore } from "@/store/themeStore";
 import { isAllowedPageForTheme } from "@/utils/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useState, forwardRef } from "react";
 
-export function Footer() {
+export const Footer = forwardRef<HTMLElement>((props, ref) => {
   const { theme } = useThemeStore();
-  const pathname = usePathname();
-  const isAllowedPage = isAllowedPageForTheme(pathname);
+  const params = useParams();
+  const isAllowedPage = isAllowedPageForTheme(
+    params as { [key: string]: string }
+  );
   const isDarkMode = isAllowedPage ? theme === "night" : false;
   const navigationMenu = useNavigationMenu();
   const contactDetails = useNavigationMenuStore(
@@ -82,6 +84,7 @@ export function Footer() {
 
   return (
     <footer
+      ref={ref}
       className={`w-full transition-colors ${
         !isDarkMode
           ? "bg-[#FFFAF7] text-black-chocolate"
@@ -330,7 +333,7 @@ export function Footer() {
       {/* Row 3: Copyright */}
       <div
         className={`transition-colors ${
-          !isDarkMode ? "bg-[#35393B] text-white" : "bg-gray-800 text-gray-200"
+          !isDarkMode ? "bg-[#35393B] text-white" : "bg-[#35393B] text-gray-200"
         }`}
       >
         <div className=" mx-auto px-6 py-4 flex items-center justify-between gap-6">
@@ -438,4 +441,6 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});
+
+Footer.displayName = "Footer";

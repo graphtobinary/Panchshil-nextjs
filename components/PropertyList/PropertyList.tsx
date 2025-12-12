@@ -8,28 +8,53 @@ import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { useThemeStore } from "@/store/themeStore";
 
 import Link from "next/link";
+import { isAllowedPageForTheme } from "@/utils/utils";
+import { useParams } from "next/navigation";
+import {
+  ActionButtonProps,
+  PropertyItemProps,
+  PropertyListProps,
+} from "@/interfaces";
 
-interface Property {
-  property_name: string;
-  property_thumbnail: string;
-  property_location: string;
-  property_link: string;
-  image_gallery: string[];
-}
+function ActionButton({
+  children,
+  href,
+  onClick,
+  isDarkMode,
+}: ActionButtonProps) {
+  const baseClasses = `px-4 py-3 text-sm font-medium hover:opacity-90 transition-all shadow-sm ${
+    !isDarkMode ? "bg-gold-beige text-white" : "bg-[#4E4E4E] text-white"
+  }`;
 
-interface PropertyListProps {
-  properties: Property[];
-}
+  if (href) {
+    return (
+      <Link href={href} className={`${baseClasses} text-center`}>
+        {children}
+      </Link>
+    );
+  }
 
-interface PropertyItemProps {
-  property: Property;
+  return (
+    <button onClick={onClick} className={`${baseClasses} cursor-pointer`}>
+      {children}
+    </button>
+  );
 }
 
 function PropertyItem({ property }: PropertyItemProps) {
   const { theme } = useThemeStore();
+  const params = useParams();
+  const isAllowedPage = isAllowedPageForTheme(
+    params as { [key: string]: string }
+  );
+  const isDarkMode = isAllowedPage ? theme === "night" : false;
   // For now, we'll use the thumbnail as the only image
   // In a real scenario, you'd have multiple images
-  const images = property.image_gallery;
+  const images = [
+    !isDarkMode
+      ? property?.property_thumbnail
+      : property?.property_thumbnail_night_mode,
+  ];
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
@@ -81,80 +106,10 @@ function PropertyItem({ property }: PropertyItemProps) {
     [emblaApi]
   );
 
-  // Dummy data for specifications
-  const specifications = [
-    {
-      icon: (
-        <Image
-          src={"/assets/svgs/location-icon.svg"}
-          alt="Location Icon"
-          width={20}
-          height={20}
-        />
-      ),
-      label: property.property_location,
-    },
-    {
-      icon: (
-        <Image
-          src={"/assets/svgs/residences.svg"}
-          alt="House Icon"
-          width={20}
-          height={20}
-        />
-      ),
-      label: "3BHK, 4.5BHK Residences",
-    },
-    {
-      icon: (
-        <Image
-          src={"/assets/svgs/platinum-project.svg"}
-          alt="Star Icon"
-          width={20}
-          height={20}
-        />
-      ),
-      label: "Platinum Project",
-    },
-    {
-      icon: (
-        <Image
-          src={"/assets/svgs/underconstruction.svg"}
-          alt="Building Icon"
-          width={20}
-          height={20}
-        />
-      ),
-      label: "Under Construction",
-    },
-    {
-      icon: (
-        <Image
-          src={"/assets/svgs/development-size.svg"}
-          alt="Dimensions Icon"
-          width={20}
-          height={20}
-        />
-      ),
-      label: "Development Size: 6,114sq.m or 65,808 sq.ft.",
-    },
-    {
-      icon: (
-        <Image
-          src={"/assets/svgs/rupee.svg"}
-          alt="Rupee Icon"
-          width={20}
-          height={20}
-        />
-      ),
-      label: "INR 20Cr* Onwards",
-    },
-  ];
-
   return (
     <div
       className={`grid grid-cols-1 md:grid-cols-[30%_70%] gap-0 mb-8 shadow-sm transition-colors ${
-        theme === "day" ? "bg-white" : "bg-black"
+        !isDarkMode ? "bg-white" : "bg-black"
       }`}
     >
       {/* Left Column - Image Slider */}
@@ -165,7 +120,11 @@ function PropertyItem({ property }: PropertyItemProps) {
               <div key={index} className="flex-[0_0_100%] relative">
                 <Image
                   src={image}
-                  alt={property.property_name}
+                  alt={
+                    !isDarkMode
+                      ? property?.property_thumbnail
+                      : property?.property_thumbnail_night_mode
+                  }
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 60vw"
@@ -182,33 +141,25 @@ function PropertyItem({ property }: PropertyItemProps) {
               onClick={scrollPrev}
               disabled={!canPrev}
               className={`absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-opacity ${
-                theme === "day"
-                  ? "bg-white/80 border border-gray-300 hover:bg-white"
-                  : "bg-white border border-white hover:bg-white/90"
+                !isDarkMode
+                  ? " border border-gray-300 "
+                  : " border border-white "
               } ${!canPrev ? "opacity-50 cursor-not-allowed" : ""}`}
               aria-label="Previous image"
             >
-              <ArrowLeftIcon
-                fill={theme === "day" ? "#1F180D" : "#1F180D"}
-                width={20}
-                height={20}
-              />
+              <ArrowLeftIcon fill={"#FFFFFF"} width={20} height={20} />
             </button>
             <button
               onClick={scrollNext}
               disabled={!canNext}
               className={`absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-opacity ${
-                theme === "day"
-                  ? "bg-white/80 border border-gray-300 hover:bg-white"
-                  : "bg-white border border-white hover:bg-white/90"
+                !isDarkMode
+                  ? " border border-gray-300 "
+                  : " border border-white "
               } ${!canNext ? "opacity-50 cursor-not-allowed" : ""}`}
               aria-label="Next image"
             >
-              <ArrowRightIcon
-                fill={theme === "day" ? "#1F180D" : "#1F180D"}
-                width={20}
-                height={20}
-              />
+              <ArrowRightIcon fill={"#FFFFFF"} width={20} height={20} />
             </button>
           </>
         )}
@@ -217,49 +168,52 @@ function PropertyItem({ property }: PropertyItemProps) {
       {/* Right Column - Property Details */}
       <div
         className={`p-8 pl-12 flex flex-col justify-between transition-colors ${
-          theme === "day" ? "bg-[#FFFAF7]" : "bg-black"
+          !isDarkMode ? "bg-[#FFFAF7]" : "bg-black"
         }`}
       >
         <div>
           {/* Property Name */}
           <h2
-            className={`text-3xl md:text-2xl font-medium uppercase mb-3 transition-colors ${
-              theme === "day" ? "text-black-chocolate" : "text-white"
+            className={`text-3xl md:text-3xl font-display-semi uppercase mb-3 transition-colors ${
+              !isDarkMode ? "text-black" : "text-white"
             }`}
           >
-            {property.property_name}
+            {property?.property_name}
           </h2>
 
           {/* Brief Description */}
           <p
             className={`text-sm md:text-md font-normal mb-6 transition-colors ${
-              theme === "day" ? "text-black-chocolate" : "text-white"
+              !isDarkMode ? "text-[#030303]" : "text-white"
             }`}
           >
-            Large format full floor residences
+            {property?.property_tagline}
           </p>
 
           {/* Specifications */}
           <div className="space-y-4 mb-8">
-            {specifications.map((spec, index) => (
+            {property?.property_basic_information?.map((spec, index) => (
               <div key={index} className="flex items-start gap-3">
                 <div
                   className={`mt-0.5 shrink-0 transition-colors ${
-                    theme === "day" ? "text-black-chocolate" : "text-white"
+                    !isDarkMode ? "text-[#030303]" : "text-white"
                   }`}
                 >
-                  <div
-                    className={theme === "night" ? "brightness-0 invert" : ""}
-                  >
-                    {spec.icon}
+                  <div className={isDarkMode ? "brightness-0 invert" : ""}>
+                    <Image
+                      src={spec.property_basic_information_icon}
+                      alt={spec.property_basic_information_caption}
+                      width={20}
+                      height={20}
+                    />
                   </div>
                 </div>
                 <p
                   className={`text-sm md:text-md transition-colors ${
-                    theme === "day" ? "text-black-chocolate" : "text-white"
+                    !isDarkMode ? "text-[#030303]" : "text-white"
                   }`}
                 >
-                  {spec.label}
+                  {spec.property_basic_information_caption}
                 </p>
               </div>
             ))}
@@ -268,43 +222,30 @@ function PropertyItem({ property }: PropertyItemProps) {
 
         {/* CTA Buttons */}
         <div className="grid md:grid-cols-4 grid-cols-1 gap-5">
-          <Link
+          <ActionButton
             href={property.property_link || "#"}
-            className={`px-4 py-3 text-sm font-medium hover:opacity-90 transition-all text-center shadow-sm ${
-              theme === "day"
-                ? "bg-gold-beige text-white"
-                : "bg-gray-700 text-white"
-            }`}
+            isDarkMode={isDarkMode}
           >
             View Project
-          </Link>
-          <button
-            className={`px-4 py-3 text-sm cursor-pointer font-medium hover:opacity-90 transition-all shadow-sm ${
-              theme === "day"
-                ? "bg-gold-beige text-white"
-                : "bg-gray-700 text-white"
-            }`}
+          </ActionButton>
+          <ActionButton
+            href={property.property_brochure || "#"}
+            isDarkMode={isDarkMode}
           >
             Download Brochure
-          </button>
-          <button
-            className={`px-4 py-3 text-sm cursor-pointer font-medium hover:opacity-90 transition-all shadow-sm ${
-              theme === "day"
-                ? "bg-gold-beige text-white"
-                : "bg-gray-700 text-white"
-            }`}
+          </ActionButton>
+          <ActionButton
+            href={property.property_link || "#"}
+            isDarkMode={isDarkMode}
           >
             View Floor Plans
-          </button>
-          <button
-            className={`px-4 py-3 text-sm cursor-pointer font-medium hover:opacity-90 transition-all shadow-sm ${
-              theme === "day"
-                ? "bg-gold-beige text-white"
-                : "bg-gray-700 text-white"
-            }`}
+          </ActionButton>
+          <ActionButton
+            href={property.property_link || "#"}
+            isDarkMode={isDarkMode}
           >
             View Amenities
-          </button>
+          </ActionButton>
         </div>
       </div>
     </div>
@@ -312,15 +253,10 @@ function PropertyItem({ property }: PropertyItemProps) {
 }
 
 export function PropertyList({ properties }: PropertyListProps) {
-  const { theme } = useThemeStore();
   return (
-    <div
-      className={`container-standard md:px-16 px-4 py-12 transition-colors ${
-        theme === "day" ? "bg-[#FFFAF7]" : "bg-gray-600"
-      }`}
-    >
+    <div className={`container-standard md:px-16 px-4 pt-12 transition-colors`}>
       <div className="space-y-0">
-        {properties.map((property, index) => (
+        {properties?.map((property, index) => (
           <PropertyItem key={index} property={property} />
         ))}
       </div>

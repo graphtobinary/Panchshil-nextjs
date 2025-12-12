@@ -26,7 +26,6 @@ export default function HomeClient({
   masterSlider,
   footerBlocks,
 }: HomeClientProps) {
-  console.log(propertyCategories, "propertyCategories");
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
       <Header metaData={metaData} />

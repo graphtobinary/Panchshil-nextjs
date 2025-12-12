@@ -2,30 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useThemeStore } from "@/store/themeStore";
+import { DropdownMenuProps, StickyBottomBarProps } from "@/interfaces";
 
-interface DropdownOption {
-  label: string;
-  value: string;
-}
-
-interface StickyBottomBarProps {
-  projectCount?: number;
-  locations?: DropdownOption[];
-  properties?: DropdownOption[];
-  selectedLocation?: string | string[];
-  selectedProperty?: string | string[];
-  onLocationChange?: (value: string[]) => void;
-  onPropertyChange?: (value: string[]) => void;
-}
-
-interface DropdownMenuProps {
-  options: DropdownOption[];
-  selectedValues?: string | string[];
-  isOpen: boolean;
-  onSelect: (value: string) => void;
-  onClose: () => void;
-  theme: "day" | "night";
-}
+const ALL_OPTION = "All";
 
 function DropdownMenu({
   options,
@@ -34,7 +13,9 @@ function DropdownMenu({
   onSelect,
   // onClose,
   theme,
-}: DropdownMenuProps) {
+  showAllOption = true,
+  isProperty = false,
+}: DropdownMenuProps & { showAllOption?: boolean }) {
   if (!isOpen) return null;
 
   // Normalize selectedValues to always be an array
@@ -44,25 +25,36 @@ function DropdownMenu({
       ? [selectedValues]
       : [];
 
-  const isSelected = (value: string) => selectedArray.includes(value);
+  const isSelected = (value: string) => {
+    if (value === ALL_OPTION) {
+      return selectedArray.length === 0;
+    }
+    return selectedArray.includes(value);
+  };
+
+  // Combine "All" option with other options
+  const allOptions = showAllOption
+    ? [ALL_OPTION, ...(options || [])]
+    : options || [];
 
   return (
     <div
-      className={`absolute bottom-full left-0 mb-2 border border-golden-beige shadow-lg min-w-[260px] max-h-60 overflow-y-auto z-10 ${
+      className={`absolute bottom-full md:left-5 ${isProperty ? "-left-20" : "left-0"} mb-2 border border-golden-beige shadow-lg min-w-[260px] max-h-60 overflow-y-auto z-10 ${
         theme === "day" ? "bg-white" : "bg-black"
       }`}
     >
       <ul className="">
-        {options.map((option) => {
-          const selected = isSelected(option.value);
+        {allOptions.map((option, index) => {
+          const selected = isSelected(option);
+          const isLast = index === allOptions.length - 1;
           return (
-            <li key={option.value}>
+            <li key={option}>
               <button
                 onClick={() => {
-                  onSelect(option.value);
+                  onSelect(option);
                 }}
-                className={`w-full text-black-chocolate border-b  text-left px-4 py-2 cursor-pointer text-sm transition-colors flex items-center gap-2 
-                  ${theme === "day" ? "border-b-gold-beige" : "border-b-white"}
+                className={`w-full  text-black-chocolate text-left px-4 py-2 cursor-pointer text-sm transition-colors flex items-center gap-2 
+                  ${!isLast ? (theme === "day" ? "border-b border-b-gold-beige" : "border-b border-b-[#4E4E4E]") : ""}
                   ${
                     selected
                       ? `${theme === "day" ? "bg-gold-beige" : "bg-gray-500"} font-medium text-white`
@@ -75,9 +67,7 @@ function DropdownMenu({
                   className={`w-3 h-3 border flex items-center justify-center ${
                     selected
                       ? `${theme === "day" ? "bg-gold-beige border-white" : "bg-gray-500 border-white"}`
-                      : theme === "day"
-                        ? "border-black"
-                        : "border-white"
+                      : "border-black"
                   }`}
                 >
                   {selected && (
@@ -94,7 +84,7 @@ function DropdownMenu({
                     </svg>
                   )}
                 </span>
-                {option.label}
+                {option}
               </button>
             </li>
           );
@@ -106,20 +96,13 @@ function DropdownMenu({
 
 export function StickyBottomBar({
   projectCount = 12,
-  locations = [
-    { label: "Pune", value: "pune" },
-    { label: "Mumbai", value: "mumbai" },
-  ],
-  properties = [
-    { label: "Ready To Move In", value: "ready-to-move-in" },
-    { label: "Under Construction", value: "under-construction" },
-    { label: "Upcoming", value: "upcoming" },
-    { label: "Sold Out", value: "sold-out" },
-  ],
   selectedLocation,
   selectedProperty,
   onLocationChange,
   onPropertyChange,
+  isVisible = true,
+  propertyCities,
+  propertyStatuses,
 }: StickyBottomBarProps) {
   const { theme, toggleTheme } = useThemeStore();
   const [isLocationOpen, setIsLocationOpen] = useState(false);
@@ -168,8 +151,8 @@ export function StickyBottomBar({
     if (selectedLocationsArray.length === 0) return "Select Location";
     if (selectedLocationsArray.length === 1) {
       return (
-        locations.find((loc) => loc.value === selectedLocationsArray[0])
-          ?.label || "Select Location"
+        propertyCities?.find((loc) => loc === selectedLocationsArray[0]) ||
+        "Select Location"
       );
     }
     return `${selectedLocationsArray.length} selected`;
@@ -179,8 +162,8 @@ export function StickyBottomBar({
     if (selectedPropertiesArray.length === 0) return "Select Project Status";
     if (selectedPropertiesArray.length === 1) {
       return (
-        properties.find((prop) => prop.value === selectedPropertiesArray[0])
-          ?.label || "Select Project Status"
+        propertyStatuses?.find((prop) => prop === selectedPropertiesArray[0]) ||
+        "Select Project Status"
       );
     }
     return `${selectedPropertiesArray.length} selected`;
@@ -191,34 +174,50 @@ export function StickyBottomBar({
 
   // Toggle selection handler
   const handleLocationToggle = (value: string) => {
+    if (value === ALL_OPTION) {
+      // Selecting "All" clears the filter
+      onLocationChange?.([]);
+      return;
+    }
     const current = selectedLocationsArray;
     const newSelection = current.includes(value)
       ? current.filter((v) => v !== value)
       : [...current, value];
-    onLocationChange?.(newSelection);
+    // If all items are deselected, treat it as "All"
+    onLocationChange?.(newSelection.length === 0 ? [] : newSelection);
   };
 
   const handlePropertyToggle = (value: string) => {
+    if (value === ALL_OPTION) {
+      // Selecting "All" clears the filter
+      onPropertyChange?.([]);
+      return;
+    }
     const current = selectedPropertiesArray;
     const newSelection = current.includes(value)
       ? current.filter((v) => v !== value)
       : [...current, value];
-    onPropertyChange?.(newSelection);
+    // If all items are deselected, treat it as "All"
+    onPropertyChange?.(newSelection.length === 0 ? [] : newSelection);
   };
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-50 border-t shadow-lg transition-colors ${
+      className={`fixed bottom-0 left-0 right-0 z-50 border-t shadow-lg transition-all duration-300 ease-in-out ${
         theme === "day"
-          ? "bg-[#FFFAF7] border-gray-200"
-          : "bg-black border-gray-700"
+          ? "bg-[#FFFAF7] border-gold-beige"
+          : "bg-black border-white"
+      } ${
+        isVisible
+          ? "translate-y-0 opacity-100"
+          : "translate-y-full opacity-0 pointer-events-none"
       }`}
     >
-      <div className="container-standard px-4 py-3">
-        <div className="flex flex-wrap items-center justify-between gap-8">
+      <div className="container-standard px-4 py-2 md:py-6">
+        <div className="flex flex-wrap items-center justify-evenly gap-3 md:gap-8">
           {/* Projects Found Text */}
           <div
-            className={`text-sm md:text-base font-normal transition-colors ${
+            className={`text-sm md:text-base font-medium transition-colors ${
               theme === "day" ? "text-black-chocolate" : "text-white"
             }`}
           >
@@ -226,21 +225,26 @@ export function StickyBottomBar({
           </div>
 
           {/* Dropdowns Container */}
-          <div className="flex flex-row items-center gap-4 flex-1 justify-center">
+          <div className="flex flex-row md:flex-row items-center gap-4  justify-center">
             {/* Location Dropdown */}
-            <div ref={locationRef} className="relative w-full">
+            <div
+              ref={locationRef}
+              className="relative md:w-auto md:px-4 cursor-pointer"
+            >
               <button
                 onClick={() => {
                   setIsLocationOpen(!isLocationOpen);
                   setIsPropertyOpen(false);
                 }}
-                className={`flex w-full items-center justify-between gap-2 px-4 py-2 border-b  text-sm md:text-base transition-colors min-w-[160px] ${
+                className={`flex md:w-64 items-center justify-between gap-2 px-4 py-2 border-b  text-sm md:text-base transition-colors min-w-[160px] ${
                   theme === "day"
                     ? "text-black-chocolate border-b-gold-beige"
                     : "text-white border-b-white"
                 }`}
               >
-                <span>{selectedLocationLabel}</span>
+                <span className="text-xs md:text-base">
+                  {selectedLocationLabel}
+                </span>
                 <svg
                   className={`w-4 h-4 transition-transform ${
                     isLocationOpen ? "rotate-180" : ""
@@ -259,29 +263,35 @@ export function StickyBottomBar({
               </button>
 
               <DropdownMenu
-                options={locations}
+                options={propertyCities}
                 selectedValues={selectedLocationsArray}
                 isOpen={isLocationOpen}
                 onSelect={handleLocationToggle}
                 onClose={() => setIsLocationOpen(false)}
                 theme={theme}
+                isProperty={false}
               />
             </div>
 
             {/* Property Dropdown */}
-            <div ref={propertyRef} className="relative w-full">
+            <div
+              ref={propertyRef}
+              className="relative md:w-auto md:px-4 cursor-pointer"
+            >
               <button
                 onClick={() => {
                   setIsPropertyOpen(!isPropertyOpen);
                   setIsLocationOpen(false);
                 }}
-                className={`flex w-full items-center justify-between gap-2 px-4 py-2 border-b  text-sm md:text-base transition-colors min-w-[160px] ${
+                className={`flex md:w-64 items-center justify-between gap-2 px-4 py-2 border-b  text-sm md:text-base transition-colors min-w-[160px] ${
                   theme === "day"
                     ? "text-black-chocolate border-b-gold-beige"
                     : "text-white border-b-white"
                 }`}
               >
-                <span>{selectedPropertyLabel}</span>
+                <span className="text-xs md:text-base">
+                  {selectedPropertyLabel}
+                </span>
                 <svg
                   className={`w-4 h-4 transition-transform ${
                     isPropertyOpen ? "rotate-180" : ""
@@ -300,12 +310,13 @@ export function StickyBottomBar({
               </button>
 
               <DropdownMenu
-                options={properties}
+                options={propertyStatuses}
                 selectedValues={selectedPropertiesArray}
                 isOpen={isPropertyOpen}
                 onSelect={handlePropertyToggle}
                 onClose={() => setIsPropertyOpen(false)}
                 theme={theme}
+                isProperty={true}
               />
             </div>
           </div>
@@ -313,15 +324,15 @@ export function StickyBottomBar({
           {/* Day/Night Mode Switcher */}
           <div className="flex items-center gap-3">
             <span
-              className={`text-sm md:text-base transition-colors font-medium ${
-                theme === "day" ? "text-black " : "text-gray-500"
+              className={`text-sm md:text-base transition-colors font-regular ${
+                theme === "day" ? "text-black " : "text-[rgba(255,255,255,0.5)]"
               }`}
             >
               Day Mode
             </span>
             <button
               onClick={toggleTheme}
-              className={`relative w-16 h-6  transition-all focus:outline-none border items-center ${
+              className={`relative cursor-pointer w-12 h-5  transition-all focus:outline-none border items-center ${
                 theme === "day"
                   ? "bg-[#FFFAF7] border-gold-beige"
                   : "bg-black border-white"
@@ -329,16 +340,16 @@ export function StickyBottomBar({
               aria-label={`Switch to ${theme === "day" ? "night" : "day"} mode`}
             >
               <span
-                className={`absolute top-0.5 h-[18px]  transform transition-all ${
+                className={`absolute top-0.5 h-[14px]  transform transition-all ${
                   theme === "day"
-                    ? "left-0.5 w-7 bg-gold-beige"
-                    : "right-0.5 w-7 bg-white"
+                    ? "left-0.5 w-5 bg-gold-beige"
+                    : "right-0.5 w-5 bg-white"
                 }`}
               />
             </button>
             <span
-              className={`text-sm md:text-base transition-colors font-medium ${
-                theme === "night" ? "text-white " : "text-gray-400"
+              className={`text-sm md:text-base transition-colors font-display-regular ${
+                theme === "night" ? "text-white " : "text-[rgba(0,0,0,0.5)]"
               }`}
             >
               Night Mode
