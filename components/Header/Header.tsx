@@ -7,17 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-// interface NavItemChild {
-//   label: string;
-//   href: string;
-// }
-
-// interface NavItem {
-//   label: string;
-//   href: string;
-//   child?: NavItemChild[];
-// }
-
 export function Header({ metaData }: { metaData: MetaDataProps }) {
   const navigationMenu = useNavigationMenu();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
