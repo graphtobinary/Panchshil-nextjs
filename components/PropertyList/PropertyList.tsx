@@ -228,12 +228,14 @@ function PropertyItem({ property }: PropertyItemProps) {
           >
             View Project
           </ActionButton>
-          <ActionButton
-            href={property.property_brochure || "#"}
-            isDarkMode={isDarkMode}
-          >
-            Download Brochure
-          </ActionButton>
+          {property.property_brochure && (
+            <ActionButton
+              href={property.property_brochure || "#"}
+              isDarkMode={isDarkMode}
+            >
+              Download Brochure
+            </ActionButton>
+          )}
           <ActionButton
             href={property.property_link || "#"}
             isDarkMode={isDarkMode}
