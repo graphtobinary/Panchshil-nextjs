@@ -7,6 +7,7 @@ import { useNavigationMenu } from "@/hooks/useNavigationMenu";
 import { isAllowedPageForTheme } from "@/utils/utils";
 import { useParams } from "next/navigation";
 import { NavigationMenuItemProps } from "@/interfaces";
+import Link from "next/link";
 
 // const dummyProperties = [
 //   {
@@ -92,11 +93,12 @@ const DevelopmentForYou = () => {
         <div className="flex md:gap-4 md:flex-row flex-col justify-center">
           {navigationMenu[6]?.menu?.map(
             (item: NavigationMenuItemProps, i: number) => (
-              <div
-                key={item.menuURL + i}
+              <Link
                 className={
                   "w-full  md:basis-[28.571%] shrink-0 grow-0 relative h-[300px] md:h-[420px] overflow-hidden"
                 }
+                href={item.menuURL}
+                key={item.menuURL + i}
               >
                 <Image
                   src={
@@ -117,7 +119,7 @@ const DevelopmentForYou = () => {
                     {item.menuTitle}
                   </div>
                 </div>
-              </div>
+              </Link>
             )
           )}
         </div>
