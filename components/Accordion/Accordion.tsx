@@ -3,9 +3,6 @@
 import { useState, useMemo } from "react";
 import { AccordionItem } from "./AccordionItem";
 import { AccordionProps } from "@/interfaces";
-import { useThemeStore } from "@/store/themeStore";
-import { isAllowedPageForTheme } from "@/utils/utils";
-import { usePathname } from "next/navigation";
 
 export function Accordion({
   propertyCategories,
