@@ -17,7 +17,7 @@ import {
 import ListClient from "../ListClient";
 
 // Disable page-level caching - we'll handle caching per API call
-export const revalidate = 0; // Always fetch fresh data
+export const revalidate = 600; // 10 minutes
 
 interface ListPageProps {
   params: {

@@ -32,9 +32,8 @@ import {
 } from "@/interfaces";
 import { MasterSliderData } from "@/components/Hero/CustomCarousel";
 
-// Disable page-level caching - we'll handle caching per API call
-// Only getNavigationMenu and getContactDetails will be cached (in layout)
-export const revalidate = 0; // Always fetch fresh data
+// Enable page-level caching - revalidate every 10 minutes (600 seconds)
+export const revalidate = 600;
 
 export default async function Home() {
   // Fetch token
