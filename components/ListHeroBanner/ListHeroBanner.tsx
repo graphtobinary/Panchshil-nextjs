@@ -29,7 +29,7 @@ const ListHeroBanner = ({
       <div className="relative z-10 h-full flex flex-col justify-end items-center max-w-[1200px] mx-auto px-6 md:px-12 py-10 md:py-16">
         {/* Title */}
         <h3
-          className={`text-3xl  md:text-6xl  font-display-semi text-white mb-6 max-w-3xl 
+          className={`text-3xl  md:text-6xl  font-display-semi text-white mb-3 md:mb-6 max-w-3xl 
                animate-fade-in-up
               `}
         >
@@ -47,14 +47,14 @@ const ListHeroBanner = ({
         <div className={`animate-fade-in-up-delay-2`}>
           {propertyCategory?.property_category_milestones &&
             propertyCategory?.property_category_milestones.length > 0 && (
-              <div className="flex flex-wrap gap-2 md:gap-8 text-white justify-center">
+              <div className="flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-8 text-white justify-center">
                 {propertyCategory?.property_category_milestones.map(
                   (stat: PropertyCategoryMilestonesProps, index: number) => (
                     <div
                       key={index}
-                      className="flex items-center gap-2 flex-col"
+                      className="flex items-center md:gap-2 flex-col"
                     >
-                      <span className="text-base md:text-4xl font-display-semi">
+                      <span className="text-3xl md:text-4xl font-display-semi">
                         {stat.milestone_count}
                       </span>
                       <span className="text-base md:text-lg font-display-semi">
