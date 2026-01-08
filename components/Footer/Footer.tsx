@@ -339,7 +339,10 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
         <div className=" mx-auto px-6 py-4 flex items-center justify-between gap-6">
           <div className="text-[12px] font-display-semi">
             PANCHSHIL &copy; {new Date().getFullYear()} - Designed &amp;
-            Developed by The Neon Tree
+            Developed by{" "}
+            <a href="https://www.theneontree.in/" target="_blank">
+              The Neon Tree
+            </a>
           </div>
           <div
             className={`hidden md:flex items-center gap-6 text-[12px] transition-colors ${

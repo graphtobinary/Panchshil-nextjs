@@ -1,5 +1,3 @@
-import { MasterSliderData } from "@/components/Hero/CustomCarousel";
-
 export interface ArrowLeftIconProps {
   fill?: string;
   width?: number;
@@ -205,6 +203,7 @@ export interface PropertyCategoryProps {
   banner_image: string;
   canonical_tag: string;
   property_category_milestones: PropertyCategoryMilestonesProps[];
+  property_count: number;
 }
 
 export interface PropertyBasicInformationProps {
@@ -228,6 +227,11 @@ export interface PropertyProps {
 
 export interface PropertyListProps {
   properties: PropertyProps[];
+  propertyCategoryUrlSlug?: string;
+  totalPropertyCount?: number;
+  propertyCities?: string[];
+  propertyStatuses?: string[];
+  footerRef?: React.RefObject<HTMLElement | null>;
 }
 
 export interface PropertyItemProps {
@@ -299,4 +303,21 @@ export interface PropertyCategoryProps {
   banner_image: string;
   canonical_tag: string;
   property_category_milestones: PropertyCategoryMilestonesProps[];
+}
+
+export interface SlideData {
+  image?: string;
+  video?: string;
+  title: string;
+  description: string;
+  ctaText: string;
+}
+
+export interface MasterSliderData {
+  master_slider_title: string;
+  master_slider_description: string;
+  master_slider_link: string;
+  master_slider_image: string | null;
+  master_slider_video: string;
+  master_slider_button_caption: string;
 }

@@ -23,6 +23,10 @@ const API_CONSTANTS = {
   PROPERTIES_BY_CATEGORY: `/properties/{property_category_url_slug}`,
   OTHER_PROPERTY_CATEGORIES: `/other-property-categories/{property_category_url_slug}`,
   PROPERTY_FOOTER_BLOCKS: `/property-category/footer-block`,
+  PROPERTIES_BY_CATEGORY_API: "/api/properties-by-category",
 };
+
+// Pagination constants
+export const PER_PAGE_LIMIT = 5;
 
 export default API_CONSTANTS;
