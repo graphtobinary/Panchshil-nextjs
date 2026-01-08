@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { useThemeStore } from "@/store/themeStore";
 import { StickyBottomBar } from "@/components/StickyBottomBar";
+import { Pagination } from "@/components/Pagination";
 
 import Link from "next/link";
 import { isAllowedPageForTheme } from "@/utils/utils";
@@ -16,7 +17,6 @@ import {
   PropertyItemProps,
   PropertyListProps,
 } from "@/interfaces";
-import { usePropertiesPagination } from "@/hooks/usePropertiesPagination";
 
 function ActionButton({
   children,
@@ -263,6 +263,7 @@ export function PropertyList({
   propertyCities = [],
   propertyStatuses = [],
   footerRef,
+  currentPage = 1,
 }: PropertyListProps) {
   const { theme } = useThemeStore();
   const params = useParams();
@@ -310,26 +311,8 @@ export function PropertyList({
     setSelectedProperty(value || []);
   };
 
-  // Use pagination hook if category slug is provided
-  const {
-    properties: paginatedProperties,
-    isLoading,
-    hasMore,
-    error,
-    sentinelRef,
-    loadNextPage,
-  } = usePropertiesPagination({
-    initialProperties: properties || [],
-    propertyCategoryUrlSlug: propertyCategoryUrlSlug || "",
-    totalPropertyCount,
-  });
-
-  // Use paginated properties if category slug is provided, otherwise use original properties
-  const allProperties = propertyCategoryUrlSlug
-    ? paginatedProperties
-    : properties || [];
-  // Apply filters to all properties (including paginated ones)
-  const displayProperties = allProperties.filter((property) => {
+  // Apply filters to current page properties
+  const displayProperties = (properties || []).filter((property) => {
     // Filter by location - check both property_city_name and property_basic_information
     let matchesLocation = true;
     if (selectedLocation.length > 0) {
@@ -358,53 +341,8 @@ export function PropertyList({
     return matchesLocation && matchesStatus;
   });
 
-  // Ensure pagination continues to load all properties when filters are applied
-  // This allows filters to work on the complete dataset
-  useEffect(() => {
-    if (!propertyCategoryUrlSlug || isLoading || !hasMore || !loadNextPage) {
-      return;
-    }
-
-    // When filters are applied and we haven't loaded all properties yet,
-    // ensure the sentinel is visible to trigger pagination
-    if (
-      allProperties.length < (totalPropertyCount || Infinity) &&
-      hasMore &&
-      !isLoading
-    ) {
-      const sentinel = sentinelRef.current;
-      if (sentinel) {
-        // Check if sentinel is visible or near viewport
-        const rect = sentinel.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight + 200;
-
-        // If sentinel is visible and we have filters, trigger load
-        // This ensures we load all properties so filters can work on complete data
-        if (
-          isVisible &&
-          (selectedLocation.length > 0 || selectedProperty.length > 0)
-        ) {
-          // Small delay to avoid rapid requests
-          const timeoutId = setTimeout(() => {
-            if (!isLoading && hasMore && loadNextPage) {
-              loadNextPage();
-            }
-          }, 500);
-
-          return () => clearTimeout(timeoutId);
-        }
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    selectedLocation.length,
-    selectedProperty.length,
-    allProperties.length,
-    totalPropertyCount,
-    hasMore,
-    isLoading,
-    propertyCategoryUrlSlug,
-  ]);
+  // Build base URL for pagination
+  const baseUrl = propertyCategoryUrlSlug ? `/${propertyCategoryUrlSlug}` : "";
 
   return (
     <>
@@ -412,57 +350,30 @@ export function PropertyList({
         className={`container-standard md:px-16 px-4 pt-12 transition-colors`}
       >
         <div className="space-y-0">
-          {displayProperties?.map((property, index) => (
-            <PropertyItem key={index} property={property} />
-          ))}
-
-          {/* Loading indicator */}
-          {isLoading && (
-            <div
-              className={`flex justify-center items-center py-8 transition-colors ${
-                !isDarkMode ? "text-black" : "text-white"
-              }`}
-            >
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-current"></div>
-              <span className="ml-3">Loading more properties...</span>
-            </div>
-          )}
-
-          {/* Error message */}
-          {error && (
+          {displayProperties?.length > 0 ? (
+            displayProperties.map((property, index) => (
+              <PropertyItem key={index} property={property} />
+            ))
+          ) : (
             <div
               className={`text-center py-8 transition-colors ${
-                !isDarkMode ? "text-red-600" : "text-red-400"
+                !isDarkMode ? "text-gray-600" : "text-gray-400"
               }`}
             >
-              {error}
+              No properties match the selected filters. Try adjusting your
+              filters.
             </div>
           )}
 
-          {/* Sentinel element for Intersection Observer - Always show when there are more properties to load */}
-          {/* This ensures pagination continues even when filters reduce visible items */}
-          {propertyCategoryUrlSlug && hasMore && (
-            <div
-              ref={sentinelRef}
-              className="h-20 w-full"
-              aria-hidden="true"
-              style={{ minHeight: "80px" }}
-            />
-          )}
-
-          {/* Show message when no filtered results but more properties might be available */}
+          {/* Pagination */}
           {propertyCategoryUrlSlug &&
-            displayProperties.length === 0 &&
-            allProperties.length > 0 &&
-            !isLoading && (
-              <div
-                className={`text-center py-8 transition-colors ${
-                  !isDarkMode ? "text-gray-600" : "text-gray-400"
-                }`}
-              >
-                No properties match the selected filters. Try adjusting your
-                filters or scroll to load more properties.
-              </div>
+            totalPropertyCount !== undefined &&
+            totalPropertyCount > 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalPropertyCount}
+                baseUrl={baseUrl}
+              />
             )}
         </div>
       </div>

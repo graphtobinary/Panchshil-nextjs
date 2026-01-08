@@ -12,7 +12,6 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
@@ -43,8 +42,12 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
       } top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out`}
     >
       {metaData?.meta_title && <title>{metaData?.meta_title}</title>}
-      <meta name="description" content={metaData?.meta_description} />
-      <meta name="canonical" content={metaData?.canonical_tag} />
+      {metaData?.meta_description && (
+        <meta name="description" content={metaData?.meta_description} />
+      )}
+      {metaData?.canonical_tag && (
+        <meta name="canonical" content={metaData?.canonical_tag} />
+      )}
 
       {/* Background overlay with fade effect */}
       <div

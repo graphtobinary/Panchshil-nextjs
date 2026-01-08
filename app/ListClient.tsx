@@ -26,6 +26,7 @@ interface ListClientProps {
   otherPropertyCategories?: PropertyCategories[];
   propertyFooterBlocks?: CategoryFooterBlocksProps;
   properties?: PropertyProps[];
+  currentPage?: number;
 }
 
 export default function ListClient({
@@ -35,6 +36,7 @@ export default function ListClient({
   properties,
   otherPropertyCategories,
   propertyFooterBlocks,
+  currentPage = 1,
 }: ListClientProps) {
   const { theme } = useThemeStore();
   const params = useParams();
@@ -52,7 +54,7 @@ export default function ListClient({
       <main
         className={`min-h-screen ${isDarkMode ? "bg-[#232323]" : "bg-[#FFFAF7]"}`}
       >
-        <Header metaData={{ metaData: propertyCategory } as MetaDataProps} />
+        <Header metaData={propertyCategory as MetaDataProps} />
         <ListHeroBanner
           propertyCategory={propertyCategory as PropertyCategoryProps}
         />
@@ -64,6 +66,7 @@ export default function ListClient({
           propertyCities={propertyCities}
           propertyStatuses={propertyStatuses}
           footerRef={footerRef}
+          currentPage={currentPage}
         />
         <DevelopmentForYou />
         <OurOtherProjects

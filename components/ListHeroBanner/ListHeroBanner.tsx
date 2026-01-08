@@ -52,7 +52,7 @@ const ListHeroBanner = ({
                   (stat: PropertyCategoryMilestonesProps, index: number) => (
                     <div
                       key={index}
-                      className="flex items-center md:gap-2 flex-col"
+                      className="flex items-center md:gap-2 flex-col border-b border-b-[rgba(255,255,255,0.5)] md:border-none pb-3 md:pb-0"
                     >
                       <span className="text-3xl md:text-4xl font-display-semi">
                         {stat.milestone_count}
