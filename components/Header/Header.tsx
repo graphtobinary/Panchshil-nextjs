@@ -127,7 +127,7 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     <Link
-                      href={link ? `/${link}` : ""}
+                      href={link ? `${link}` : ""}
                       className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light block"
                     >
                       {item.menuTitle}
