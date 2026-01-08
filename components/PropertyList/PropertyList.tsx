@@ -381,7 +381,7 @@ export function PropertyList({
       {/* Sticky Bottom Bar */}
       {propertyCategoryUrlSlug && (
         <StickyBottomBar
-          projectCount={displayProperties.length}
+          projectCount={totalPropertyCount}
           selectedLocation={selectedLocation}
           selectedProperty={selectedProperty}
           onLocationChange={handleLocationChange}
