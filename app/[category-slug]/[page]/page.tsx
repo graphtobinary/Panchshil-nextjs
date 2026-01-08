@@ -17,9 +17,62 @@ import {
 import { PER_PAGE_LIMIT } from "@/api/constants";
 import ListClient from "../../ListClient";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 // Disable page-level caching - we'll handle caching per API call
 export const revalidate = 600; // 10 minutes
+
+// Generate metadata for the page
+export async function generateMetadata({
+  params,
+}: PaginatedListPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const propertyCategoryUrlSlug = resolvedParams["category-slug"];
+
+  // Fetch token and property category for metadata
+  let token: string | null = null;
+  let propertyCategory: PropertyCategoryProps | null = null;
+
+  try {
+    const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+    if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+      token = tokenResponse.token;
+
+      // Fetch property category for metadata
+      if (token && propertyCategoryUrlSlug) {
+        try {
+          const categoryResponse = await getPropertyCategory(
+            token,
+            propertyCategoryUrlSlug
+          );
+          propertyCategory = categoryResponse as PropertyCategoryProps;
+        } catch (error) {
+          console.error(
+            "Error fetching property category for metadata:",
+            error
+          );
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching auth token for metadata:", error);
+  }
+
+  // Return metadata if available, otherwise use defaults
+  return {
+    title:
+      propertyCategory?.meta_title ||
+      "Panchshil - India's Leading Luxury Developer",
+    description:
+      propertyCategory?.meta_description ||
+      "Since 2002, Panchshil Realty has set benchmarks in design, delivery and urban placemaking.",
+    alternates: propertyCategory?.canonical_tag
+      ? {
+          canonical: propertyCategory.canonical_tag,
+        }
+      : undefined,
+  };
+}
 
 interface PaginatedListPageProps {
   params: {
