@@ -200,7 +200,7 @@ export function WelcomeSection({
           </div>
 
           {/* CTA Button */}
-          <Link href={aboutIntroData.about_intro_link}>
+          <Link href={aboutIntroData?.about_intro_link}>
             <Button
               variant="overlay"
               size="lg"
@@ -222,8 +222,8 @@ export function WelcomeSection({
           <video
             src={
               isMobile
-                ? getVideoUrl(aboutIntroData.about_intro_mobile_video)
-                : getVideoUrl(aboutIntroData.about_intro_desktop_video)
+                ? getVideoUrl(aboutIntroData?.about_intro_mobile_video)
+                : getVideoUrl(aboutIntroData?.about_intro_desktop_video)
             }
             autoPlay
             loop
@@ -235,7 +235,7 @@ export function WelcomeSection({
             onError={(e) => {
               console.error(
                 "Video failed to load:",
-                aboutIntroData.about_intro_desktop_video,
+                aboutIntroData?.about_intro_desktop_video,
                 e
               );
             }}

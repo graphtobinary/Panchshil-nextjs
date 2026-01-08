@@ -48,10 +48,23 @@ export const getPropertyStatuses = (
 
 export const getPropertiesByCategory = (
   token: string,
-  property_category_url_slug: string
+  property_category_url_slug: string,
+  limit?: number,
+  skip?: number
 ) => {
+  // Build the API path
+  let apiPath = API_CONSTANTS.PROPERTIES_BY_CATEGORY.replace(
+    "{property_category_url_slug}",
+    property_category_url_slug
+  );
+
+  // Add query parameters if limit and skip are provided
+  if (limit !== undefined && skip !== undefined) {
+    apiPath = `${apiPath}?limit=${limit}&skip=${skip}`;
+  }
+
   return doGet(
-    API_CONSTANTS.PROPERTIES_BY_CATEGORY,
+    apiPath,
     { property_category_url_slug },
     {
       headers: {

@@ -14,6 +14,7 @@ import {
   PropertyCategoryProps,
   PropertyProps,
 } from "@/interfaces";
+import { PER_PAGE_LIMIT } from "@/api/constants";
 import ListClient from "../ListClient";
 
 // Disable page-level caching - we'll handle caching per API call
@@ -43,13 +44,19 @@ export default async function ListPage({ params }: ListPageProps) {
   }
 
   // Fetch all data in parallel if token is available, otherwise return null promises
+  // For properties, fetch only page 1 initially (limit=5, skip=0)
   const apiCalls =
     token && propertyCategoryUrlSlug
       ? [
           getPropertyCategory(token, propertyCategoryUrlSlug),
           getPropertyCities(token, propertyCategoryUrlSlug),
           getPropertyStatuses(token, propertyCategoryUrlSlug),
-          getPropertiesByCategory(token, propertyCategoryUrlSlug),
+          getPropertiesByCategory(
+            token,
+            propertyCategoryUrlSlug,
+            PER_PAGE_LIMIT * 1, // limit = 5 * 1 = 5
+            PER_PAGE_LIMIT * (1 - 1) // skip = 5 * 0 = 0
+          ),
           getOtherPropertyCategories(token, propertyCategoryUrlSlug),
           getPropertyFooterBlocks(token),
         ]
@@ -82,7 +89,6 @@ export default async function ListPage({ params }: ListPageProps) {
         ? propertyFooterBlocks.value
         : null,
   };
-
   return (
     <ListClient
       propertyCategory={data.propertyCategory as PropertyCategoryProps}

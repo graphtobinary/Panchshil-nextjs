@@ -6,6 +6,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { useThemeStore } from "@/store/themeStore";
+import { StickyBottomBar } from "@/components/StickyBottomBar";
 
 import Link from "next/link";
 import { isAllowedPageForTheme } from "@/utils/utils";
@@ -15,6 +16,7 @@ import {
   PropertyItemProps,
   PropertyListProps,
 } from "@/interfaces";
+import { usePropertiesPagination } from "@/hooks/usePropertiesPagination";
 
 function ActionButton({
   children,
@@ -254,14 +256,230 @@ function PropertyItem({ property }: PropertyItemProps) {
   );
 }
 
-export function PropertyList({ properties }: PropertyListProps) {
+export function PropertyList({
+  properties,
+  propertyCategoryUrlSlug,
+  totalPropertyCount,
+  propertyCities = [],
+  propertyStatuses = [],
+  footerRef,
+}: PropertyListProps) {
+  const { theme } = useThemeStore();
+  const params = useParams();
+  const isAllowedPage = isAllowedPageForTheme(
+    params as { [key: string]: string }
+  );
+  const isDarkMode = isAllowedPage ? theme === "night" : false;
+
+  // Filter state management
+  const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState<string[]>([]);
+  const [isStickyBarVisible, setIsStickyBarVisible] = useState(true);
+
+  // Detect when footer enters viewport
+  useEffect(() => {
+    const footerElement = footerRef?.current;
+    if (!footerElement) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Hide sticky bar when footer is in view
+          setIsStickyBarVisible(!entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of footer is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(footerElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [footerRef]);
+
+  // Handler functions for filter changes
+  const handleLocationChange = (value: string[] | null) => {
+    setSelectedLocation(value || []);
+  };
+
+  const handlePropertyChange = (value: string[] | null) => {
+    setSelectedProperty(value || []);
+  };
+
+  // Use pagination hook if category slug is provided
+  const {
+    properties: paginatedProperties,
+    isLoading,
+    hasMore,
+    error,
+    sentinelRef,
+    loadNextPage,
+  } = usePropertiesPagination({
+    initialProperties: properties || [],
+    propertyCategoryUrlSlug: propertyCategoryUrlSlug || "",
+    totalPropertyCount,
+  });
+
+  // Use paginated properties if category slug is provided, otherwise use original properties
+  const allProperties = propertyCategoryUrlSlug
+    ? paginatedProperties
+    : properties || [];
+  // Apply filters to all properties (including paginated ones)
+  const displayProperties = allProperties.filter((property) => {
+    // Filter by location - check both property_city_name and property_basic_information
+    let matchesLocation = true;
+    if (selectedLocation.length > 0) {
+      // Check if property_city_name matches
+      const cityNameMatch = selectedLocation.includes(
+        property.property_city_name
+      );
+
+      // Check if any property_basic_information_caption contains the selected location
+      const basicInfoMatch =
+        property.property_basic_information?.some((info) => {
+          const caption = info.property_basic_information_caption || "";
+          return selectedLocation.some((location) =>
+            caption.toLowerCase().includes(location.toLowerCase())
+          );
+        }) || false;
+
+      matchesLocation = cityNameMatch || basicInfoMatch;
+    }
+
+    // Filter by status (property_status)
+    const matchesStatus =
+      selectedProperty.length === 0 ||
+      selectedProperty.includes(property.property_status);
+
+    return matchesLocation && matchesStatus;
+  });
+
+  // Ensure pagination continues to load all properties when filters are applied
+  // This allows filters to work on the complete dataset
+  useEffect(() => {
+    if (!propertyCategoryUrlSlug || isLoading || !hasMore || !loadNextPage) {
+      return;
+    }
+
+    // When filters are applied and we haven't loaded all properties yet,
+    // ensure the sentinel is visible to trigger pagination
+    if (
+      allProperties.length < (totalPropertyCount || Infinity) &&
+      hasMore &&
+      !isLoading
+    ) {
+      const sentinel = sentinelRef.current;
+      if (sentinel) {
+        // Check if sentinel is visible or near viewport
+        const rect = sentinel.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight + 200;
+
+        // If sentinel is visible and we have filters, trigger load
+        // This ensures we load all properties so filters can work on complete data
+        if (
+          isVisible &&
+          (selectedLocation.length > 0 || selectedProperty.length > 0)
+        ) {
+          // Small delay to avoid rapid requests
+          const timeoutId = setTimeout(() => {
+            if (!isLoading && hasMore && loadNextPage) {
+              loadNextPage();
+            }
+          }, 500);
+
+          return () => clearTimeout(timeoutId);
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedLocation.length,
+    selectedProperty.length,
+    allProperties.length,
+    totalPropertyCount,
+    hasMore,
+    isLoading,
+    propertyCategoryUrlSlug,
+  ]);
+
   return (
-    <div className={`container-standard md:px-16 px-4 pt-12 transition-colors`}>
-      <div className="space-y-0">
-        {properties?.map((property, index) => (
-          <PropertyItem key={index} property={property} />
-        ))}
+    <>
+      <div
+        className={`container-standard md:px-16 px-4 pt-12 transition-colors`}
+      >
+        <div className="space-y-0">
+          {displayProperties?.map((property, index) => (
+            <PropertyItem key={index} property={property} />
+          ))}
+
+          {/* Loading indicator */}
+          {isLoading && (
+            <div
+              className={`flex justify-center items-center py-8 transition-colors ${
+                !isDarkMode ? "text-black" : "text-white"
+              }`}
+            >
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-current"></div>
+              <span className="ml-3">Loading more properties...</span>
+            </div>
+          )}
+
+          {/* Error message */}
+          {error && (
+            <div
+              className={`text-center py-8 transition-colors ${
+                !isDarkMode ? "text-red-600" : "text-red-400"
+              }`}
+            >
+              {error}
+            </div>
+          )}
+
+          {/* Sentinel element for Intersection Observer - Always show when there are more properties to load */}
+          {/* This ensures pagination continues even when filters reduce visible items */}
+          {propertyCategoryUrlSlug && hasMore && (
+            <div
+              ref={sentinelRef}
+              className="h-20 w-full"
+              aria-hidden="true"
+              style={{ minHeight: "80px" }}
+            />
+          )}
+
+          {/* Show message when no filtered results but more properties might be available */}
+          {propertyCategoryUrlSlug &&
+            displayProperties.length === 0 &&
+            allProperties.length > 0 &&
+            !isLoading && (
+              <div
+                className={`text-center py-8 transition-colors ${
+                  !isDarkMode ? "text-gray-600" : "text-gray-400"
+                }`}
+              >
+                No properties match the selected filters. Try adjusting your
+                filters or scroll to load more properties.
+              </div>
+            )}
+        </div>
       </div>
-    </div>
+
+      {/* Sticky Bottom Bar */}
+      {propertyCategoryUrlSlug && (
+        <StickyBottomBar
+          projectCount={displayProperties.length}
+          selectedLocation={selectedLocation}
+          selectedProperty={selectedProperty}
+          onLocationChange={handleLocationChange}
+          onPropertyChange={handlePropertyChange}
+          isVisible={isStickyBarVisible}
+          propertyCities={propertyCities}
+          propertyStatuses={propertyStatuses}
+        />
+      )}
+    </>
   );
 }
