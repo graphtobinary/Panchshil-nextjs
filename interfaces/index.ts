@@ -232,6 +232,7 @@ export interface PropertyListProps {
   propertyCities?: string[];
   propertyStatuses?: string[];
   footerRef?: React.RefObject<HTMLElement | null>;
+  currentPage?: number;
 }
 
 export interface PropertyItemProps {
