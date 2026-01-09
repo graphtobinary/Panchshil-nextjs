@@ -13,7 +13,6 @@ import { useParams } from "next/navigation";
 import OurOtherProjects from "@/components/OurOtherProjects";
 import {
   CategoryFooterBlocksProps,
-  MetaDataProps,
   PropertyCategories,
   PropertyCategoryProps,
   PropertyProps,
@@ -54,7 +53,7 @@ export default function ListClient({
       <main
         className={`min-h-screen ${isDarkMode ? "bg-[#232323]" : "bg-[#FFFAF7]"}`}
       >
-        <Header metaData={propertyCategory as MetaDataProps} />
+        <Header />
         <ListHeroBanner
           propertyCategory={propertyCategory as PropertyCategoryProps}
         />

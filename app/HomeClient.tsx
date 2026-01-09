@@ -12,7 +12,6 @@ import { Footer } from "@/components/Footer";
 import { HomeClientProps } from "@/interfaces";
 
 export default function HomeClient({
-  metaData,
   banner,
   servicesIntro,
   services,
@@ -28,7 +27,7 @@ export default function HomeClient({
 }: HomeClientProps) {
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
-      <Header metaData={metaData} />
+      <Header />
       <Hero masterSliderData={masterSlider} />
       <WelcomeSection
         aboutIntroData={aboutIntro}

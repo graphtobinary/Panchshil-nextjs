@@ -29,8 +29,8 @@ import {
   BannersProps,
   FooterBlocksProps,
   MilestonesProps,
+  MasterSliderData,
 } from "@/interfaces";
-import { MasterSliderData } from "@/components/Hero/CustomCarousel";
 
 // Enable page-level caching - revalidate every 10 minutes (600 seconds)
 export const revalidate = 600;

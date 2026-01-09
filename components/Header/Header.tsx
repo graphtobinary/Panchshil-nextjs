@@ -2,12 +2,11 @@
 
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useNavigationMenu } from "@/hooks/useNavigationMenu";
-import { MetaDataProps } from "@/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-export function Header({ metaData }: { metaData: MetaDataProps }) {
+export function Header() {
   const navigationMenu = useNavigationMenu();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -41,14 +40,6 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
         isScrolled ? "fixed" : "absolute"
       } top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out`}
     >
-      {metaData?.meta_title && <title>{metaData?.meta_title}</title>}
-      {metaData?.meta_description && (
-        <meta name="description" content={metaData?.meta_description} />
-      )}
-      {metaData?.canonical_tag && (
-        <meta name="canonical" content={metaData?.canonical_tag} />
-      )}
-
       {/* Background overlay with fade effect */}
       <div
         className={`absolute shadow inset-0 bg-white/95 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${
@@ -117,6 +108,7 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
                 item?.menuURL === "about"
                   ? "https://www.panchshil.com/about"
                   : item?.menuURL;
+              console.log(item?.menuURL, item.menuTitle, "item.menuTitle");
               return (
                 <li key={item?.menuURL + i} className="relative">
                   <div
@@ -127,7 +119,13 @@ export function Header({ metaData }: { metaData: MetaDataProps }) {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     <Link
-                      href={link ? `${link}` : ""}
+                      href={
+                        link
+                          ? item?.menuTitle === "About"
+                            ? `${link}`
+                            : `/${link}`
+                          : ""
+                      }
                       className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light block"
                     >
                       {item.menuTitle}

@@ -342,7 +342,9 @@ export function PropertyList({
   });
 
   // Build base URL for pagination
-  const baseUrl = propertyCategoryUrlSlug ? `/${propertyCategoryUrlSlug}` : "";
+  const baseUrl = propertyCategoryUrlSlug
+    ? `${process.env.NEXT_PUBLIC_BASEPATH}${propertyCategoryUrlSlug}`
+    : "";
 
   return (
     <>
