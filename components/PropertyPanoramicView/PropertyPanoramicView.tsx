@@ -93,7 +93,7 @@ const PropertyPanoramicView = () => {
       <section className="w-full py-16 md:py-24 bg-[#fff]">
         <div className=" mx-auto ">
           {/* Header Text */}
-          <div className="text-center mb-8 md:mb-12">
+          <div className="text-center mb-8 md:mb-12 px-4 md:px-0">
             <p className="text-[#9E8C70] text-sm md:text-base font-medium mb-4 tracking-wider">
               VIRTUAL TOUR
             </p>

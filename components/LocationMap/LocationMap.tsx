@@ -242,7 +242,7 @@ export function LocationMap({
         <div className="mx-auto max-w-[1920px]">
           {/* Title and Description */}
           <div
-            className={`text-center mb-10 ${
+            className={`text-center mb-10 px-4 md:px-0 ${
               isInView ? "animate-fade-in-up" : "opacity-0"
             }`}
           >

@@ -43,7 +43,7 @@ export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
       <div className="mx-auto ">
         {/* Title and Description */}
         <div
-          className={`text-center mb-10 ${
+          className={`text-center mb-10 px-4 md:px-0 ${
             isInView ? "animate-fade-in-up" : "opacity-0"
           }`}
         >
