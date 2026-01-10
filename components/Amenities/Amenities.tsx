@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { floorPlansData } from "./floorPlansData";
-import { FloorPlanCarousel } from "./FloorPlanCarousel";
+import { amenitiesCategories } from "./amenitiesData";
+import { AmenityCarousel } from "./AmenityCarousel";
 
-interface FloorPlansProps {
+interface AmenitiesProps {
   title?: string;
 }
 
-export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
+export function Amenities({ title = "AMENITIES" }: AmenitiesProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [selectedTab, setSelectedTab] = useState<string>(
-    floorPlansData[0]?.id || ""
+    amenitiesCategories[0]?.id || ""
   );
 
   useEffect(() => {
@@ -31,16 +31,17 @@ export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
     return () => observer.disconnect();
   }, []);
 
-  const selectedFloorPlan = floorPlansData.find(
-    (plan) => plan.id === selectedTab
+  const selectedCategory = amenitiesCategories.find(
+    (category) => category.id === selectedTab
   );
 
-  // Get image gallery from selected floor plan
-  const imageGallery = selectedFloorPlan?.imageGallery || [];
+  // Get image gallery from selected category
+  const imageGallery =
+    selectedCategory?.amenities.map((amenity) => amenity.image) || [];
 
   return (
-    <section ref={sectionRef} className="w-full  py-20 bg-white">
-      <div className="mx-auto ">
+    <section ref={sectionRef} className="w-full py-20">
+      <div className="mx-auto">
         {/* Title and Description */}
         <div
           className={`text-center mb-10 ${
@@ -51,8 +52,8 @@ export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
             {title}
           </div>
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black">
-            SPACIOUS LAYOUTS DESIGNED FOR <br />
-            COMFORT AND PRIVACY
+            SPACES DESIGNED TO SUPPORT WELL-BEING, DAILY COMFORT AND <br />
+            CONNECTED LIVING
           </h2>
         </div>
 
@@ -62,31 +63,27 @@ export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
             isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
           }`}
         >
-          {floorPlansData.map((plan) => {
-            const isActive = plan.id === selectedTab;
+          {amenitiesCategories.map((category) => {
+            const isActive = category.id === selectedTab;
             return (
               <button
-                key={plan.id}
-                onClick={() => setSelectedTab(plan.id)}
+                key={category.id}
+                onClick={() => setSelectedTab(category.id)}
                 className={`text-[12px] md:text-[16px] font-medium tracking-wider transition-colors ${
                   isActive
                     ? "text-gold-beige border-b-3 border-gold-beige"
                     : "text-gold-beige/60 hover:text-gold-beige"
                 }`}
               >
-                {plan.title}
+                {category.title}
               </button>
             );
           })}
         </div>
 
-        {/* Floor Plan Image Carousel */}
-        {selectedFloorPlan && imageGallery.length > 0 && (
-          <FloorPlanCarousel
-            images={imageGallery}
-            title={selectedFloorPlan.title}
-            isInView={isInView}
-          />
+        {/* Amenities Image Carousel */}
+        {selectedCategory && imageGallery.length > 0 && (
+          <AmenityCarousel images={imageGallery} isInView={isInView} />
         )}
       </div>
     </section>

@@ -87,6 +87,28 @@ body {
   min-width: 0;
 }
 
+/* Amenities carousel - 2 slides per viewport */
+.embla-amenities {
+  overflow: hidden;
+  cursor: grab;
+}
+
+.embla-amenities:active {
+  cursor: grabbing;
+}
+
+.embla-amenities__container {
+  display: flex;
+  touch-action: pan-x pan-y;
+}
+
+.embla-amenities__slide {
+  /* width controlled by Tailwind basis utility (basis-1/2 = 50%) */
+  min-width: 0;
+  position: relative;
+  user-select: none;
+}
+
 /* Utility classes for ZapfHumanist601 display font */
 .font-display {
   font-family: var(--font-zapf-humanist);

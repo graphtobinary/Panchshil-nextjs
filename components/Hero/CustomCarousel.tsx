@@ -8,23 +8,7 @@ import { Button } from "../Button/Button";
 import Link from "next/link";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
-
-export interface SlideData {
-  image?: string;
-  video?: string;
-  title: string;
-  description: string;
-  ctaText: string;
-}
-
-export interface MasterSliderData {
-  master_slider_title: string;
-  master_slider_description: string;
-  master_slider_link: string;
-  master_slider_image: string | null;
-  master_slider_video: string;
-  master_slider_button_caption: string;
-}
+import { MasterSliderData } from "@/interfaces";
 
 export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
   const autoplay = useRef(

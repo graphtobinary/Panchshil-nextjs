@@ -72,7 +72,6 @@ export const isIos = () => {
 
 // create util function to check allowed list of pages for dark/light mode
 export const isAllowedPageForTheme = (params: { [key: string]: string }) => {
-  // console.log(page, "page");
   const page = params?.["category-slug"];
   const allowedPages = [
     "luxury-residences",
@@ -82,4 +81,19 @@ export const isAllowedPageForTheme = (params: { [key: string]: string }) => {
     "retail",
   ];
   return allowedPages.includes(page);
+};
+
+export const getVideoUrl = (videoUrl: string): string => {
+  if (!videoUrl) return "";
+
+  // Check if URL is absolute (starts with http:// or https://)
+  const isAbsoluteUrl = /^https?:\/\//i.test(videoUrl);
+
+  // If it's an absolute URL (external), use the proxy to handle CORS
+  if (isAbsoluteUrl) {
+    return `/api/video-proxy?url=${encodeURIComponent(videoUrl)}`;
+  }
+
+  // For relative URLs, use directly (they're from the same origin)
+  return videoUrl;
 };
