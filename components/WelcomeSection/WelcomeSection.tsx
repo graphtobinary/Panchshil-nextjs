@@ -161,7 +161,7 @@ export function WelcomeSection({
         <div className="max-w-[1200px] mx-auto px-6 text-center">
           {/* Title */}
           <h2
-            className={`text-4xl md:text-5xl lg:text-6xl font-display-semi mb-6 text-black-chocolate ${
+            className={`text-2xl md:text-5xl lg:text-6xl font-display-semi mb-6 text-black-chocolate ${
               isInView ? "animate-fade-in-up" : "opacity-0"
             }`}
           >
@@ -170,7 +170,7 @@ export function WelcomeSection({
 
           {/* Description */}
           <p
-            className={`text-base md:text-lg  mb-12 max-w-4xl mx-auto leading-relaxed text-black-chocolate ${
+            className={`text-lg md:text-lg  mb-12 max-w-4xl mx-auto leading-relaxed text-black-chocolate ${
               isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
             }`}
           >
@@ -198,17 +198,6 @@ export function WelcomeSection({
               );
             })}
           </div>
-
-          {/* CTA Button */}
-          <Link href={aboutIntroData?.about_intro_link}>
-            <Button
-              variant="overlay"
-              size="lg"
-              className={`w-56 ${isInView ? "animate-fade-in-up-delay-5" : "opacity-0"}`}
-            >
-              Learn More
-            </Button>
-          </Link>
         </div>
       </div>
 

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { FooterBlocksProps } from "@/interfaces";
+import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 
 export function LatestNews({
   footerBlocks,
@@ -42,31 +43,25 @@ export function LatestNews({
               href={item.footer_block_link || "#"}
               className="relative min-w-[80%] snap-center md:min-w-0 group"
             >
-              <div className="relative h-[340px] md:h-[420px] overflow-hidden">
+              <div className="relative h-[340px] md:h-[420px] overflow-hidden  transition-all duration-300">
                 <Image
                   src={item.footer_block_thumbnail}
                   alt={item.footer_block_title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                   sizes="(min-width: 768px) 33vw, 80vw"
                 />
-                {/* overlay */}
+                {/* overlay - shows full on hover */}
                 <div className="absolute inset-0 bg-linear-to-b from-black/10 via-white/40 to-black/70" />
 
-                <div className="absolute inset-0 flex flex-col items-center justify-end p-6 text-white">
-                  <div className="text-base md:text-lg font-display-semi tracking-wide">
+                <div className="absolute inset-0 flex flex-col items-center justify-end p-6">
+                  <div className="text-2xl md:text-lg font-display-semi tracking-wide text-white group-hover:text-white transition-colors duration-300">
                     {item.footer_block_title}
                   </div>
 
                   <div className="mt-4">
-                    <span className="inline-flex h-9 w-9 items-center justify-center ">
-                      <Image
-                        src="/assets/svgs/arrow-button.svg"
-                        alt="Go"
-                        width={48}
-                        height={48}
-                        // className="w-12 h-12"
-                      />
+                    <span className="inline-flex h-12 w-12 items-center  justify-center border border-gold-beige group-hover:border-gold-beige group-hover:bg-gold-beige transition-all duration-300 [&_svg]:fill-gold-beige group-hover:[&_svg]:fill-white [&_svg]:transition-colors [&_svg]:duration-300">
+                      <ArrowRightIcon fill="#9E8C70" width={28} height={18} />
                     </span>
                   </div>
                 </div>

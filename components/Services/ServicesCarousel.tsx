@@ -97,7 +97,7 @@ export function ServicesCarousel({ items }: { items: ServicesProps[] }) {
                 </div>
 
                 <div className="p-5 flex items-center flex-col">
-                  <div className="text-black-chocolate font-display-semi text-[15px] md:text-base">
+                  <div className="text-black-chocolate font-display-semi text-xl md:text-base">
                     {item?.service_title}
                   </div>
                   <div className="mt-2 text-[12px] text-gold-beige underline underline-offset-4">

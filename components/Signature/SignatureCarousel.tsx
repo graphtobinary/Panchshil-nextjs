@@ -98,7 +98,7 @@ export function SignatureCarousel({
                   {/* Text strip */}
                   <div className="bg-[#F5EEE6] py-10">
                     <div className="mx-auto px-2 md:px-6 text-center">
-                      <h3 className="text-black-chocolate text-base font-display-semi md:text-xl tracking-wide mb-6">
+                      <h3 className="text-black-chocolate text-xl font-display-semi md:text-xl tracking-wide mb-6">
                         {property.property_name}
                       </h3>
 
@@ -117,7 +117,7 @@ export function SignatureCarousel({
                                   height={28}
                                   className="w-5 h-5 md:w-6 md:h-6"
                                 />
-                                <span className="text-xs md:text-base font-display-semi">
+                                <span className="text-base md:text-base font-display-semi">
                                   {feature.property_highlight_caption}
                                 </span>
                               </div>,
@@ -134,7 +134,11 @@ export function SignatureCarousel({
 
                       <div className="mt-8">
                         <Link href={property.property_link}>
-                          <Button variant="signature" className="px-6">
+                          <Button
+                            variant="signature-outline"
+                            className="px-6"
+                            size="lg"
+                          >
                             {"Discover"}
                           </Button>
                         </Link>

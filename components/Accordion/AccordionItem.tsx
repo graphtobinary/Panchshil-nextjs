@@ -70,7 +70,7 @@ export function AccordionItem({
             {String(id).padStart(2, "0")}
           </span>
           <span
-            className={`text-lg md:text-xl font-display-semi transition-colors ${
+            className={`text-2xl md:text-xl font-display-semi transition-colors ${
               !isDarkMode ? "text-black-chocolate" : "text-white"
             }`}
           >
@@ -107,7 +107,7 @@ export function AccordionItem({
           <div className="relative z-10 h-full flex flex-col justify-end items-center max-w-[1200px] mx-auto px-6 md:px-12 py-10 md:py-16">
             {/* Title */}
             <h3
-              className={`text-3xl uppercase md:text-4xl  font-display-semi text-white mb-6 max-w-3xl ${
+              className={`text-2xl uppercase md:text-4xl  font-display-semi text-white mb-6 max-w-3xl ${
                 isOpen ? "animate-fade-in-up" : "opacity-0"
               }`}
             >
@@ -116,7 +116,7 @@ export function AccordionItem({
 
             {/* Description */}
             <p
-              className={`text-xs md:text-lg text-center text-white/95 mb-8 max-w-3xl md:leading-relaxed ${
+              className={`text-lg md:text-lg text-center text-white/95 mb-8 max-w-3xl md:leading-relaxed ${
                 isOpen ? "animate-fade-in-up-delay-1" : "opacity-0"
               }`}
             >
@@ -131,8 +131,8 @@ export function AccordionItem({
                 <div className="flex flex-wrap gap-2 md:gap-8 text-white justify-center">
                   {stats.map((stat, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <span className="text-base md:text-xl">•</span>
-                      <span className="text-base md:text-lg font-display-semi">
+                      <span className="text-lg md:text-xl">•</span>
+                      <span className="text-lg md:text-lg font-display-semi">
                         {stat.label}
                       </span>
                     </div>
@@ -142,7 +142,7 @@ export function AccordionItem({
               {/* CTA Button */}
               <div className="flex justify-center pt-5">
                 <Link href={link}>
-                  <Button variant="hero" size="lg" className="w-48">
+                  <Button variant="hero-outline" size="lg" className="w-48">
                     Learn More
                   </Button>
                 </Link>

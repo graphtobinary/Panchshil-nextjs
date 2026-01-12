@@ -37,7 +37,7 @@ export function Signature({
     <section ref={sectionRef} className="w-full bg-[#FFFAF7] py-10 md:py-20">
       <div className=" mx-auto">
         <div
-          className={`text-center mb-10 ${isInView ? "animate-fade-in-up" : "opacity-0"}`}
+          className={`text-center mb-10 ${isInView ? "animate-fade-in-up" : "opacity-0"} px-4 md:px-0`}
         >
           <div className="text-lg font-medium tracking-[0.2em] text-gold-beige mb-2">
             {featuredPropertiesIntro?.featured_properties_intro_heading}

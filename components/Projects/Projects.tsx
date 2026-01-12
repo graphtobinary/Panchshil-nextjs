@@ -249,7 +249,7 @@ function PropertiesHeader({
 }) {
   return (
     <div
-      className={`text-center mb-10 ${isInView ? "animate-fade-in-up" : "opacity-0"}`}
+      className={`text-center mb-10 ${isInView ? "animate-fade-in-up" : "opacity-0"} px-4 md:px-0`}
     >
       <div className="text-lg tracking-[0.2em] font-medium text-gold-beige mb-2">
         {heading}

@@ -50,7 +50,7 @@ export function Header() {
       <div className="relative max-w-[1920px] mx-auto px-6 lg:px-12">
         {/* Logo and Mobile Menu Button */}
         <div
-          className={`relative flex justify-center items-center transition-all duration-300 ease-in-out ${
+          className={`relative flex justify-start md:justify-center items-center transition-all duration-300 ease-in-out ${
             isScrolled ? "pt-4 pb-3" : "pt-8 pb-4"
           }`}
         >
@@ -72,7 +72,7 @@ export function Header() {
 
           <button
             type="button"
-            className={`md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 items-center justify-center w-12 h-12 rounded-full transition-colors duration-300 ${
+            className={`md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 items-center justify-center rounded-full transition-colors duration-300 ${
               isScrolled ? "text-black-chocolate" : "text-white"
             }`}
             aria-label="Toggle navigation menu"
