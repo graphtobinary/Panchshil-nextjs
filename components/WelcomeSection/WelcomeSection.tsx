@@ -161,7 +161,7 @@ export function WelcomeSection({
         <div className="max-w-[1200px] mx-auto px-6 text-center">
           {/* Title */}
           <h2
-            className={`text-2xl md:text-5xl lg:text-6xl font-display-semi mb-6 text-black-chocolate ${
+            className={`text-2xl  font-display-semi mb-6 text-black-chocolate ${
               isInView ? "animate-fade-in-up" : "opacity-0"
             }`}
           >
