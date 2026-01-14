@@ -175,7 +175,7 @@ export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
             href={currentSlide?.master_slider_link || "#"}
             className="pointer-events-auto z-50 relative"
           >
-            <Button variant="hero-outline" size="lg" className="w-48">
+            <Button variant="hero-outline" size="lg">
               {currentSlide?.master_slider_button_caption}
             </Button>
           </Link>

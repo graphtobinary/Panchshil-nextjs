@@ -177,7 +177,7 @@ const PropertDetails = () => {
                 href={heroBannerData?.master_slider_link || "#"}
                 className="pointer-events-auto z-50 relative"
               >
-                <Button variant="hero" size="lg" className="w-48">
+                <Button variant="hero" size="lg">
                   {heroBannerData?.master_slider_button_caption}
                 </Button>
               </Link>

@@ -142,7 +142,7 @@ export function AccordionItem({
               {/* CTA Button */}
               <div className="flex justify-center pt-5">
                 <Link href={link}>
-                  <Button variant="hero-outline" size="lg" className="w-48">
+                  <Button variant="hero-outline" size="lg">
                     Learn More
                   </Button>
                 </Link>

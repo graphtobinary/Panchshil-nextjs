@@ -134,11 +134,7 @@ export function SignatureCarousel({
 
                       <div className="mt-8">
                         <Link href={property.property_link}>
-                          <Button
-                            variant="signature-outline"
-                            className="px-6"
-                            size="lg"
-                          >
+                          <Button variant="signature-outline" size="lg">
                             {"Discover"}
                           </Button>
                         </Link>
