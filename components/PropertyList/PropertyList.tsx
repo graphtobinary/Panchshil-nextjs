@@ -24,7 +24,7 @@ function ActionButton({
   onClick,
   isDarkMode,
 }: ActionButtonProps) {
-  const baseClasses = `px-4 py-3 text-sm font-medium hover:opacity-90 transition-all shadow-sm ${
+  const baseClasses = `px-4 py-3 text-sm font-medium hover:opacity-90 transition-all shadow-sm w-fit ${
     !isDarkMode ? "bg-gold-beige text-white" : "bg-[#4E4E4E] text-white"
   }`;
 
@@ -223,7 +223,7 @@ function PropertyItem({ property }: PropertyItemProps) {
         </div>
 
         {/* CTA Buttons */}
-        <div className="grid md:grid-cols-4 grid-cols-1 gap-5">
+        <div className="flex flex-wrap gap-5">
           <ActionButton
             href={property.property_link || "#"}
             isDarkMode={isDarkMode}
