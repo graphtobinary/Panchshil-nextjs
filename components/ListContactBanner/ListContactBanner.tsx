@@ -44,7 +44,7 @@ const ListContactBanner = ({
         {/* CTA Button */}
         <div className="flex justify-center pt-5">
           <Link href={propertyFooterBlocks?.footer_block_cta_value || "#"}>
-            <Button variant="hero" size="sm" className="w-48">
+            <Button variant="hero" size="sm">
               {propertyFooterBlocks?.footer_block_cta_label}
             </Button>
           </Link>

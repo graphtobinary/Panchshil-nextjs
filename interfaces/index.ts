@@ -322,3 +322,25 @@ export interface MasterSliderData {
   master_slider_video: string;
   master_slider_button_caption: string;
 }
+
+export interface TestimonialData {
+  name: string;
+  title: string;
+  videoUrl: string;
+  posterImage: string;
+}
+
+export interface DisclaimerData {
+  disclaimerText: string;
+  reraNumber: string;
+  reraCertificateImage?: string | null;
+}
+
+export interface PropertyInfoData {
+  location: string;
+  configuration: string;
+  status: string;
+  price: string;
+  brochureUrl: string;
+  contactUrl: string;
+}

@@ -1,4 +1,5 @@
-import { CustomCarousel, MasterSliderData } from "./CustomCarousel";
+import { MasterSliderData } from "@/interfaces";
+import { CustomCarousel } from "./CustomCarousel";
 
 export function Hero({
   masterSliderData,

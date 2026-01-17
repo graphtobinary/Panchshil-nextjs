@@ -30,7 +30,7 @@ export function CategoryTabs({
           <button
             key={category.key}
             onClick={() => onCategoryChange(category.key)}
-            className={`text-[12px] md:text-[16px] font-medium tracking-wider capitalize transition-colors ${
+            className={`text-lg md:text-[16px] font-medium tracking-wider capitalize transition-colors ${
               isActive
                 ? "text-gold-beige border-b-3 border-gold-beige"
                 : "text-gold-beige/60 hover:text-gold-beige"
