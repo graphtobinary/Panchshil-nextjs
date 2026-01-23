@@ -169,7 +169,7 @@ function PropertyItem({ property, categorySlug }: PropertyItemProps) {
 
       {/* Right Column - Property Details */}
       <div
-        className={`px-6 py-4 pl-12 flex flex-col justify-between transition-colors ${
+        className={`px-6 py-4 md:pl-12 flex flex-col justify-between transition-colors ${
           !isDarkMode ? "bg-[#FFFAF7]" : "bg-black"
         }`}
       >
