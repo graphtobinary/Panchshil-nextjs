@@ -43,7 +43,7 @@ function ActionButton({
   );
 }
 
-function PropertyItem({ property }: PropertyItemProps) {
+function PropertyItem({ property, categorySlug }: PropertyItemProps) {
   const { theme } = useThemeStore();
   const params = useParams();
   const isAllowedPage = isAllowedPageForTheme(
@@ -169,14 +169,14 @@ function PropertyItem({ property }: PropertyItemProps) {
 
       {/* Right Column - Property Details */}
       <div
-        className={`p-8 pl-12 flex flex-col justify-between transition-colors ${
+        className={`px-6 py-4 pl-12 flex flex-col justify-between transition-colors ${
           !isDarkMode ? "bg-[#FFFAF7]" : "bg-black"
         }`}
       >
         <div>
           {/* Property Name */}
           <h2
-            className={`text-3xl md:text-3xl font-display-semi uppercase mb-3 transition-colors ${
+            className={`text-2xl md:text-[28px] font-display-semi uppercase mb-3 transition-colors ${
               !isDarkMode ? "text-black" : "text-white"
             }`}
           >
@@ -225,7 +225,7 @@ function PropertyItem({ property }: PropertyItemProps) {
         {/* CTA Buttons */}
         <div className="flex flex-wrap gap-5">
           <ActionButton
-            href={property.property_link || "#"}
+            href={`/${categorySlug}/${property.property_url_slug}` || "#"}
             isDarkMode={isDarkMode}
           >
             View Project
@@ -264,7 +264,9 @@ export function PropertyList({
   propertyStatuses = [],
   footerRef,
   currentPage = 1,
+  categorySlug,
 }: PropertyListProps) {
+  console.log(properties, "properties");
   const { theme } = useThemeStore();
   const params = useParams();
   const isAllowedPage = isAllowedPageForTheme(
@@ -343,7 +345,7 @@ export function PropertyList({
 
   // Build base URL for pagination
   const baseUrl = propertyCategoryUrlSlug
-    ? `${process.env.NEXT_PUBLIC_BASEPATH}${propertyCategoryUrlSlug}`
+    ? `${process.env.NEXT_PUBLIC_BASEPATH}${propertyCategoryUrlSlug}/page`
     : "";
 
   return (
@@ -354,7 +356,11 @@ export function PropertyList({
         <div className="space-y-0">
           {displayProperties?.length > 0 ? (
             displayProperties.map((property, index) => (
-              <PropertyItem key={index} property={property} />
+              <PropertyItem
+                key={index}
+                property={property}
+                categorySlug={categorySlug}
+              />
             ))
           ) : (
             <div

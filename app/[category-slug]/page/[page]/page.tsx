@@ -15,21 +15,25 @@ import {
   PropertyProps,
 } from "@/interfaces";
 import { PER_PAGE_LIMIT } from "@/api/constants";
-import ListClient from "../../ListClient";
+import ListClient from "../../../ListClient";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-// Disable page-level caching - we'll handle caching per API call
 export const revalidate = 600; // 10 minutes
 
-// Generate metadata for the page
+interface PaginatedListPageProps {
+  params: {
+    "category-slug": string;
+    page: string;
+  };
+}
+
 export async function generateMetadata({
   params,
 }: PaginatedListPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const propertyCategoryUrlSlug = resolvedParams["category-slug"];
 
-  // Fetch token and property category for metadata
   let token: string | null = null;
   let propertyCategory: PropertyCategoryProps | null = null;
 
@@ -38,7 +42,6 @@ export async function generateMetadata({
     if (tokenResponse?.token && typeof tokenResponse.token === "string") {
       token = tokenResponse.token;
 
-      // Fetch property category for metadata
       if (token && propertyCategoryUrlSlug) {
         try {
           const categoryResponse = await getPropertyCategory(
@@ -58,7 +61,6 @@ export async function generateMetadata({
     console.error("Error fetching auth token for metadata:", error);
   }
 
-  // Return metadata if available, otherwise use defaults
   return {
     title:
       propertyCategory?.meta_title ||
@@ -67,17 +69,8 @@ export async function generateMetadata({
       propertyCategory?.meta_description ||
       "Since 2002, Panchshil Realty has set benchmarks in design, delivery and urban placemaking.",
     alternates: propertyCategory?.canonical_tag
-      ? {
-          canonical: propertyCategory.canonical_tag,
-        }
+      ? { canonical: propertyCategory.canonical_tag }
       : undefined,
-  };
-}
-
-interface PaginatedListPageProps {
-  params: {
-    "category-slug": string;
-    page: string;
   };
 }
 
@@ -86,12 +79,10 @@ export default async function PaginatedListPage({
 }: PaginatedListPageProps) {
   const resolvedParams = await params;
 
-  // Get property_category_url_slug and page from params
   const propertyCategoryUrlSlug = resolvedParams["category-slug"];
   const pageParam = resolvedParams.page;
   const page = pageParam ? parseInt(pageParam, 10) : 1;
 
-  // Validate page number
   if (isNaN(page) || page < 1) {
     notFound();
   }
@@ -107,8 +98,6 @@ export default async function PaginatedListPage({
     console.error("Error fetching auth token:", error);
   }
 
-  // Fetch all data in parallel if token is available, otherwise return null promises
-  // Calculate pagination: limit = PER_PAGE_LIMIT (items per page), skip = PER_PAGE_LIMIT * (page - 1)
   const apiCalls =
     token && propertyCategoryUrlSlug
       ? [
@@ -118,8 +107,8 @@ export default async function PaginatedListPage({
           getPropertiesByCategory(
             token,
             propertyCategoryUrlSlug,
-            PER_PAGE_LIMIT, // limit = 5 (items per page)
-            PER_PAGE_LIMIT * (page - 1) // skip = 5 * (page - 1)
+            PER_PAGE_LIMIT,
+            PER_PAGE_LIMIT * (page - 1)
           ),
           getOtherPropertyCategories(token, propertyCategoryUrlSlug),
           getPropertyFooterBlocks(token),
@@ -135,7 +124,6 @@ export default async function PaginatedListPage({
     propertyFooterBlocks,
   ] = await Promise.allSettled(apiCalls);
 
-  // Extract data from settled promises with type assertions
   const data = {
     propertyCategory:
       propertyCategory.status === "fulfilled" ? propertyCategory.value : null,

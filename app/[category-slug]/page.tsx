@@ -11,5 +11,5 @@ export default async function ListPage({ params }: ListPageProps) {
   const propertyCategoryUrlSlug = resolvedParams["category-slug"];
 
   // Redirect to page 1
-  redirect(`${propertyCategoryUrlSlug}/1`);
+  redirect(`${propertyCategoryUrlSlug}/page/1`);
 }

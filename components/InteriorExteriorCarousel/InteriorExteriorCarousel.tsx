@@ -106,7 +106,7 @@ function SingleColumnCarousel({
     <div className="relative w-full">
       {/* Header with title and navigation arrows */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl md:text-3xl font-display-semi text-black">
+        <h3 className="text-2xl md:text-[28px] font-display-semi text-black">
           {title}
         </h3>
         {/* Top right nav */}

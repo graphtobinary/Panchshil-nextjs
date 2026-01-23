@@ -66,6 +66,7 @@ export default function ListClient({
           propertyStatuses={propertyStatuses}
           footerRef={footerRef}
           currentPage={currentPage}
+          categorySlug={categorySlug}
         />
         <DevelopmentForYou />
         <OurOtherProjects

@@ -97,7 +97,7 @@ const PropertyPanoramicView = () => {
             <p className="text-[#9E8C70] text-sm md:text-base font-medium mb-4 tracking-wider">
               VIRTUAL TOUR
             </p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-display-semi text-black uppercase tracking-tight leading-tight max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-[28px] font-display-semi text-black uppercase tracking-tight leading-tight max-w-4xl mx-auto">
               EACH RESIDENCE IS SURROUNDED BY 360-DEGREE PANORAMIC VIEWS OF THE
               CITY
             </h2>

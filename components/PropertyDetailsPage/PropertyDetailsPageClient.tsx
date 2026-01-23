@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/Button";
 import { FloorPlans } from "@/components/FloorPlans";
 import { Footer } from "@/components/Footer";
@@ -7,16 +8,30 @@ import { Header } from "@/components/Header";
 import PropertyAreaDetails from "@/components/PropertyAreaDetails";
 import PropertyDetailsHero from "@/components/PropertyDetailsHero";
 import { InteriorExteriorCarousel } from "@/components/InteriorExteriorCarousel/InteriorExteriorCarousel";
-import Link from "next/link";
 import PropertyPanoramicView from "@/components/PropertyPanoramicView/PropertyPanoramicView";
 import WhatSetsApart from "@/components/WhatSetsApart/WhatSetsApart";
 import { Amenities } from "@/components/Amenities";
-import { LocationMap } from "@/components/LocationMap";
-import { Testimonials } from "@/components/Testimonials";
+
+// import { Testimonials } from "@/components/Testimonials";
 import { Disclaimer } from "@/components/Disclaimer";
 import { PropertyInfo } from "@/components/PropertyInfo";
+import type {
+  MasterSliderData,
+  Property,
+  PropertyInfoData,
+  PropertyLocationCoOrdinatesProps,
+} from "@/interfaces";
+import LocationMap from "../LocationMap";
 
-const heroBannerData = {
+type Props = {
+  heroSlide?: MasterSliderData;
+  propertyInfo?: PropertyInfoData;
+  interiorItems?: Property[];
+  exteriorItems?: Property[];
+  property_location_co_ordinates: PropertyLocationCoOrdinatesProps;
+};
+
+const fallbackHeroSlide: MasterSliderData = {
   master_slider_title: "Omnia Residences",
   master_slider_description:
     "An unmatched living experience in of Mumbai's most sought-after neighbourhoods in Bandra West, comprising of 12 exclusive residences overlooking the prestigious Almeida Park.",
@@ -27,7 +42,7 @@ const heroBannerData = {
   master_slider_button_caption: "Discover",
 };
 
-const staticPropertyData = [
+const fallbackCarouselItems: Property[] = [
   {
     property_name: "Omnia Residences",
     property_thumbnail:
@@ -144,96 +159,103 @@ const staticPropertyData = [
   },
 ];
 
-const PropertDetails = () => {
-  // Split the data array into two parts for Interior and Exterior
-  const midpoint = Math.ceil(staticPropertyData.length / 2);
-  const interiorItems = staticPropertyData.slice(0, midpoint);
-  const exteriorItems = staticPropertyData.slice(midpoint);
+export default function PropertyDetailsPageClient({
+  heroSlide,
+  propertyInfo,
+  interiorItems,
+  exteriorItems,
+  property_location_co_ordinates,
+}: Props) {
+  const slide = heroSlide || fallbackHeroSlide;
+
+  const midpoint = Math.ceil(fallbackCarouselItems.length / 2);
+  const fallbackInterior = fallbackCarouselItems.slice(0, midpoint);
+  const fallbackExterior = fallbackCarouselItems.slice(midpoint);
+
+  const safeInterior = (interiorItems || []).filter(
+    (x) => !!x?.property_thumbnail
+  );
+  const safeExterior = (exteriorItems || []).filter(
+    (x) => !!x?.property_thumbnail
+  );
+
+  const interior = safeInterior.length > 0 ? safeInterior : fallbackInterior;
+  const exterior = safeExterior.length > 0 ? safeExterior : fallbackExterior;
+  console.log(slide, "slide");
+  console.log(propertyInfo, "propertyInfo");
+  console.log(interiorItems, "interiorItems");
+  console.log(exteriorItems, "exteriorItems");
   return (
-    <>
-      <main className="min-h-screen bg-[#FFFAF7]">
-        <Header />
-        <div className="relative w-full h-screen overflow-hidden">
-          <PropertyDetailsHero
-            shouldShowVideo={true}
-            slide={heroBannerData}
-            setVideoErrors={() => new Set()}
-          />
-          {/* Content Overlay */}
-          <div className="absolute inset-0 flex items-end justify-center z-40 pb-16 pointer-events-none">
-            <div className="max-w-[1200px] mx-auto px-6 text-center">
-              {/* Main Title */}
-              <h1 className="text-3xl md:text-6xl lg:text-7xl font-display-semi text-white mb-6 tracking-tight">
-                {heroBannerData?.master_slider_title}
-              </h1>
+    <main className="min-h-screen bg-[#FFFAF7]">
+      <Header />
+      <div className="relative w-full h-screen overflow-hidden">
+        <PropertyDetailsHero
+          shouldShowVideo={!!slide?.master_slider_video}
+          slide={slide}
+          setVideoErrors={() => new Set()}
+        />
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex items-end justify-center z-40 pb-16 pointer-events-none">
+          <div className="max-w-[1200px] mx-auto px-6 text-center">
+            {/* Main Title */}
+            <h1 className="text-2xl md:text-[28px] font-display-semi text-white mb-6 tracking-tight">
+              {slide?.master_slider_title}
+            </h1>
 
-              {/* Description */}
-              <p className="text-sm md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
-                {heroBannerData?.master_slider_description}
-              </p>
+            {/* Description */}
+            <p className="text-sm md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
+              {slide?.master_slider_description}
+            </p>
 
-              {/* CTA Button */}
-              <Link
-                href={heroBannerData?.master_slider_link || "#"}
-                className="pointer-events-auto z-50 relative"
-              >
-                <Button variant="hero" size="lg">
-                  {heroBannerData?.master_slider_button_caption}
-                </Button>
-              </Link>
-              {/* <button className="relative w-36 h-12 pointer-events-auto">
-              <span className="absolute top-0 left-0 right-0 bottom-0 bg-white opacity-40 hover:opacity-50 cursor-pointer text-white transition-opacity font-medium text-lg"></span>
-              <div className=" w-full absolute z-10 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
-                {currentSlide.ctaText}
-              </div>
-            </button> */}
-            </div>
+            {/* CTA Button */}
+            <Link
+              href={slide?.master_slider_link || "#"}
+              className="pointer-events-auto z-50 relative"
+            >
+              <Button variant="hero" size="lg">
+                {slide?.master_slider_button_caption || "Discover"}
+              </Button>
+            </Link>
           </div>
         </div>
-        {/* Property Info section */}
-        <PropertyInfo
-          propertyInfo={{
-            location: "Kalyani Nagar, Pune",
-            configuration: "5.5Bhk Residences",
-            status: "Ready-To-Move In Property",
-            price: "Starting From 15.14 Crore",
-            brochureUrl: "#",
-            contactUrl: "#",
-          }}
-        />
-        <PropertyAreaDetails />
-        {/* Interior Exterior Carousel section */}
-        <InteriorExteriorCarousel
-          interiorItems={interiorItems}
-          exteriorItems={exteriorItems}
-        />
+      </div>
 
-        <PropertyPanoramicView />
-        {/* What sets apart section */}
-        <WhatSetsApart />
+      {/* Property Info section */}
+      <PropertyInfo propertyInfo={propertyInfo} />
 
-        {/* Full width banner with play button */}
-        <FloorPlans title="FLOOR PLANS" />
-        <Amenities title="AMENITIES" />
-        <LocationMap
-          title="MAPS"
-          description="Located in Kalyani Nagar, the development provides proximity to real, entertainment, business districts and the airport - offering convenience without compromising privacy."
-        />
-        <Testimonials
-          testimonial={{
-            name: "JOHN DOE",
-            title: "CEO, COMPANY NAME",
-            videoUrl:
-              "https://www.panchshil.com/omnia/assets/videos/master-banner-530520572.mp4",
-            posterImage: "/assets/images/testimonial-video-poster.png",
-          }}
-        />
-        {/* Disclaimer section */}
-        <Disclaimer />
-        <Footer />
-      </main>
-    </>
+      <PropertyAreaDetails />
+
+      {/* Interior Exterior Carousel section */}
+      <InteriorExteriorCarousel
+        interiorItems={interior}
+        exteriorItems={exterior}
+      />
+
+      <PropertyPanoramicView />
+
+      {/* What sets apart section */}
+      <WhatSetsApart />
+
+      {/* Full width banner with play button */}
+      <FloorPlans title="FLOOR PLANS" />
+      <Amenities title="AMENITIES" />
+      <LocationMap
+        title="MAPS"
+        property_location_co_ordinates={property_location_co_ordinates}
+      />
+      {/* <Testimonials
+        testimonial={{
+          name: "JOHN DOE",
+          title: "CEO, COMPANY NAME",
+          videoUrl:
+            "https://www.panchshil.com/omnia/assets/videos/master-banner-530520572.mp4",
+          posterImage: "/assets/images/testimonial-video-poster.png",
+        }}
+      /> */}
+
+      {/* Disclaimer section */}
+      <Disclaimer />
+      <Footer />
+    </main>
   );
-};
-
-export default PropertDetails;
+}

@@ -48,7 +48,7 @@ const WhatSetsApart = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Text Content */}
           <div>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-display-semi text-black uppercase mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-[28px] font-display-semi text-black uppercase mb-8 md:mb-12">
               WHAT SETS TRUMP TOWER APART?
             </h2>
             <div className="space-y-6">

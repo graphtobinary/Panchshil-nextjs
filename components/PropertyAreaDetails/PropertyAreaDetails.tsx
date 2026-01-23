@@ -78,7 +78,7 @@ const PropertyAreaDetails = () => {
           {/* Title */}
           <div className="md:w-3/5 w-full mx-auto">
             <h2
-              className={`text-4xl md:text-2xl lg:text-4xl font-display-semi mb-6 text-black-chocolate ${
+              className={`text-2xl md:text-[28px] font-display-semi mb-6 text-black-chocolate ${
                 isInView ? "animate-fade-in-up" : "opacity-0"
               }`}
             >
