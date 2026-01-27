@@ -110,13 +110,13 @@ export function SignatureCarousel({
                                 key={`feature-${featureIndex}`}
                                 className="flex items-start md:gap-3 gap-2"
                               >
-                                <Image
+                                {/* <Image
                                   src={feature.property_highlight_icon}
                                   alt={feature.property_highlight_caption}
                                   width={28}
                                   height={28}
                                   className="w-5 h-5 md:w-6 md:h-6"
-                                />
+                                /> */}
                                 <span className="text-base md:text-base font-display-semi">
                                   {feature.property_highlight_caption}
                                 </span>

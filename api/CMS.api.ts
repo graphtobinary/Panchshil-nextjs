@@ -242,3 +242,19 @@ export const getNavigationMenu = (token: string) => {
     }
   );
 };
+
+export const getPropertyDetail = (
+  token: string,
+  property_category_url_slug: string,
+  property_url_slug: string
+) => {
+  return doGet(
+    API_CONSTANTS.PROPERTY_DETAIL,
+    { property_category_url_slug, property_url_slug },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};

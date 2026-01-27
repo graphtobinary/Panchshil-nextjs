@@ -50,6 +50,11 @@ export type PropertiesIntroProps = {
   properties_intro_sub_heading: string;
 };
 
+export type PropertyLocationCoOrdinatesProps = {
+  property_latitude: number;
+  property_longitude: number;
+};
+
 // Property Types
 export type Property = {
   property_name: string;
@@ -223,6 +228,7 @@ export interface PropertyProps {
   property_tagline: string;
   property_url: string;
   property_basic_information: PropertyBasicInformationProps[];
+  property_url_slug: string;
 }
 
 export interface PropertyListProps {
@@ -233,10 +239,12 @@ export interface PropertyListProps {
   propertyStatuses?: string[];
   footerRef?: React.RefObject<HTMLElement | null>;
   currentPage?: number;
+  categorySlug?: string;
 }
 
 export interface PropertyItemProps {
   property: PropertyProps;
+  categorySlug?: string;
 }
 
 export interface ActionButtonProps {
@@ -344,3 +352,43 @@ export interface PropertyInfoData {
   brochureUrl: string;
   contactUrl: string;
 }
+
+export type PropertyDetailResponse = {
+  property_name: string;
+  banner_data?: {
+    banner_image: string | null;
+    banner_image_caption: string;
+    banner_image_description: string;
+  };
+  meta_data?: {
+    meta_title: string;
+    meta_description: string;
+    canonical_tag: string;
+  };
+  property_band?: {
+    property_location: string;
+    property_configuration: string;
+    property_status: string;
+    property_pricing: string;
+  };
+  property_introduction_caption?: string;
+  property_introduction_description?: string;
+  property_details_informations?: unknown[];
+  property_interior_sliders?: unknown;
+  property_exterior_sliders?: unknown;
+  property_virtual_tour_section?: unknown;
+  property_defining_features_section?: unknown;
+  property_brochure?: string | null;
+  property_floor_plan_section?: unknown;
+  property_disclaimer?: unknown;
+  property_location?: {
+    property_location_caption?: string;
+    property_location_marker?: string | null;
+    property_location_co_ordinates?: {
+      property_latitude: number;
+      property_longitude: number;
+    };
+  };
+  property_landmark_categories?: unknown[];
+  property_landmarks?: unknown[];
+};

@@ -15,7 +15,7 @@ const ListHeroBanner = ({
       <div className="absolute inset-0">
         <Image
           src={propertyCategory?.banner_image}
-          alt={propertyCategory.banner_image_caption}
+          alt={propertyCategory?.banner_image_caption}
           fill
           className="object-cover md:object-fill"
           priority
@@ -29,7 +29,7 @@ const ListHeroBanner = ({
       <div className="relative z-10 h-full flex flex-col justify-end items-center max-w-[1200px] mx-auto px-6 md:px-12 py-10 md:py-16">
         {/* Title */}
         <h3
-          className={`text-3xl  md:text-6xl  font-display-semi text-white mb-3 md:mb-6 max-w-3xl 
+          className={`text-2xl md:text-[28px] font-display-semi text-white mb-3 md:mb-6 max-w-3xl 
                animate-fade-in-up
               `}
         >
@@ -42,7 +42,7 @@ const ListHeroBanner = ({
                  animate-fade-in-up-delay-1
               `}
         >
-          {propertyCategory.banner_image_description}
+          {propertyCategory?.banner_image_description}
         </p>
         <div className={`animate-fade-in-up-delay-2`}>
           {propertyCategory?.property_category_milestones &&

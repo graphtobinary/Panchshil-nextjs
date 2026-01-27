@@ -8,10 +8,12 @@ import {
   MapCategory,
   getCategoryMarkerIcon,
 } from "./mapData";
+import { PropertyLocationCoOrdinatesProps } from "@/interfaces";
 
 interface LocationMapProps {
   title?: string;
   description?: string;
+  property_location_co_ordinates: PropertyLocationCoOrdinatesProps;
 }
 
 // Icon components for categories
@@ -78,9 +80,10 @@ declare global {
   }
 }
 
-export function LocationMap({
+export default function LocationMap({
   title = "MAPS",
   description = "Located in Kalyani Nagar, the development provides proximity to real, entertainment, business districts and the airport - offering convenience without compromising privacy.",
+  property_location_co_ordinates,
 }: LocationMapProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -116,8 +119,8 @@ export function LocationMap({
     if (!mapRef.current || !window.google || map) return;
 
     const propertyPosition = {
-      lat: PROPERTY_LOCATION.lat,
-      lng: PROPERTY_LOCATION.lng,
+      lat: property_location_co_ordinates.property_latitude,
+      lng: property_location_co_ordinates.property_longitude,
     };
 
     const googleMap = new window.google.maps.Map(mapRef.current, {
@@ -153,13 +156,14 @@ export function LocationMap({
     setMap(googleMap);
     setMarkers([propertyMarker]);
     setIsMapLoaded(true);
-  }, [map, mapType, mapView]);
+  }, [map, mapType, mapView, property_location_co_ordinates]);
 
-  // Load Google Maps script
+  // Ensure the map initializes on client-side navigation too.
+  // (When mounting after navigation, "lazyOnload" can miss the load event.)
   useEffect(() => {
-    if (isInView && !window.google && typeof window !== "undefined") {
-      window.initMap = initMap;
-    }
+    if (!isInView) return;
+    if (typeof window === "undefined") return;
+    if (window.google) initMap();
   }, [isInView, initMap]);
 
   // Filter markers based on selected category
@@ -223,15 +227,12 @@ export function LocationMap({
   return (
     <>
       {/* Google Maps Script */}
-      {isInView && typeof window !== "undefined" && !window.google && (
+      {isInView && typeof window !== "undefined" && (
         <Script
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}&callback=initMap&libraries=places`}
-          strategy="lazyOnload"
-          onLoad={() => {
-            if (window.google && !map) {
-              initMap();
-            }
-          }}
+          id="google-maps-js"
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}&libraries=places`}
+          strategy="afterInteractive"
+          onReady={() => initMap()}
           onError={() => {
             console.error("Failed to load Google Maps script");
           }}

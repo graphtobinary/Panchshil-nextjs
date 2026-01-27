@@ -161,7 +161,7 @@ export function CustomCarousel({ slides }: { slides: MasterSliderData[] }) {
       <div className="absolute inset-0 flex items-end justify-center z-40 pb-16 pointer-events-none">
         <div className="max-w-[1200px] mx-auto px-6 text-center">
           {/* Main Title */}
-          <h1 className="text-2xl md:text-6xl lg:text-7xl font-display-semi text-white mb-6 tracking-tight">
+          <h1 className="text-2xl md:text-[28px] font-display-semi text-white mb-6 tracking-tight">
             {currentSlide?.master_slider_title}
           </h1>
 

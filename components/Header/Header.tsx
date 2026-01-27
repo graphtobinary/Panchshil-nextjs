@@ -108,7 +108,6 @@ export function Header() {
                 item?.menuURL === "about"
                   ? "https://www.panchshil.com/about"
                   : item?.menuURL;
-              console.log(item?.menuURL, item.menuTitle, "item.menuTitle");
               return (
                 <li key={item?.menuURL + i} className="relative">
                   <div
