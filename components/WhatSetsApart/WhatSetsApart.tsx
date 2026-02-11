@@ -44,12 +44,13 @@ const whatSetsApartData = [
 const WhatSetsApart = () => {
   return (
     <section className="w-full bg-[#FFFAF7] py-16 md:py-24">
-      <div className="max-w-[1200px] mx-auto px-6">
+      <div className="mx-auto px-6 md:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Text Content */}
           <div>
             <h2 className="text-2xl md:text-[28px] font-display-semi text-black uppercase mb-8 md:mb-12">
-              WHAT SETS TRUMP TOWER APART?
+              WHAT SETS TRUMP
+              <br /> TOWER APART?
             </h2>
             <div className="space-y-6">
               {whatSetsApartData.map((item) => (
@@ -57,10 +58,10 @@ const WhatSetsApart = () => {
                   key={item.id}
                   className="flex gap-4 border-b border-[#ab9b815e] pb-4"
                 >
-                  <span className="text-[#1F180D] font-regular text-md shrink-0">
+                  <span className="text-[#1F180D] font-regular text-sm md:text-sm shrink-0">
                     {item.number}
                   </span>
-                  <p className="text-[#1F180D] text-base ">
+                  <p className="text-[#1F180D] text-sm md:text-sm ">
                     {item.description}
                   </p>
                 </div>

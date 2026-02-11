@@ -109,7 +109,7 @@ export function AmenityCarousel({ images, isInView }: AmenityCarouselProps) {
       )}
 
       {/* Carousel container */}
-      <div className="relative mb-4 overflow-hidden">
+      <div className="relative mb-4 overflow-hidden pb-8">
         <div className="embla-amenities" ref={emblaRef}>
           <div className="embla-amenities__container">
             {images.map((image, index) => (
@@ -139,7 +139,7 @@ export function AmenityCarousel({ images, isInView }: AmenityCarouselProps) {
         <div className="w-1/2 mx-auto">
           <div className="h-0.5 bg-gold-beige/20">
             <div
-              className="h-full bg-gold-beige transition-[width] duration-300 ease-out"
+              className="h-full bg-gold-beige transition-[width] duration-200 ease-out"
               style={{ width: `${Math.max(2, scrollProgress * 100)}%` }}
             />
           </div>
