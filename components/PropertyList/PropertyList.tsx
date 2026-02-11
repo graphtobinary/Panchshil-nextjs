@@ -266,7 +266,6 @@ export function PropertyList({
   currentPage = 1,
   categorySlug,
 }: PropertyListProps) {
-  console.log(properties, "properties");
   const { theme } = useThemeStore();
   const params = useParams();
   const isAllowedPage = isAllowedPageForTheme(

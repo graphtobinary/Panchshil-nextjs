@@ -185,10 +185,6 @@ export default function PropertyDetailsPageClient({
 
   const interior = safeInterior.length > 0 ? safeInterior : fallbackInterior;
   const exterior = safeExterior.length > 0 ? safeExterior : fallbackExterior;
-  console.log(slide, "slide");
-  console.log(propertyInfo, "propertyInfo");
-  console.log(interiorItems, "interiorItems");
-  console.log(exteriorItems, "exteriorItems");
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
       <Header />
