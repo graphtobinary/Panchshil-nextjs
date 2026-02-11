@@ -239,7 +239,7 @@ export default function LocationMap({
         />
       )}
 
-      <section ref={sectionRef} className="w-full pt-20 bg-white">
+      <section ref={sectionRef} className="w-full pt-0 md:pt-20 bg-white">
         <div className="mx-auto max-w-[1920px]">
           {/* Title and Description */}
           <div

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/Button";
-import { FloorPlans } from "@/components/FloorPlans";
+// import { FloorPlans } from "@/components/FloorPlans";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import PropertyAreaDetails from "@/components/PropertyAreaDetails";
@@ -10,7 +10,11 @@ import PropertyDetailsHero from "@/components/PropertyDetailsHero";
 import { InteriorExteriorCarousel } from "@/components/InteriorExteriorCarousel/InteriorExteriorCarousel";
 import PropertyPanoramicView from "@/components/PropertyPanoramicView/PropertyPanoramicView";
 import WhatSetsApart from "@/components/WhatSetsApart/WhatSetsApart";
-import { Amenities } from "@/components/Amenities";
+import {
+  Amenities,
+  AmenitiesAwardsCertificates,
+  AmenitiesKeyTenants,
+} from "@/components/Amenities";
 
 // import { Testimonials } from "@/components/Testimonials";
 import { Disclaimer } from "@/components/Disclaimer";
@@ -237,8 +241,11 @@ export default function PropertyDetailsPageClient({
       <WhatSetsApart />
 
       {/* Full width banner with play button */}
-      <FloorPlans title="FLOOR PLANS" />
+      {/* <FloorPlans title="FLOOR PLANS" /> */}
       <Amenities title="AMENITIES" />
+      <AmenitiesKeyTenants />
+      <AmenitiesAwardsCertificates />
+
       <LocationMap
         title="MAPS"
         property_location_co_ordinates={property_location_co_ordinates}
