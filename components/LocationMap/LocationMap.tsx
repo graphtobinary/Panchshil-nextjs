@@ -286,65 +286,70 @@ export default function LocationMap({
             </button>
           </div>
 
-          {/* Category Filter Tabs - Second */}
-          <div
-            className={`flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-10 ${
-              isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
-            }`}
-          >
-            {mapCategoriesData.map((category) => {
-              const isActive = category.id === selectedCategory;
-              return (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center gap-2 text-[12px] md:text-[16px] font-medium tracking-wider transition-colors ${
-                    isActive
-                      ? "text-gold-beige border-b-3 border-gold-beige"
-                      : "text-gold-beige/60 hover:text-gold-beige"
-                  }`}
-                >
-                  <CategoryIcon iconName={category.icon} />
-                  <span>{category.title}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Map Container */}
-          <div
-            className={`relative w-full h-[600px] md:h-[700px]  overflow-hidden shadow-lg ${
-              isInView ? "animate-fade-in-up-delay-2" : "opacity-0"
-            }`}
-          >
-            {/* Left Sidebar - Map/Satellite Toggle */}
-            <div className="absolute top-4 left-4 z-10 bg-white rounded-md shadow-md">
-              <div className="flex border border-gray-200 rounded-md overflow-hidden">
-                <button
-                  onClick={() => setMapType("roadmap")}
-                  className={`px-4 py-2 text-sm font-medium transition-colors ${
-                    mapType === "roadmap"
-                      ? "bg-gold-beige text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  Map
-                </button>
-                <button
-                  onClick={() => setMapType("satellite")}
-                  className={`px-4 py-2 text-sm font-medium transition-colors border-l border-gray-200 ${
-                    mapType === "satellite"
-                      ? "bg-gold-beige text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  Satellite
-                </button>
+          {/* Tabs + Map (2 columns: 20% tabs / 80% map) */}
+          <div className="flex flex-col md:flex-row gap-8 md:gap-6">
+            {/* Category Filter Tabs - Left (vertical) */}
+            <div
+              className={`w-full md:w-1/5 ${
+                isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
+              }`}
+            >
+              <div className="flex flex-col items-start gap-4 md:gap-5 px-4 md:px-0">
+                {mapCategoriesData.map((category) => {
+                  const isActive = category.id === selectedCategory;
+                  return (
+                    <button
+                      key={category.id}
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={`w-full flex items-center gap-3 text-left text-[12px] md:text-[16px] font-medium tracking-wider transition-colors ${
+                        isActive
+                          ? "text-gold-beige border-l-4 border-gold-beige pl-3"
+                          : "text-gold-beige/60 hover:text-gold-beige pl-4"
+                      }`}
+                    >
+                      <CategoryIcon iconName={category.icon} />
+                      <span className="leading-snug">{category.title}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Map */}
-            <div ref={mapRef} className="w-full h-full" />
+            {/* Map Container - Right */}
+            <div
+              className={`relative w-full md:w-4/5 h-[600px] md:h-[700px] overflow-hidden shadow-lg ${
+                isInView ? "animate-fade-in-up-delay-2" : "opacity-0"
+              }`}
+            >
+              {/* Map/Satellite Toggle */}
+              <div className="absolute top-4 left-4 z-10 bg-white rounded-md shadow-md">
+                <div className="flex border border-gray-200 rounded-md overflow-hidden">
+                  <button
+                    onClick={() => setMapType("roadmap")}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      mapType === "roadmap"
+                        ? "bg-gold-beige text-white"
+                        : "bg-white text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    Map
+                  </button>
+                  <button
+                    onClick={() => setMapType("satellite")}
+                    className={`px-4 py-2 text-sm font-medium transition-colors border-l border-gray-200 ${
+                      mapType === "satellite"
+                        ? "bg-gold-beige text-white"
+                        : "bg-white text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    Satellite
+                  </button>
+                </div>
+              </div>
+
+              {/* Map */}
+              <div ref={mapRef} className="w-full h-full" />
+            </div>
           </div>
         </div>
       </section>
