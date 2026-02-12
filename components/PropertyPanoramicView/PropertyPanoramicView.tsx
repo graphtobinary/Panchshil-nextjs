@@ -98,8 +98,9 @@ const PropertyPanoramicView = () => {
               VIRTUAL TOUR
             </p>
             <h2 className="text-2xl md:text-[28px] font-display-semi text-black uppercase tracking-tight leading-tight max-w-4xl mx-auto">
-              EACH RESIDENCE IS SURROUNDED BY 360-DEGREE PANORAMIC VIEWS OF THE
-              CITY
+              EACH RESIDENCE IS SURROUNDED BY 360-
+              <br />
+              DEGREE PANORAMIC VIEWS OF THE CITY
             </h2>
           </div>
 

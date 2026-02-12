@@ -40,7 +40,7 @@ export function Amenities({ title = "AMENITIES" }: AmenitiesProps) {
     selectedCategory?.amenities.map((amenity) => amenity.image) || [];
 
   return (
-    <section ref={sectionRef} className="w-full py-20">
+    <section ref={sectionRef} className="w-full py-10 md:py-20 bg-white">
       <div className="mx-auto">
         {/* Title and Description */}
         <div

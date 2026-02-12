@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/Button";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   AboutIntroData,
@@ -9,7 +8,40 @@ import {
   MilestonesProps,
   Stat,
 } from "@/interfaces";
-import Link from "next/link";
+
+const VENTIVE_HOSPITALITY_TEXT = "For details, visit Ventive Hospitality.";
+const VENTIVE_HOSPITALITY_URL = "https://www.ventivehospitality.com/";
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function renderTextWithSingleLink(text: string | undefined | null) {
+  if (!text) return null;
+  if (!text.includes(VENTIVE_HOSPITALITY_TEXT)) return text;
+
+  const parts = text.split(
+    new RegExp(`(${escapeRegExp(VENTIVE_HOSPITALITY_TEXT)})`, "g")
+  );
+
+  return parts.map((part, idx) => {
+    if (part === VENTIVE_HOSPITALITY_TEXT) {
+      return (
+        <a
+          key={`ventive-link-${idx}`}
+          href={VENTIVE_HOSPITALITY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4 hover:opacity-80 transition-opacity"
+        >
+          {part}
+        </a>
+      );
+    }
+
+    return <span key={`ventive-text-${idx}`}>{part}</span>;
+  });
+}
 
 function useCountUp(targetValue: number, isActive: boolean, duration = 2000) {
   const [currentValue, setCurrentValue] = useState(0);
@@ -174,7 +206,7 @@ export function WelcomeSection({
               isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
             }`}
           >
-            {aboutIntroData?.about_intro_description}
+            {renderTextWithSingleLink(aboutIntroData?.about_intro_description)}
           </p>
 
           {/* Stats Row */}

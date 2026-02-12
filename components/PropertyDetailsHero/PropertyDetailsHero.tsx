@@ -11,7 +11,6 @@ const PropertyDetailsHero = ({
   //   getVideoUrl: (videoUrl: string) => string;
   setVideoErrors: (errors: Set<number>) => void;
 }) => {
-  //   console.log(slide, "slide");
   return (
     <>
       {shouldShowVideo ? (
