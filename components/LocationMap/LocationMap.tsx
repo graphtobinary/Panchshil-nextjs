@@ -8,70 +8,58 @@ import {
   PropertyLocationCoOrdinatesProps,
 } from "@/interfaces";
 import Image from "next/image";
+
 const base = "/assets/images/map/";
 
-const LOCATIONS: MapLocation[] = [
-  {
-    id: "atm",
-    title: "ATM",
-    type: "atm",
-    lat: 18.5204,
-    lng: 73.8567,
-    zoom: 13,
-    icon: "atm.png",
-  },
+// Category config: maps our UI to Google Places API types for nearby search
+const PLACE_CATEGORIES: Array<{
+  id: string;
+  title: string;
+  type: LocationType;
+  placeType: string; // Google Places API type
+  icon: string;
+}> = [
+  { id: "atm", title: "ATM", type: "atm", placeType: "atm", icon: "atm.png" },
   {
     id: "banks",
     title: "BANKS",
     type: "banks",
-    lat: 18.5167,
-    lng: 73.8417,
-    zoom: 14,
+    placeType: "bank",
     icon: "banks.png",
   },
   {
     id: "entertainment",
     title: "ENTERTAINMENT & LIFESTYLE",
     type: "entertainment",
-    lat: 18.5636,
-    lng: 73.789,
-    zoom: 13,
+    placeType: "shopping_mall",
     icon: "entertainment.png",
   },
   {
     id: "hospital",
     title: "HOSPITAL",
     type: "hospital",
-    lat: 18.5081,
-    lng: 73.925,
-    zoom: 14,
+    placeType: "hospital",
     icon: "hospital.png",
   },
   {
     id: "park",
     title: "PARKS & OUTDOORS",
     type: "park",
-    lat: 18.532,
-    lng: 73.83,
-    zoom: 14,
+    placeType: "park",
     icon: "park.png",
   },
   {
     id: "restaurants",
     title: "RESTAURANTS & CAFE",
     type: "restaurants",
-    lat: 18.5211,
-    lng: 73.8553,
-    zoom: 15,
+    placeType: "restaurant",
     icon: "restaurants.png",
   },
   {
     id: "airport",
     title: "AIRPORT",
     type: "airport",
-    lat: 18.5822,
-    lng: 73.9197,
-    zoom: 11,
+    placeType: "airport",
     icon: "airport.png",
   },
 ];
@@ -139,7 +127,9 @@ export default function LocationMap({
   description = "Located in Kalyani Nagar, the development provides proximity to real, entertainment, business districts and the airport - offering convenience without compromising privacy.",
   property_location_co_ordinates,
 }: LocationMapProps) {
-  const [active, setActive] = useState<string>("business");
+  const [active, setActive] = useState<string | null>(null);
+  const [locations, setLocations] = useState<MapLocation[]>([]);
+  const [isPlacesLoading, setIsPlacesLoading] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
@@ -167,19 +157,19 @@ export default function LocationMap({
       v: "weekly",
     });
 
-    importLibrary("maps").then(() => {
+    Promise.all([importLibrary("maps"), importLibrary("places")]).then(() => {
       if (!mapRef.current || !property_location_co_ordinates) return;
 
       const { property_latitude, property_longitude } =
         property_location_co_ordinates;
-      const propertyPosition = {
-        lat: property_latitude,
-        lng: property_longitude,
-      };
+      const propertyPosition = new google.maps.LatLng(
+        property_latitude,
+        property_longitude
+      );
 
       const map = new google.maps.Map(mapRef.current, {
         center: propertyPosition,
-        zoom: 12,
+        zoom: 14,
         styles: MAP_STYLE,
         disableDefaultUI: true,
       });
@@ -198,13 +188,72 @@ export default function LocationMap({
         },
       });
 
-      LOCATIONS.forEach((loc) => {
-        new google.maps.Marker({
-          position: { lat: loc.lat, lng: loc.lng },
-          map,
-          title: loc.title,
-          icon: getMarkerIcon(loc.type),
+      const bounds = new google.maps.LatLngBounds();
+      bounds.extend(propertyPosition);
+
+      const placesService = new google.maps.places.PlacesService(map);
+      const radiusMeters = 10000; // 10 km - increase for airport if needed
+
+      const fetchPromises = PLACE_CATEGORIES.map(
+        (category) =>
+          new Promise<MapLocation | null>((resolve) => {
+            const request = {
+              location: propertyPosition,
+              radius: radiusMeters,
+              type: category.placeType as string,
+            };
+            placesService.nearbySearch(
+              request,
+              (
+                results: google.maps.places.PlaceResult[] | null,
+                status: google.maps.places.PlacesServiceStatus
+              ) => {
+                if (
+                  status === google.maps.places.PlacesServiceStatus.OK &&
+                  results &&
+                  results[0]?.geometry?.location
+                ) {
+                  const place = results[0];
+                  const loc = place.geometry!.location! as google.maps.LatLng;
+                  const lat = loc.lat();
+                  const lng = loc.lng();
+                  bounds.extend({ lat, lng });
+                  resolve({
+                    id: category.id,
+                    title: category.title,
+                    type: category.type,
+                    lat,
+                    lng,
+                    zoom: 14,
+                    icon: category.icon,
+                  });
+                } else {
+                  resolve(null);
+                }
+              }
+            );
+          })
+      );
+
+      Promise.all(fetchPromises).then((results) => {
+        const foundLocations = results.filter(
+          (r): r is MapLocation => r !== null
+        );
+        setLocations(foundLocations);
+        setIsPlacesLoading(false);
+
+        // Add markers for nearby places
+        foundLocations.forEach((loc) => {
+          new google.maps.Marker({
+            position: { lat: loc.lat, lng: loc.lng },
+            map,
+            title: loc.title,
+            icon: getMarkerIcon(loc.type),
+          });
         });
+
+        // Fit map to show property + all nearby places with padding
+        map.fitBounds(bounds, { top: 60, right: 60, bottom: 60, left: 60 });
       });
     });
   }, [property_location_co_ordinates]);
@@ -287,25 +336,35 @@ export default function LocationMap({
             className={`w-full md:w-1/5 ${isInView ? "animate-fade-in-up-delay-1" : "opacity-0"}`}
           >
             <div className="flex flex-col items-start gap-4 md:gap-5 px-4 md:px-0">
-              {LOCATIONS.map((loc) => {
-                const isActive = active === loc.id;
-                return (
-                  <button
-                    key={loc.id}
-                    onClick={() => panToLocation(loc)}
-                    className={`w-full flex items-center gap-3 text-left text-[12px] md:text-[16px] font-medium tracking-wider transition-colors ${
-                      isActive
-                        ? "text-gold-beige border-l-4 border-gold-beige pl-3"
-                        : "text-gold-beige/60 hover:text-gold-beige pl-4"
-                    }`}
-                  >
-                    <CategoryIcon iconName={loc.icon} />
-                    <span className="leading-snug text-gold-beige">
-                      {loc.title}
-                    </span>
-                  </button>
-                );
-              })}
+              {isPlacesLoading ? (
+                <p className="text-sm text-gold-beige/70">
+                  Loading nearby places…
+                </p>
+              ) : locations.length === 0 ? (
+                <p className="text-sm text-gold-beige/70">
+                  No nearby places found
+                </p>
+              ) : (
+                locations.map((loc) => {
+                  const isActive = active === loc.id;
+                  return (
+                    <button
+                      key={loc.id}
+                      onClick={() => panToLocation(loc)}
+                      className={`w-full flex items-center gap-3 text-left text-[12px] md:text-[16px] font-medium tracking-wider transition-colors ${
+                        isActive
+                          ? "text-gold-beige border-l-4 border-gold-beige pl-3"
+                          : "text-gold-beige/60 hover:text-gold-beige pl-4"
+                      }`}
+                    >
+                      <CategoryIcon iconName={loc.icon} />
+                      <span className="leading-snug text-gold-beige">
+                        {loc.title}
+                      </span>
+                    </button>
+                  );
+                })
+              )}
             </div>
           </div>
 
@@ -324,13 +383,13 @@ export default function LocationMap({
 
 function getMarkerIcon(type: LocationType) {
   const icons: Record<LocationType, string> = {
-    atm: `${base}/atm.png`,
-    banks: `${base}/banks.png`,
-    entertainment: `${base}/entertainment.png`,
-    hospital: `${base}/hospital.png`,
-    park: `${base}/park.png`,
-    restaurants: `${base}/restaurants.png`,
-    airport: `${base}/airport.png`,
+    atm: `${base}atm.png`,
+    banks: `${base}banks.png`,
+    entertainment: `${base}entertainment.png`,
+    hospital: `${base}hospital.png`,
+    park: `${base}park.png`,
+    restaurants: `${base}restaurants.png`,
+    airport: `${base}airport.png`,
   };
 
   return {
