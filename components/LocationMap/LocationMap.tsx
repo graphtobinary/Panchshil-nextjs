@@ -183,8 +183,8 @@ export default function LocationMap({
         title: "Property Location",
         icon: {
           url: PROPERTY_PIN_ICON,
-          scaledSize: new google.maps.Size(22, 30),
-          anchor: new google.maps.Point(11, 30),
+          scaledSize: new google.maps.Size(48, 65),
+          anchor: new google.maps.Point(24, 65),
         },
       });
 
