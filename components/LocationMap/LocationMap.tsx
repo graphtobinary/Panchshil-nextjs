@@ -105,7 +105,7 @@ const MAP_STYLE: google.maps.MapTypeStyle[] = [
 
 // Custom property pin icon (gold-beige #9E8C70)
 const PROPERTY_PIN_SVG =
-  '<svg width="22" height="30" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.626 2.29A4.92 4.92 0 005.13.848 4.92 4.92 0 001.635 2.29c-1.926 1.922-2.18 4.642-.31 7.408.95 1.397 3.805 4.905 3.805 4.905s2.857-3.508 3.806-4.905c1.87-2.757 1.616-5.476-.31-7.408zM5.13 8.884A2.967 2.967 0 012.161 5.92a2.973 2.973 0 012.97-2.963A2.972 2.972 0 018.1 5.92a2.972 2.972 0 01-2.97 2.963z" fill="#9E8C70"/></svg>';
+  '<svg width="65" height="65" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.626 2.29A4.92 4.92 0 005.13.848 4.92 4.92 0 001.635 2.29c-1.926 1.922-2.18 4.642-.31 7.408.95 1.397 3.805 4.905 3.805 4.905s2.857-3.508 3.806-4.905c1.87-2.757 1.616-5.476-.31-7.408zM5.13 8.884A2.967 2.967 0 012.161 5.92a2.973 2.973 0 012.97-2.963A2.972 2.972 0 018.1 5.92a2.972 2.972 0 01-2.97 2.963z" fill="#9E8C70"/></svg>';
 
 const PROPERTY_PIN_ICON =
   "data:image/svg+xml," + encodeURIComponent(PROPERTY_PIN_SVG);
