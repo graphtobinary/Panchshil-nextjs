@@ -392,3 +392,21 @@ export type PropertyDetailResponse = {
   property_landmark_categories?: unknown[];
   property_landmarks?: unknown[];
 };
+
+export type LocationType =
+  | "atm"
+  | "banks"
+  | "entertainment"
+  | "hospital"
+  | "park"
+  | "restaurants"
+  | "airport";
+export interface MapLocation {
+  id: string;
+  title: string;
+  type: LocationType;
+  lat: number;
+  lng: number;
+  zoom?: number;
+  icon: string;
+}

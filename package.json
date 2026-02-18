@@ -23,6 +23,7 @@
     ]
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^2.0.2",
     "autoplay": "^0.0.4",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.6.0",
