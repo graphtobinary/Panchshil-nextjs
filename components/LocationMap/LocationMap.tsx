@@ -286,7 +286,7 @@ export default function LocationMap({
       <div className="mx-auto max-w-[1920px]">
         {/* Title and Description */}
         <div
-          className={`text-center mb-10 px-4 md:px-0 ${
+          className={`text-center mb-20 px-4 md:px-0 ${
             isInView ? "animate-fade-in-up" : "opacity-0"
           }`}
         >
@@ -370,7 +370,7 @@ export default function LocationMap({
 
           {/* Map Container - Right */}
           <div
-            className={`relative w-full md:w-4/5 h-[600px] md:h-[700px] overflow-hidden shadow-lg ${isInView ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
+            className={`relative w-full md:w-4/5 h-[600px] md:h-[700px] overflow-hidden ${isInView ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
           >
             {/* Map */}
             <div ref={mapRef} className="w-full h-[500px] shadow-lg" />
