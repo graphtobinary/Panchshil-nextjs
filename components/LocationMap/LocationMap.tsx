@@ -76,26 +76,42 @@ const LOCATIONS: MapLocation[] = [
   },
 ];
 
+// Light map style matching panchshil.com/57-avenue reference
 const MAP_STYLE: google.maps.MapTypeStyle[] = [
   {
     featureType: "all",
     elementType: "geometry",
-    stylers: [{ color: "#1d2c4d" }],
+    stylers: [{ color: "#f5f5f5" }],
   },
   {
     featureType: "all",
     elementType: "labels.text.fill",
-    stylers: [{ color: "#8ec3b9" }],
+    stylers: [{ color: "#5c5c5c" }],
+  },
+  {
+    featureType: "all",
+    elementType: "labels.text.stroke",
+    stylers: [{ color: "#ffffff" }],
   },
   {
     featureType: "road",
     elementType: "geometry",
-    stylers: [{ color: "#304a7d" }],
+    stylers: [{ color: "#e8e8e8" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#d0d0d0" }],
   },
   {
     featureType: "water",
     elementType: "geometry",
-    stylers: [{ color: "#0e1626" }],
+    stylers: [{ color: "#c9e6f5" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry",
+    stylers: [{ color: "#e8f0e8" }],
   },
 ];
 interface LocationMapProps {
