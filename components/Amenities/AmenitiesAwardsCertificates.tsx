@@ -42,11 +42,15 @@ const fallbackAwards: AwardsCertificateItem[] = [
 
 type Props = {
   title?: string;
+  subTitle?: string;
+  description?: string;
   items?: AwardsCertificateItem[];
 };
 
 export function AmenitiesAwardsCertificates({
   title = "AMENITIES",
+  subTitle = "AWARDS & CERTIFICATES",
+  description,
   items = fallbackAwards,
 }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -105,8 +109,13 @@ export function AmenitiesAwardsCertificates({
             {title}
           </div>
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black">
-            AWARDS &amp; CERTIFICATES
+            {subTitle}
           </h2>
+          {description ? (
+            <p className="mt-3 max-w-[980px] mx-auto text-sm md:text-base text-black/75 leading-relaxed">
+              {description}
+            </p>
+          ) : null}
         </div>
 
         <EmblaCardsCarousel
