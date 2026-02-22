@@ -16,10 +16,10 @@ export default function CareerSearchPageClient({
   data,
 }: CareerSearchPageClientProps) {
   const [searchText, setSearchText] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [selectedSkill, setSelectedSkill] = useState("");
-  const [selectedFunction, setSelectedFunction] = useState("");
-  const [selectedExperience, setSelectedExperience] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
+  const [selectedSkill, setSelectedSkill] = useState<string[]>([]);
+  const [selectedFunction, setSelectedFunction] = useState<string[]>([]);
+  const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
 
   const locationOptions = useMemo(
     () => [...new Set(data.jobs.map((job) => job.location))],
@@ -57,14 +57,17 @@ export default function CareerSearchPageClient({
         normalizedSearch.length === 0 ||
         searchTarget.includes(normalizedSearch);
       const matchesLocation =
-        selectedLocation.length === 0 || job.location === selectedLocation;
+        selectedLocation.length === 0 ||
+        selectedLocation.includes(job.location);
       const matchesSkill =
-        selectedSkill.length === 0 || job.skills.includes(selectedSkill);
+        selectedSkill.length === 0 ||
+        selectedSkill.some((skill) => job.skills.includes(skill));
       const matchesFunction =
-        selectedFunction.length === 0 || job.functionArea === selectedFunction;
+        selectedFunction.length === 0 ||
+        selectedFunction.includes(job.functionArea);
       const matchesExperience =
         selectedExperience.length === 0 ||
-        job.experienceLevel === selectedExperience;
+        selectedExperience.includes(job.experienceLevel);
 
       return (
         matchesSearch &&

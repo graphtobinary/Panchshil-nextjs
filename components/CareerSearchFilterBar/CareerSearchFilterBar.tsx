@@ -4,20 +4,22 @@ import { useEffect, useRef, useState } from "react";
 
 type CareerSearchFilterBarProps = {
   searchText: string;
-  selectedLocation: string;
-  selectedSkill: string;
-  selectedFunction: string;
-  selectedExperience: string;
+  selectedLocation: string[];
+  selectedSkill: string[];
+  selectedFunction: string[];
+  selectedExperience: string[];
   locationOptions: string[];
   skillOptions: string[];
   functionOptions: string[];
   experienceOptions: string[];
   onSearchTextChange: (value: string) => void;
-  onLocationChange: (value: string) => void;
-  onSkillChange: (value: string) => void;
-  onFunctionChange: (value: string) => void;
-  onExperienceChange: (value: string) => void;
+  onLocationChange: (value: string[]) => void;
+  onSkillChange: (value: string[]) => void;
+  onFunctionChange: (value: string[]) => void;
+  onExperienceChange: (value: string[]) => void;
 };
+
+const ALL_OPTION = "All";
 
 function SearchIcon() {
   return (
@@ -47,28 +49,121 @@ function FilterSelect({
   onChange,
 }: {
   label: string;
-  value: string;
+  value: string[];
   options: string[];
-  onChange: (value: string) => void;
+  onChange: (value: string[]) => void;
 }) {
-  return (
-    <div className="relative">
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="w-full appearance-none border-b border-[#bfbfbf] bg-transparent pb-3 pr-7 text-[18px] leading-tight text-[#272727] outline-none"
-      >
-        <option value="">{label}</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const allOptions = [ALL_OPTION, ...options];
 
-      <span className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-[#646464]">
-        ˅
-      </span>
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelect = (option: string) => {
+    if (option === ALL_OPTION) {
+      onChange([]);
+      return;
+    }
+
+    const nextValues = value.includes(option)
+      ? value.filter((item) => item !== option)
+      : [...value, option];
+    onChange(nextValues);
+  };
+
+  const displayLabel =
+    value.length === 0
+      ? label
+      : value.length === 1
+        ? value[0]
+        : `${value.length} selected`;
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="w-full flex items-center justify-between gap-2 border-b border-[#bfbfbf] bg-transparent pb-3 pr-1 text-[18px] leading-tight text-[#272727] outline-none"
+      >
+        <span
+          className={value.length > 0 ? "text-[#272727]" : "text-[#444444]"}
+        >
+          {displayLabel}
+        </span>
+        <span
+          className={`text-[#646464] transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        >
+          ˅
+        </span>
+      </button>
+
+      {isOpen ? (
+        <div className="absolute bottom-full left-0 mb-2 border border-gold-beige shadow-lg min-w-[260px] max-h-60 overflow-y-auto z-20 bg-white">
+          <ul>
+            {allOptions.map((option, index) => {
+              const isSelected =
+                option === ALL_OPTION
+                  ? value.length === 0
+                  : value.includes(option);
+              const isLast = index === allOptions.length - 1;
+
+              return (
+                <li key={option}>
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(option)}
+                    className={`w-full text-black-chocolate text-left px-4 py-2 cursor-pointer text-sm transition-colors flex items-center gap-2 ${
+                      !isLast ? "border-b border-b-gold-beige" : ""
+                    } ${
+                      isSelected
+                        ? "bg-gold-beige font-medium text-white"
+                        : "bg-white text-black-chocolate"
+                    }`}
+                  >
+                    <span
+                      className={`w-3 h-3 border flex items-center justify-center ${
+                        isSelected
+                          ? "bg-gold-beige border-white"
+                          : "border-black"
+                      }`}
+                    >
+                      {isSelected ? (
+                        <svg
+                          className="w-3 h-3 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      ) : null}
+                    </span>
+                    {option}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
     </div>
   );
 }
