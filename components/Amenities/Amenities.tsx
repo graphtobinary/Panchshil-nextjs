@@ -1,19 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { amenitiesCategories } from "./amenitiesData";
 import { AmenityCarousel } from "./AmenityCarousel";
+import { PropertyAmenitiesSection } from "@/interfaces";
 
 interface AmenitiesProps {
   title?: string;
+  property_amenities_section: PropertyAmenitiesSection | undefined;
 }
 
-export function Amenities({ title = "AMENITIES" }: AmenitiesProps) {
+export function Amenities({
+  title = "AMENITIES",
+  property_amenities_section,
+}: AmenitiesProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<string>(
-    amenitiesCategories[0]?.id || ""
-  );
+  const [selectedTab, setSelectedTab] = useState<string>("");
+  const amenityCategories =
+    property_amenities_section?.property_amenities || [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,13 +35,21 @@ export function Amenities({ title = "AMENITIES" }: AmenitiesProps) {
     return () => observer.disconnect();
   }, []);
 
-  const selectedCategory = amenitiesCategories.find(
-    (category) => category.id === selectedTab
+  const activeTab = amenityCategories.some(
+    (category) => category.property_amenity_slider_title === selectedTab
+  )
+    ? selectedTab
+    : amenityCategories[0]?.property_amenity_slider_title || "";
+
+  const selectedCategory = amenityCategories.find(
+    (category) => category.property_amenity_slider_title === activeTab
   );
 
   // Get image gallery from selected category
   const imageGallery =
-    selectedCategory?.amenities.map((amenity) => amenity.image) || [];
+    selectedCategory?.property_amenity_sliders.map(
+      (amenity) => amenity.property_amenity_slider_image
+    ) || [];
 
   return (
     <section ref={sectionRef} className="w-full py-10 md:py-20 bg-white">
@@ -52,8 +64,7 @@ export function Amenities({ title = "AMENITIES" }: AmenitiesProps) {
             {title}
           </div>
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black">
-            SPACES DESIGNED TO SUPPORT WELL-BEING, DAILY COMFORT AND <br />
-            CONNECTED LIVING
+            {property_amenities_section?.property_amenities_caption}
           </h2>
         </div>
 
@@ -63,19 +74,22 @@ export function Amenities({ title = "AMENITIES" }: AmenitiesProps) {
             isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
           }`}
         >
-          {amenitiesCategories.map((category) => {
-            const isActive = category.id === selectedTab;
+          {property_amenities_section?.property_amenities.map((category) => {
+            const isActive =
+              category?.property_amenity_slider_title === activeTab;
             return (
               <button
-                key={category.id}
-                onClick={() => setSelectedTab(category.id)}
+                key={category?.property_amenity_slider_title}
+                onClick={() =>
+                  setSelectedTab(category?.property_amenity_slider_title)
+                }
                 className={`text-[12px] md:text-[16px] font-medium tracking-wider transition-colors ${
                   isActive
                     ? "text-gold-beige border-b-3 border-gold-beige"
                     : "text-gold-beige/60 hover:text-gold-beige"
                 }`}
               >
-                {category.title}
+                {category?.property_amenity_slider_title}
               </button>
             );
           })}

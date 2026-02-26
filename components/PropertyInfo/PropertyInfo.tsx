@@ -1,72 +1,63 @@
 "use client";
 
 import Link from "next/link";
-import { PropertyInfoData } from "@/interfaces";
+import { PropertyDetailResponse } from "@/interfaces";
 
-interface PropertyInfoProps {
-  propertyInfo?: PropertyInfoData;
-}
-
-export function PropertyInfo({ propertyInfo }: PropertyInfoProps) {
-  // Sample data - can be replaced with props from CMS
-  const defaultPropertyInfo: PropertyInfoData = {
-    location: "Kalyani Nagar, Pune",
-    configuration: "5.5Bhk Residences",
-    status: "Ready-To-Move In Property",
-    price: "Starting From 15.14 Crore",
-    brochureUrl: "#",
-    contactUrl: "#",
-  };
-
-  const info = propertyInfo || defaultPropertyInfo;
+export function PropertyInfo({
+  propertyInfo,
+}: {
+  propertyInfo: PropertyDetailResponse | undefined;
+}) {
+  const info = propertyInfo;
 
   return (
-    <section className="w-full bg-[#FFFAF7] py-4 md:py-5 shadow-lg">
+    <section className="fixed bottom-0 left-0 right-0 z-50 w-full bg-[#FFFAF7] py-2 md:py-3 shadow-lg">
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-6">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-2 lg:gap-4">
           {/* Left side - Property Information */}
-          <div className="flex flex-wrap items-center gap-x-4 md:gap-x-6 gap-y-2 flex-1">
+          <div className="flex flex-wrap items-center gap-x-3 md:gap-x-5 gap-y-1.5 flex-1">
             {/* Location */}
-            <span className="text-black-chocolate text-sm md:text-base font-normal">
-              {info.location}
+            <span className="text-black-chocolate text-xs md:text-sm font-normal">
+              {info?.property_band?.property_location}
             </span>
 
             {/* Separator */}
             <span className="hidden sm:inline-block w-px h-4 bg-gray-300"></span>
 
             {/* Configuration */}
-            <span className="text-black-chocolate text-sm md:text-base font-normal">
-              {info.configuration}
+            <span className="text-black-chocolate text-xs md:text-sm font-normal">
+              {info?.property_band?.property_configuration}
             </span>
 
             {/* Separator */}
             <span className="hidden sm:inline-block w-px h-4 bg-gray-300"></span>
 
             {/* Status */}
-            <span className="text-black-chocolate text-sm md:text-base font-normal">
-              {info.status}
+            <span className="text-black-chocolate text-xs md:text-sm font-normal">
+              {info?.property_band?.property_status}
             </span>
 
             {/* Separator */}
             <span className="hidden sm:inline-block w-px h-4 bg-gray-300"></span>
 
             {/* Price */}
-            <span className="text-black-chocolate text-sm md:text-base font-normal">
-              {info.price}
+            <span className="text-black-chocolate text-xs md:text-sm font-normal">
+              {info?.property_band?.property_pricing}
             </span>
           </div>
 
           {/* Right side - Action Buttons */}
-          <div className="flex items-center gap-3 w-full lg:w-auto">
+          <div className="flex items-center gap-2 w-full lg:w-auto">
             <Link
-              href={info.brochureUrl}
-              className="flex-1 lg:flex-none bg-[#35393B] hover:bg-black text-white px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base font-medium transition-colors duration-200 whitespace-nowrap text-center"
+              href={info?.property_brochure || "#"}
+              className="flex-1 lg:flex-none bg-[#35393B] hover:bg-black text-white px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium transition-colors duration-200 whitespace-nowrap text-center"
+              target="_blank"
             >
               Download Brochure
             </Link>
             <Link
-              href={info.contactUrl}
-              className="flex-1 lg:flex-none bg-[#35393B] hover:bg-black text-white px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base font-medium transition-colors duration-200 whitespace-nowrap text-center"
+              href={info?.property_brochure || "#"}
+              className="flex-1 lg:flex-none bg-[#35393B] hover:bg-black text-white px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium transition-colors duration-200 whitespace-nowrap text-center"
             >
               Get In Touch
             </Link>

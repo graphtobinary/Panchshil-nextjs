@@ -5,19 +5,7 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
-import Link from "next/link";
-
-interface CarouselItem {
-  property_name: string;
-  property_thumbnail: string;
-  property_location: string;
-  property_link: string;
-}
-
-interface InteriorExteriorCarouselProps {
-  interiorItems: CarouselItem[];
-  exteriorItems: CarouselItem[];
-}
+import { CarouselItem, InteriorExteriorCarouselProps } from "@/interfaces";
 
 function SingleColumnCarousel({
   title,
@@ -101,7 +89,6 @@ function SingleColumnCarousel({
   }, [emblaApi, onSelect, onScroll]);
 
   if (items.length === 0) return null;
-
   return (
     <div className="relative w-full">
       {/* Header with title and navigation arrows */}
@@ -138,35 +125,22 @@ function SingleColumnCarousel({
       <div className="relative mb-6 overflow-hidden">
         <div className="embla-projects" ref={emblaRef}>
           <div className="embla-projects__container">
-            {items.map((item, index) => (
-              <div
-                key={index}
-                className="embla-projects__slide basis-full shrink-0 grow-0 relative h-[400px] md:h-[500px] overflow-hidden"
-              >
-                {item.property_link ? (
-                  <Link
-                    href={item.property_link}
-                    className="block w-full h-full"
-                  >
-                    <Image
-                      src={item.property_thumbnail}
-                      alt={item.property_name}
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 768px) 50vw, 100vw"
-                    />
-                  </Link>
-                ) : (
+            {items.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="embla-projects__slide basis-full shrink-0 grow-0 relative h-[400px] md:h-[500px] overflow-hidden"
+                >
                   <Image
-                    src={item.property_thumbnail}
-                    alt={item.property_name}
+                    src={item.image}
+                    alt={item.caption}
                     fill
                     className="object-cover"
                     sizes="(min-width: 768px) 50vw, 100vw"
                   />
-                )}
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -184,8 +158,8 @@ function SingleColumnCarousel({
                 }`}
               >
                 <Image
-                  src={thumbItem.property_thumbnail}
-                  alt={thumbItem.property_name}
+                  src={thumbItem.image}
+                  alt={thumbItem.caption}
                   fill
                   className="object-cover"
                   sizes="(min-width: 768px) 80px, 64px"
@@ -213,15 +187,38 @@ export function InteriorExteriorCarousel({
   interiorItems,
   exteriorItems,
 }: InteriorExteriorCarouselProps) {
+  const safeInteriorItems = Array.isArray(interiorItems) ? interiorItems : [];
+  const safeExteriorItems = Array.isArray(exteriorItems) ? exteriorItems : [];
+
+  const normalizedInteriorItems: CarouselItem[] = safeInteriorItems
+    .map((item) => ({
+      image: item?.property_interior_slider_image,
+      caption: item?.property_interior_slider_caption || "Interior image",
+    }))
+    .filter((item) => !!item.image);
+
+  const normalizedExteriorItems: CarouselItem[] = safeExteriorItems
+    .map((item) => ({
+      image: item?.property_exterior_slider_image,
+      caption: item?.property_exterior_slider_caption || "Exterior image",
+    }))
+    .filter((item) => !!item.image);
+
   return (
     <section className="w-full bg-[#FFFAF7] py-12 md:py-20">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {/* Interior Column */}
-          <SingleColumnCarousel title="INTERIOR" items={interiorItems} />
+          <SingleColumnCarousel
+            title="INTERIOR"
+            items={normalizedInteriorItems}
+          />
 
           {/* Exterior Column */}
-          <SingleColumnCarousel title="EXTERIOR" items={exteriorItems} />
+          <SingleColumnCarousel
+            title="EXTERIOR"
+            items={normalizedExteriorItems}
+          />
         </div>
       </div>
     </section>

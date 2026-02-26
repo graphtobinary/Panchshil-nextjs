@@ -1,68 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import {
-  LocationType,
+  LandmarkCategoryNormalized,
+  LandmarkNormalized,
+  LocationMapProps,
   MapLocation,
-  PropertyLocationCoOrdinatesProps,
 } from "@/interfaces";
 import Image from "next/image";
 
 const base = "/assets/images/map/";
-
-// Category config: maps our UI to Google Places API types for nearby search
-const PLACE_CATEGORIES: Array<{
-  id: string;
-  title: string;
-  type: LocationType;
-  placeType: string; // Google Places API type
-  icon: string;
-}> = [
-  { id: "atm", title: "ATM", type: "atm", placeType: "atm", icon: "atm.png" },
-  {
-    id: "banks",
-    title: "BANKS",
-    type: "banks",
-    placeType: "bank",
-    icon: "banks.png",
-  },
-  {
-    id: "entertainment",
-    title: "ENTERTAINMENT & LIFESTYLE",
-    type: "entertainment",
-    placeType: "shopping_mall",
-    icon: "entertainment.png",
-  },
-  {
-    id: "hospital",
-    title: "HOSPITAL",
-    type: "hospital",
-    placeType: "hospital",
-    icon: "hospital.png",
-  },
-  {
-    id: "park",
-    title: "PARKS & OUTDOORS",
-    type: "park",
-    placeType: "park",
-    icon: "park.png",
-  },
-  {
-    id: "restaurants",
-    title: "RESTAURANTS & CAFE",
-    type: "restaurants",
-    placeType: "restaurant",
-    icon: "restaurants.png",
-  },
-  {
-    id: "airport",
-    title: "AIRPORT",
-    type: "airport",
-    placeType: "airport",
-    icon: "airport.png",
-  },
-];
 
 // Light map style matching panchshil.com/57-avenue reference
 const MAP_STYLE: google.maps.MapTypeStyle[] = [
@@ -110,30 +58,133 @@ const PROPERTY_PIN_SVG =
 const PROPERTY_PIN_ICON =
   "data:image/svg+xml," + encodeURIComponent(PROPERTY_PIN_SVG);
 
-interface LocationMapProps {
-  title?: string;
-  description?: string;
-  property_location_co_ordinates: PropertyLocationCoOrdinatesProps;
-}
+const resolveIconSrc = (iconName: string) => {
+  if (!iconName) return `${base}atm.png`;
+  if (
+    iconName.startsWith("http://") ||
+    iconName.startsWith("https://") ||
+    iconName.startsWith("/") ||
+    iconName.startsWith("data:")
+  ) {
+    return iconName;
+  }
+  return `${base}${iconName}`;
+};
 
 // Icon components for categories
 const CategoryIcon = ({ iconName }: { iconName: string }) => {
-  const src = `${base}${iconName}`;
+  const src = resolveIconSrc(iconName);
   return <Image src={src} alt={iconName} width={24} height={24} unoptimized />;
 };
 
 export default function LocationMap({
   title = "MAPS",
-  description = "Located in Kalyani Nagar, the development provides proximity to real, entertainment, business districts and the airport - offering convenience without compromising privacy.",
   property_location_co_ordinates,
+  property_location,
+  property_landmark_categories,
+  property_landmarks,
 }: LocationMapProps) {
+  const [mapView, setMapView] = useState<"2d" | "3d">("2d");
   const [active, setActive] = useState<string | null>(null);
-  const [locations, setLocations] = useState<MapLocation[]>([]);
-  const [isPlacesLoading, setIsPlacesLoading] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
   const [isInView, setIsInView] = useState(false);
+  const normalizedCategories: LandmarkCategoryNormalized[] = useMemo(
+    () =>
+      property_landmark_categories.map((category) => {
+        const categoryRecord = category as unknown as Record<string, unknown>;
+        const title =
+          (categoryRecord.property_landmark_category_title as string) ||
+          (categoryRecord.property_landmark_category_name as string) ||
+          "";
+        const icon =
+          (categoryRecord.property_landmark_category_icon as string) ||
+          (categoryRecord.property_landmark_category_image as string) ||
+          "atm.png";
+
+        return { title, icon };
+      }),
+    [property_landmark_categories]
+  );
+
+  const normalizedLandmarks: LandmarkNormalized[] = useMemo(() => {
+    const mapped: LandmarkNormalized[] = [];
+
+    property_landmarks.forEach((landmark) => {
+      const landmarkRecord = landmark as unknown as Record<string, unknown>;
+      const coordinates = landmarkRecord.property_location_co_ordinates as
+        | Record<string, unknown>
+        | undefined;
+
+      const lat =
+        (landmarkRecord.property_landmark_latitude as number) ??
+        (coordinates?.property_latitude as number | undefined);
+      const lng =
+        (landmarkRecord.property_landmark_longitude as number) ??
+        (coordinates?.property_longitude as number | undefined);
+
+      if (typeof lat !== "number" || typeof lng !== "number") return;
+
+      mapped.push({
+        name:
+          (landmarkRecord.property_landmark_name as string) ||
+          (landmarkRecord.property_location_caption as string) ||
+          "Landmark",
+        lat,
+        lng,
+        icon:
+          (landmarkRecord.property_location_marker as string) ||
+          (landmarkRecord.property_landmark_marker as string) ||
+          "atm.png",
+        categoryKey:
+          (landmarkRecord.property_landmark_category_title as string) ||
+          (landmarkRecord.property_landmark_category_name as string) ||
+          (landmarkRecord.property_landmark_category as string) ||
+          undefined,
+      });
+    });
+
+    return mapped;
+  }, [property_landmarks]);
+
+  const locations: MapLocation[] = useMemo(() => {
+    if (!normalizedCategories.length) {
+      return normalizedLandmarks.map((landmark, index) => ({
+        id: `landmark-${index}`,
+        title: landmark.name,
+        type: "atm",
+        lat: landmark.lat,
+        lng: landmark.lng,
+        zoom: 14,
+        icon: landmark.icon,
+      }));
+    }
+
+    const mapped: MapLocation[] = [];
+    normalizedCategories.forEach((category, index) => {
+      const matchedLandmark =
+        normalizedLandmarks.find(
+          (landmark) =>
+            landmark.categoryKey?.trim().toLowerCase() ===
+            category.title.trim().toLowerCase()
+        ) || normalizedLandmarks[index];
+
+      if (!matchedLandmark) return;
+
+      mapped.push({
+        id: `landmark-${index}`,
+        title: category.title || matchedLandmark.name,
+        type: "atm",
+        lat: matchedLandmark.lat,
+        lng: matchedLandmark.lng,
+        zoom: 14,
+        icon: category.icon || matchedLandmark.icon,
+      });
+    });
+
+    return mapped;
+  }, [normalizedCategories, normalizedLandmarks]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -157,7 +208,7 @@ export default function LocationMap({
       v: "weekly",
     });
 
-    Promise.all([importLibrary("maps"), importLibrary("places")]).then(() => {
+    Promise.all([importLibrary("maps")]).then(() => {
       if (!mapRef.current || !property_location_co_ordinates) return;
 
       const { property_latitude, property_longitude } =
@@ -191,72 +242,21 @@ export default function LocationMap({
       const bounds = new google.maps.LatLngBounds();
       bounds.extend(propertyPosition);
 
-      const placesService = new google.maps.places.PlacesService(map);
-      const radiusMeters = 10000; // 10 km - increase for airport if needed
-
-      const fetchPromises = PLACE_CATEGORIES.map(
-        (category) =>
-          new Promise<MapLocation | null>((resolve) => {
-            const request = {
-              location: propertyPosition,
-              radius: radiusMeters,
-              type: category.placeType as string,
-            };
-            placesService.nearbySearch(
-              request,
-              (
-                results: google.maps.places.PlaceResult[] | null,
-                status: google.maps.places.PlacesServiceStatus
-              ) => {
-                if (
-                  status === google.maps.places.PlacesServiceStatus.OK &&
-                  results &&
-                  results[0]?.geometry?.location
-                ) {
-                  const place = results[0];
-                  const loc = place.geometry!.location! as google.maps.LatLng;
-                  const lat = loc.lat();
-                  const lng = loc.lng();
-                  bounds.extend({ lat, lng });
-                  resolve({
-                    id: category.id,
-                    title: category.title,
-                    type: category.type,
-                    lat,
-                    lng,
-                    zoom: 14,
-                    icon: category.icon,
-                  });
-                } else {
-                  resolve(null);
-                }
-              }
-            );
-          })
-      );
-
-      Promise.all(fetchPromises).then((results) => {
-        const foundLocations = results.filter(
-          (r): r is MapLocation => r !== null
-        );
-        setLocations(foundLocations);
-        setIsPlacesLoading(false);
-
-        // Add markers for nearby places
-        foundLocations.forEach((loc) => {
-          new google.maps.Marker({
-            position: { lat: loc.lat, lng: loc.lng },
-            map,
-            title: loc.title,
-            icon: getMarkerIcon(loc.type),
-          });
+      // Add markers from API landmarks
+      locations.forEach((loc) => {
+        new google.maps.Marker({
+          position: { lat: loc.lat, lng: loc.lng },
+          map,
+          title: loc.title,
+          icon: getMarkerIcon(loc.icon),
         });
-
-        // Fit map to show property + all nearby places with padding
-        map.fitBounds(bounds, { top: 60, right: 60, bottom: 60, left: 60 });
+        bounds.extend({ lat: loc.lat, lng: loc.lng });
       });
+
+      // Fit map to show property + all nearby places with padding
+      map.fitBounds(bounds, { top: 60, right: 60, bottom: 60, left: 60 });
     });
-  }, [property_location_co_ordinates]);
+  }, [locations, property_location_co_ordinates]);
 
   const panToLocation = (location: MapLocation) => {
     if (!mapInstance.current) return;
@@ -278,11 +278,14 @@ export default function LocationMap({
     setActive(location.id);
   };
 
+  useEffect(() => {
+    if (mapView !== "2d" || !mapInstance.current) return;
+    const center = mapInstance.current.getCenter();
+    google.maps.event.trigger(mapInstance.current, "resize");
+    if (center) mapInstance.current.setCenter(center);
+  }, [mapView]);
   return (
-    <section
-      ref={sectionRef}
-      className="w-full pt-0 md:pt-20 bg-white pr-6 md:pr-16"
-    >
+    <section ref={sectionRef} className="w-full pt-0 md:pt-20 bg-white">
       <div className="mx-auto max-w-[1920px]">
         {/* Title and Description */}
         <div
@@ -294,10 +297,10 @@ export default function LocationMap({
             {title}
           </div>
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black mb-4">
-            CONNECTED TO THE CITY&apos;S CORE
+            {property_location?.property_location_caption}
           </h2>
           <p className="text-base md:text-lg text-gray-600 max-w-4xl mx-auto">
-            {description}
+            {property_location?.property_location_description}
           </p>
         </div>
 
@@ -329,51 +332,92 @@ export default function LocationMap({
           </button>
         </div> */}
 
-        {/* Tabs + Map (2 columns: 20% tabs / 80% map) */}
-        <div className="flex flex-col md:flex-row gap-8 md:gap-6">
-          {/* Category Filter Tabs - Left (vertical) */}
+        {/* Tabs + Map (full width map with tabs above, right aligned) */}
+        <div className="w-full px-4 md:px-0">
+          {/* Tabs 2D/3D */}
           <div
-            className={`w-full md:w-1/5 ${isInView ? "animate-fade-in-up-delay-1" : "opacity-0"}`}
+            className={`mb-6 px-6 flex flex-wrap items-center justify-between gap-4 ${
+              isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
+            }`}
           >
-            <div className="flex flex-col items-start gap-4 md:gap-5 px-4 md:px-0">
-              {isPlacesLoading ? (
-                <p className="text-sm text-gold-beige/70">
-                  Loading nearby places…
-                </p>
-              ) : locations.length === 0 ? (
-                <p className="text-sm text-gold-beige/70">
-                  No nearby places found
-                </p>
-              ) : (
-                locations.map((loc) => {
-                  const isActive = active === loc.id;
-                  return (
-                    <button
-                      key={loc.id}
-                      onClick={() => panToLocation(loc)}
-                      className={`w-full flex items-center gap-3 text-left text-[12px] md:text-[16px] font-medium tracking-wider transition-colors ${
-                        isActive
-                          ? "text-gold-beige border-l-4 border-gold-beige pl-3"
-                          : "text-gold-beige/60 hover:text-gold-beige pl-4"
-                      }`}
-                    >
-                      <CategoryIcon iconName={loc.icon} />
-                      <span className="leading-snug text-gold-beige">
-                        {loc.title}
-                      </span>
-                    </button>
-                  );
-                })
-              )}
+            <div className="flex items-center gap-4">
+              <span className="text-lg leading-none text-[#202020] font-normal">
+                MAP VIEW
+              </span>
+              <div className="inline-flex items-center rounded-full bg-[#D9D2C5] p-2">
+                <button
+                  onClick={() => setMapView("2d")}
+                  className={`rounded-full px-5 py-2 text-lg font-semibold transition-colors ${
+                    mapView === "2d"
+                      ? "bg-white text-[#202020]"
+                      : "text-[#202020] hover:text-black"
+                  }`}
+                >
+                  2D
+                </button>
+                <button
+                  onClick={() => setMapView("3d")}
+                  className={`rounded-full px-5 py-2 text-lg font-semibold transition-colors ${
+                    mapView === "3d"
+                      ? "bg-white text-[#202020]"
+                      : "text-[#202020] hover:text-black"
+                  }`}
+                >
+                  3D
+                </button>
+              </div>
             </div>
+
+            {mapView === "2d" && (
+              <div className="flex flex-wrap items-center justify-start md:justify-end gap-x-5 gap-y-3">
+                {locations.length === 0 ? (
+                  <p className="text-sm text-gray-500">
+                    No nearby landmarks found
+                  </p>
+                ) : (
+                  locations.map((loc) => {
+                    const isActive = (active ?? locations[0]?.id) === loc.id;
+                    return (
+                      <button
+                        key={loc.id}
+                        onClick={() => panToLocation(loc)}
+                        className={`flex items-center gap-2 border-b-2 pb-1 text-[12px] md:text-[14px] font-medium tracking-wide transition-colors ${
+                          isActive
+                            ? "border-[#9E8C70] text-[#1F1F1F]"
+                            : "border-transparent text-[#6F6F6F] hover:text-[#1F1F1F]"
+                        }`}
+                      >
+                        <CategoryIcon iconName={loc.icon} />
+                        <span>{loc.title}</span>
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Map Container - Right */}
           <div
-            className={`relative w-full md:w-4/5 h-[600px] md:h-[700px] overflow-hidden ${isInView ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
+            className={`relative w-full h-[500px] md:h-[650px] overflow-hidden ${
+              isInView ? "animate-fade-in-up-delay-2" : "opacity-0"
+            }`}
           >
-            {/* Map */}
-            <div ref={mapRef} className="w-full h-[500px] shadow-lg" />
+            <div
+              ref={mapRef}
+              className={`w-full h-full shadow-lg ${
+                mapView === "2d" ? "block" : "hidden"
+              }`}
+            />
+            {mapView === "3d" && (
+              <iframe
+                src="https://my.matterport.com/show/?m=ptAPb9Azymz"
+                title="3D Property View"
+                className="w-full h-full border-0 shadow-lg"
+                allow="xr-spatial-tracking; fullscreen"
+                allowFullScreen
+                loading="lazy"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -381,19 +425,9 @@ export default function LocationMap({
   );
 }
 
-function getMarkerIcon(type: LocationType) {
-  const icons: Record<LocationType, string> = {
-    atm: `${base}atm.png`,
-    banks: `${base}banks.png`,
-    entertainment: `${base}entertainment.png`,
-    hospital: `${base}hospital.png`,
-    park: `${base}park.png`,
-    restaurants: `${base}restaurants.png`,
-    airport: `${base}airport.png`,
-  };
-
+function getMarkerIcon(iconName: string) {
   return {
-    url: icons[type],
+    url: resolveIconSrc(iconName),
     scaledSize: new google.maps.Size(36, 36),
   };
 }

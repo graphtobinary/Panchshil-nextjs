@@ -1,79 +1,50 @@
+import { PropertyDefiningFeaturesSectionType } from "@/interfaces";
 import Image from "next/image";
 
-const whatSetsApartData = [
-  {
-    id: 1,
-    number: "01",
-    description: "Offers 360-degree view of cityscape",
-  },
-  {
-    id: 2,
-    number: "02",
-    description: "Located in an affluent neighborhood of Kalyani Nagar",
-  },
-  {
-    id: 3,
-    number: "03",
-    description: "Advanced safety and security with 24-hour on-site personnel",
-  },
-  {
-    id: 4,
-    number: "04",
-    description:
-      "The interiors feature designs by Matteo Nunziati, known for his elegant and contemporary style, ensuring a sophisticated living experience",
-  },
-  {
-    id: 5,
-    number: "05",
-    description:
-      "Each apartment boasts large windows and private balconies, offering breathtaking views of the city and surrounding landscapes",
-  },
-  {
-    id: 6,
-    number: "06",
-    description:
-      "With a limited number of units per floor, Trump Towers Pune ensures a sense of exclusivity and privacy for its residents",
-  },
-  {
-    id: 7,
-    number: "07",
-    description: "Single apartment per floor with private elevator access",
-  },
-];
-
-const WhatSetsApart = () => {
+const WhatSetsApart = ({
+  property_defining_features_section,
+}: {
+  property_defining_features_section: PropertyDefiningFeaturesSectionType;
+}) => {
   return (
     <section className="w-full bg-[#FFFAF7] py-16 md:py-24">
       <div className="mx-auto px-6 md:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Text Content */}
           <div>
             <h2 className="text-2xl md:text-[28px] font-display-semi text-black uppercase mb-8 md:mb-12">
-              WHAT SETS TRUMP
-              <br /> TOWER APART?
+              {
+                property_defining_features_section?.property_defining_features_caption
+              }
             </h2>
             <div className="space-y-6">
-              {whatSetsApartData.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex gap-4 border-b border-[#ab9b815e] pb-4"
-                >
-                  <span className="text-[#1F180D] font-regular text-sm md:text-sm shrink-0">
-                    {item.number}
-                  </span>
-                  <p className="text-[#1F180D] text-sm md:text-sm ">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
+              {property_defining_features_section?.property_defining_features?.map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="flex gap-4 border-b border-[#ab9b815e] pb-4"
+                  >
+                    <span className="text-[#1F180D] font-regular text-sm md:text-sm shrink-0">
+                      {index + 1}
+                    </span>
+                    <p className="text-[#1F180D] text-sm md:text-sm ">
+                      {item.property_defining_feature_caption}
+                    </p>
+                  </div>
+                )
+              )}
             </div>
           </div>
 
           {/* Right Column - Image */}
           <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px]">
             <Image
-              src="https://www.panchshil.com/asset/images/properties/trump-towers-674500024.webp"
-              alt="Trump Towers"
+              src={
+                property_defining_features_section?.property_defining_features_thumbnail
+              }
+              alt={
+                property_defining_features_section?.property_defining_features_caption
+              }
               fill
               className="object-cover "
               priority
