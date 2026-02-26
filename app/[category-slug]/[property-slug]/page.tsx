@@ -6,7 +6,7 @@ import type {
   MasterSliderData,
   Property,
   PropertyDetailResponse,
-  PropertyInfoData,
+  // PropertyInfoData,
   PropertyLocationCoOrdinatesProps,
 } from "@/interfaces";
 import { notFound, redirect } from "next/navigation";
@@ -163,19 +163,19 @@ export default async function PropertyDetailPage({
     };
   })();
 
-  // Property info mapping (best-effort)
-  const propertyInfo: PropertyInfoData | undefined = (() => {
-    const location = detail?.property_band?.property_location || "";
-    const configuration = detail?.property_band?.property_configuration || "";
-    const status = detail?.property_band?.property_status || "";
-    const price = detail?.property_band?.property_pricing || "";
-    const brochureUrl = detail?.property_brochure || "#";
-    const contactUrl = detail?.meta_data?.canonical_tag || "#";
+  // // Property info mapping (best-effort)
+  // const propertyInfo: PropertyInfoData | undefined = (() => {
+  //   const location = detail?.property_band?.property_location || "";
+  //   const configuration = detail?.property_band?.property_configuration || "";
+  //   const status = detail?.property_band?.property_status || "";
+  //   const price = detail?.property_band?.property_pricing || "";
+  //   const brochureUrl = detail?.property_brochure || "#";
+  //   const contactUrl = detail?.meta_data?.canonical_tag || "#";
 
-    // If we have nothing useful, let the client component fallback
-    if (!location && !configuration && !status && !price) return undefined;
-    return { location, configuration, status, price, brochureUrl, contactUrl };
-  })();
+  //   // If we have nothing useful, let the client component fallback
+  //   if (!location && !configuration && !status && !price) return undefined;
+  //   return { location, configuration, status, price, brochureUrl, contactUrl };
+  // })();
 
   // Try to build carousel items from image gallery if present
   const interiorUrls = extractImageUrls(detail?.property_interior_sliders);
@@ -196,11 +196,10 @@ export default async function PropertyDetailPage({
 
   const property_location_co_ordinates =
     detail?.property_location?.property_location_co_ordinates || "";
-
   return (
     <PropertyDetailsPageClient
       heroSlide={heroSlide}
-      propertyInfo={propertyInfo}
+      propertyInfo={detail}
       interiorItems={interiorItems}
       exteriorItems={exteriorItems}
       property_location_co_ordinates={

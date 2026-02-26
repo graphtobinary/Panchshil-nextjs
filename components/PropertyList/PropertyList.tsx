@@ -23,14 +23,19 @@ function ActionButton({
   href,
   onClick,
   isDarkMode,
-}: ActionButtonProps) {
+  target = "_self",
+}: ActionButtonProps & { target?: string }) {
   const baseClasses = `px-4 py-3 text-sm font-medium hover:opacity-90 transition-all shadow-sm w-fit ${
     !isDarkMode ? "bg-gold-beige text-white" : "bg-[#4E4E4E] text-white"
   }`;
 
   if (href) {
     return (
-      <Link href={href} className={`${baseClasses} text-center`}>
+      <Link
+        href={href}
+        className={`${baseClasses} text-center`}
+        target={target}
+      >
         {children}
       </Link>
     );
@@ -107,7 +112,7 @@ function PropertyItem({ property, categorySlug }: PropertyItemProps) {
     () => emblaApi && emblaApi.scrollNext(),
     [emblaApi]
   );
-
+  console.log(property, "property");
   return (
     <div
       className={`grid grid-cols-1 md:grid-cols-[30%_70%] gap-0 mb-8 shadow-sm transition-colors ${
@@ -224,32 +229,45 @@ function PropertyItem({ property, categorySlug }: PropertyItemProps) {
 
         {/* CTA Buttons */}
         <div className="flex flex-wrap gap-5">
-          <ActionButton
-            href={`/${categorySlug}/${property.property_url_slug}` || "#"}
-            isDarkMode={isDarkMode}
-          >
-            View Project
-          </ActionButton>
+          {!property.listing_only && (
+            <ActionButton
+              href={`/${categorySlug}/${property.property_url_slug}` || "#"}
+              isDarkMode={isDarkMode}
+            >
+              View Project
+            </ActionButton>
+          )}
           {property.property_brochure && (
             <ActionButton
               href={property.property_brochure || "#"}
               isDarkMode={isDarkMode}
+              target="_blank"
             >
               Download Brochure
             </ActionButton>
           )}
-          <ActionButton
-            href={property.property_link || "#"}
-            isDarkMode={isDarkMode}
-          >
-            View Floor Plans
-          </ActionButton>
-          <ActionButton
-            href={property.property_link || "#"}
-            isDarkMode={isDarkMode}
-          >
-            View Amenities
-          </ActionButton>
+          {!property.listing_only && (
+            <ActionButton
+              href={
+                `/${categorySlug}/${property.property_url_slug}?filter=floor-plan` ||
+                "#"
+              }
+              isDarkMode={isDarkMode}
+            >
+              View Floor Plans
+            </ActionButton>
+          )}
+          {!property.listing_only && (
+            <ActionButton
+              href={
+                `/${categorySlug}/${property.property_url_slug}?filter=amenities` ||
+                "#"
+              }
+              isDarkMode={isDarkMode}
+            >
+              View Amenities
+            </ActionButton>
+          )}
         </div>
       </div>
     </div>

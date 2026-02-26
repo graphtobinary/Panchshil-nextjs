@@ -126,19 +126,19 @@ export default async function PaginatedListPage({
 
   const data = {
     propertyCategory:
-      propertyCategory.status === "fulfilled" ? propertyCategory.value : null,
+      propertyCategory?.status === "fulfilled" ? propertyCategory?.value : null,
     propertyCities:
-      propertyCities.status === "fulfilled" ? propertyCities.value : null,
+      propertyCities?.status === "fulfilled" ? propertyCities?.value : null,
     propertyStatuses:
-      propertyStatuses.status === "fulfilled" ? propertyStatuses.value : null,
-    properties: properties.status === "fulfilled" ? properties.value : null,
+      propertyStatuses?.status === "fulfilled" ? propertyStatuses?.value : null,
+    properties: properties?.status === "fulfilled" ? properties?.value : null,
     otherPropertyCategories:
-      otherPropertyCategories.status === "fulfilled"
-        ? otherPropertyCategories.value
+      otherPropertyCategories?.status === "fulfilled"
+        ? otherPropertyCategories?.value
         : null,
     propertyFooterBlocks:
-      propertyFooterBlocks.status === "fulfilled"
-        ? propertyFooterBlocks.value
+      propertyFooterBlocks?.status === "fulfilled"
+        ? propertyFooterBlocks?.value
         : null,
   };
 

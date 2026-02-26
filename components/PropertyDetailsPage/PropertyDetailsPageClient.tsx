@@ -22,176 +22,42 @@ import { PropertyInfo } from "@/components/PropertyInfo";
 import type {
   MasterSliderData,
   Property,
-  PropertyInfoData,
+  PropertyDefiningFeaturesSectionType,
+  // PropertyDefiningFeaturesType,
+  PropertyDetailResponse,
+  PropertyDetailsInformationType,
+  PropertyExteriorSliderType,
+  PropertyInteriorSliderType,
+  PropertyLandmark,
+  PropertyLandmarkCategory,
+  PropertyLocation,
   PropertyLocationCoOrdinatesProps,
+  PropertyVirtualTourSectionType,
 } from "@/interfaces";
 import LocationMap from "../LocationMap";
 
 type Props = {
   heroSlide?: MasterSliderData;
-  propertyInfo?: PropertyInfoData;
+  propertyInfo?: PropertyDetailResponse;
   interiorItems?: Property[];
   exteriorItems?: Property[];
   property_location_co_ordinates: PropertyLocationCoOrdinatesProps;
 };
 
-const fallbackHeroSlide: MasterSliderData = {
-  master_slider_title: "Omnia Residences",
-  master_slider_description:
-    "An unmatched living experience in of Mumbai's most sought-after neighbourhoods in Bandra West, comprising of 12 exclusive residences overlooking the prestigious Almeida Park.",
-  master_slider_link: "https://www.panchshil.com/omnia",
-  master_slider_image: null,
-  master_slider_video:
-    "https://www.panchshil.com/asset/videos/master-slider/omnia-your-sanctuary-of-serenity-269331917.mp4",
-  master_slider_button_caption: "Discover",
-};
-
-const fallbackCarouselItems: Property[] = [
-  {
-    property_name: "Omnia Residences",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/omnia-residences-399070081.webp",
-    property_location: "Almeida Park, Bandra West, Mumbai",
-    property_link:
-      "https://www.panchshil.com/luxury-residences/omnia-residences",
-  },
-  {
-    property_name: "Trump Towers",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/trump-towers-674500024.webp",
-    property_location: "Kalyani Nagar, Pune",
-    property_link: "https://www.panchshil.com/luxury-residences/trump-towers",
-  },
-  {
-    property_name: "YOO Villas",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/yoo-villas-700275726.webp",
-    property_location: "Near EON Free Zone, Kharadi, Pune",
-    property_link: "https://www.panchshil.com/luxury-residences/yoo-villas",
-  },
-  {
-    property_name: "yoopune",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/yoopune-421699478.webp",
-    property_location: "Hadapsar, Pune",
-    property_link: "https://www.panchshil.com/luxury-residences/yoopune",
-  },
-  {
-    property_name: "EON Waterfront",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/eon-waterfront-133951849.webp",
-    property_location: "Near EON Free Zone, Kharadi, Pune",
-    property_link: "https://www.panchshil.com/luxury-residences/eon-waterfront",
-  },
-  {
-    property_name: "Panchshil Towers",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/panchshil-towers-596555604.webp",
-    property_location: "Near EON Free Zone, Kharadi, Pune",
-    property_link:
-      "https://www.panchshil.com/luxury-residences/panchshil-towers",
-  },
-  {
-    property_name: "SOHO",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/soho-157045448.webp",
-    property_location: "Near EON Free Zone, Pune",
-    property_link: "https://www.panchshil.com/luxury-residences/soho",
-  },
-  {
-    property_name: "Avant Garde",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/avant-garde-788610806.webp",
-    property_location: "Friends Colony West, Delhi",
-    property_link: "https://www.panchshil.com/luxury-residences/avant-garde",
-  },
-  {
-    property_name: "Waterfront",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/waterfront-174507118.webp",
-    property_location: "Kalyani Nagar, Pune",
-    property_link: "https://www.panchshil.com/luxury-residences/waterfront",
-  },
-  {
-    property_name: "One North",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/one-north-650572378.webp",
-    property_location: "Magarpatta, Hadapsar, Pune",
-    property_link: "https://www.panchshil.com/luxury-residences/one-north",
-  },
-  {
-    property_name: "The Address",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/the-address-396971157.webp",
-    property_location: "Boat Club Road, Pune",
-    property_link: "https://www.panchshil.com/luxury-residences/the-address",
-  },
-  {
-    property_name: "Ssilver Woods",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/ssilver-woods-293051009.webp",
-    property_location: "Koregaon Park Annexe, Mundhwa, Pune",
-    property_link: "",
-  },
-  {
-    property_name: "Satellite Towers",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/satellite-towers-249475606.webp",
-    property_location: "Koregaon Park Annexe, Mundhwa, Pune",
-    property_link: "",
-  },
-  {
-    property_name: "Forest Castle",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/forest-castle-930340720.webp",
-    property_location: "Koregaon Park Annexe, Mundhwa, Pune",
-    property_link: "",
-  },
-  {
-    property_name: "Queens Court",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/queens-court-300471141.webp",
-    property_location: "Boat Club Road, Pune",
-    property_link: "",
-  },
-  {
-    property_name: "Casa 9",
-    property_thumbnail:
-      "https://www.panchshil.com/asset/images/properties/casa-9-526096480.webp",
-    property_location: "Baner, Pune",
-    property_link: "",
-  },
-];
-
 export default function PropertyDetailsPageClient({
   heroSlide,
   propertyInfo,
-  interiorItems,
-  exteriorItems,
   property_location_co_ordinates,
 }: Props) {
-  const slide = heroSlide || fallbackHeroSlide;
+  const slide = heroSlide;
 
-  const midpoint = Math.ceil(fallbackCarouselItems.length / 2);
-  const fallbackInterior = fallbackCarouselItems.slice(0, midpoint);
-  const fallbackExterior = fallbackCarouselItems.slice(midpoint);
-
-  const safeInterior = (interiorItems || []).filter(
-    (x) => !!x?.property_thumbnail
-  );
-  const safeExterior = (exteriorItems || []).filter(
-    (x) => !!x?.property_thumbnail
-  );
-
-  const interior = safeInterior.length > 0 ? safeInterior : fallbackInterior;
-  const exterior = safeExterior.length > 0 ? safeExterior : fallbackExterior;
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
       <Header />
       <div className="relative w-full h-screen overflow-hidden">
         <PropertyDetailsHero
           shouldShowVideo={!!slide?.master_slider_video}
-          slide={slide}
+          slide={slide as MasterSliderData}
           setVideoErrors={() => new Set()}
         />
         {/* Content Overlay */}
@@ -218,33 +84,67 @@ export default function PropertyDetailsPageClient({
             </Link>
           </div>
         </div>
+
+        {/* Property info pinned in first fold */}
+        <div className="absolute bottom-0 left-0 right-0 z-50">
+          <PropertyInfo propertyInfo={propertyInfo} />
+        </div>
       </div>
 
-      {/* Property Info section */}
-      <PropertyInfo propertyInfo={propertyInfo} />
-
-      <PropertyAreaDetails />
+      <PropertyAreaDetails
+        property_introduction_caption={
+          propertyInfo?.property_introduction_caption
+        }
+        property_introduction_description={
+          propertyInfo?.property_introduction_description
+        }
+        property_details_informations={
+          propertyInfo?.property_details_informations as PropertyDetailsInformationType[]
+        }
+      />
 
       {/* Interior Exterior Carousel section */}
       <InteriorExteriorCarousel
-        interiorItems={interior}
-        exteriorItems={exterior}
+        interiorItems={
+          propertyInfo?.property_interior_sliders as PropertyInteriorSliderType[]
+        }
+        exteriorItems={
+          propertyInfo?.property_exterior_sliders as PropertyExteriorSliderType[]
+        }
       />
 
-      <PropertyPanoramicView />
+      <PropertyPanoramicView
+        property_virtual_tour_section={
+          propertyInfo?.property_virtual_tour_section as PropertyVirtualTourSectionType
+        }
+      />
 
       {/* What sets apart section */}
-      <WhatSetsApart />
+      <WhatSetsApart
+        property_defining_features_section={
+          propertyInfo?.property_defining_features_section as PropertyDefiningFeaturesSectionType
+        }
+      />
 
       {/* Full width banner with play button */}
       {/* <FloorPlans title="FLOOR PLANS" /> */}
-      <Amenities title="AMENITIES" />
+      <Amenities
+        title="AMENITIES"
+        property_amenities_section={propertyInfo?.property_amenities_section}
+      />
       <AmenitiesKeyTenants />
       <AmenitiesAwardsCertificates />
 
       <LocationMap
         title="MAPS"
         property_location_co_ordinates={property_location_co_ordinates}
+        property_location={propertyInfo?.property_location as PropertyLocation}
+        property_landmark_categories={
+          propertyInfo?.property_landmark_categories as unknown as PropertyLandmarkCategory[]
+        }
+        property_landmarks={
+          propertyInfo?.property_landmarks as unknown as PropertyLandmark[]
+        }
       />
       {/* <Testimonials
         testimonial={{
@@ -257,7 +157,9 @@ export default function PropertyDetailsPageClient({
       /> */}
 
       {/* Disclaimer section */}
-      <Disclaimer />
+      <Disclaimer
+        disclaimer={propertyInfo?.property_disclaimer as string | null}
+      />
       <Footer />
     </main>
   );

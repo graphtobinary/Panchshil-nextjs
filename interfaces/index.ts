@@ -229,6 +229,7 @@ export interface PropertyProps {
   property_url: string;
   property_basic_information: PropertyBasicInformationProps[];
   property_url_slug: string;
+  listing_only: boolean;
 }
 
 export interface PropertyListProps {
@@ -391,6 +392,110 @@ export type PropertyDetailResponse = {
   };
   property_landmark_categories?: unknown[];
   property_landmarks?: unknown[];
+  property_amenities_section?: PropertyAmenitiesSection;
+};
+
+export type PropertyInteriorSliderType = {
+  property_interior_slider_caption: string;
+  property_interior_slider_image: string;
+};
+
+export type PropertyExteriorSliderType = {
+  property_exterior_slider_caption: string;
+  property_exterior_slider_image: string;
+};
+
+export interface InteriorExteriorCarouselProps {
+  interiorItems: PropertyInteriorSliderType[];
+  exteriorItems: PropertyExteriorSliderType[];
+}
+
+export type CarouselItem = {
+  image: string;
+  caption: string;
+};
+
+export type PropertyDefiningFeaturesType = {
+  property_defining_feature_caption: string;
+};
+
+export type PropertyDefiningFeaturesSectionType = {
+  property_defining_features: PropertyDefiningFeaturesType[];
+  property_defining_features_caption: string;
+  property_defining_features_thumbnail: string;
+};
+
+export type PropertyLandmarkCategory = {
+  property_landmark_category_name: string;
+  property_landmark_category_description: string;
+  property_landmark_category_image: string;
+};
+
+export type PropertyLandmark = {
+  property_location_caption: string;
+  property_location_description: number;
+  property_3d_map_link: string;
+  property_location_marker: string;
+  property_location_co_ordinates: PropertyLocationCoOrdinatesProps;
+};
+
+export type PropertyDetailsInformationType = {
+  property_details_information_title: string;
+  property_details_information_icon: string;
+  property_details_information_caption: string;
+};
+export interface PropertyAreaDetailsProps {
+  property_introduction_caption: string | undefined;
+  property_introduction_description: string | undefined;
+  property_details_informations?: PropertyDetailsInformationType[];
+}
+
+export interface PropertyLocation {
+  property_location_caption: string;
+  property_location_description: string;
+  property_3d_map_link: string;
+  property_location_marker: string;
+  property_location_co_ordinates: PropertyLocationCoOrdinatesProps;
+}
+export interface LocationMapProps {
+  title?: string;
+  description?: string;
+  property_location_co_ordinates: PropertyLocationCoOrdinatesProps;
+  property_location: PropertyLocation;
+  property_landmark_categories: PropertyLandmarkCategory[];
+  property_landmarks: PropertyLandmark[];
+}
+
+export type LandmarkCategoryNormalized = {
+  title: string;
+  icon: string;
+};
+
+export type LandmarkNormalized = {
+  name: string;
+  lat: number;
+  lng: number;
+  icon: string;
+  categoryKey?: string;
+};
+
+export interface PropertyVirtualTourSectionType {
+  property_virtual_video_caption: string;
+  property_virtual_youtube_video_id: string;
+  property_virtual_video_thumbnail: string;
+}
+
+export type PropertyAmenitiesSliderType = {
+  property_amenity_slider_title: string;
+  property_amenity_sliders: {
+    property_amenity_slider_image_caption: string;
+    property_amenity_slider_image: string;
+  }[];
+};
+
+export type PropertyAmenitiesSection = {
+  property_amenities_caption: string;
+  property_amenities: PropertyAmenitiesSliderType[];
 };
 
 export type LocationType =
