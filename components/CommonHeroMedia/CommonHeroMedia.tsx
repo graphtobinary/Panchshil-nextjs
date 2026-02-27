@@ -17,7 +17,6 @@ export default function CommonHeroMedia({
   shouldShowVideo = false,
   overlayClassName = "bg-black/20",
 }: CommonHeroMediaProps) {
-  console.log(imageSrc, "imageSrc");
   return (
     <>
       {shouldShowVideo && videoSrc ? (

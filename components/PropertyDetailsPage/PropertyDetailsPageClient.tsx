@@ -69,7 +69,7 @@ export default function PropertyDetailsPageClient({
             </h1>
 
             {/* Description */}
-            <p className="text-sm md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
+            <p className="text-lg md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
               {slide?.master_slider_description}
             </p>
 
@@ -78,7 +78,7 @@ export default function PropertyDetailsPageClient({
               href={slide?.master_slider_link || "#"}
               className="pointer-events-auto z-50 relative"
             >
-              <Button variant="hero" size="lg">
+              <Button variant="hero-outline" size="lg">
                 {slide?.master_slider_button_caption || "Discover"}
               </Button>
             </Link>
