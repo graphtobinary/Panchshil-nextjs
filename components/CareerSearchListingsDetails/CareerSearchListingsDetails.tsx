@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { CareerSearchJob } from "@/app/careers/search/career-search-page.data";
 
@@ -13,6 +13,8 @@ export default function CareerSearchListingsDetails({
   jobs,
   itemsPerPage,
 }: CareerSearchListingsDetailsProps) {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const asideScrollRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJobId, setSelectedJobId] = useState(jobs[0]?.id ?? "");
   const [activeSectionDomId, setActiveSectionDomId] = useState("");
@@ -52,12 +54,56 @@ export default function CareerSearchListingsDetails({
     });
   };
 
+  useEffect(() => {
+    const gridElement = gridRef.current;
+    if (!gridElement) {
+      return;
+    }
+
+    const handleGridWheel = (event: WheelEvent) => {
+      if (window.innerWidth < 1024) {
+        return;
+      }
+
+      const asideElement = asideScrollRef.current;
+      if (!asideElement) {
+        return;
+      }
+
+      const delta = event.deltaY;
+      const atTop = asideElement.scrollTop <= 0;
+      const atBottom =
+        asideElement.scrollTop + asideElement.clientHeight >=
+        asideElement.scrollHeight - 1;
+
+      const canScrollAsideDown = delta > 0 && !atBottom;
+      const canScrollAsideUp = delta < 0 && !atTop;
+
+      if (canScrollAsideDown || canScrollAsideUp) {
+        event.preventDefault();
+        asideElement.scrollTop += delta;
+      }
+    };
+
+    gridElement.addEventListener("wheel", handleGridWheel, { passive: false });
+
+    return () => {
+      gridElement.removeEventListener("wheel", handleGridWheel);
+    };
+  }, []);
+
   return (
     <section id="job-listings" className="bg-[#efefef] py-10 md:py-14">
       <div className="mx-auto max-w-[1440px] px-4 md:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[34%_66%] border border-[#cfcfcf] bg-white">
-          <aside className="border-r border-[#cfcfcf]">
-            <div className="divide-y divide-[#d8d8d8]">
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 lg:grid-cols-[34%_66%] border border-[#cfcfcf] bg-white"
+        >
+          <aside className="border-r border-[#cfcfcf] lg:flex lg:flex-col lg:max-h-[calc(100vh-170px)]">
+            <div
+              ref={asideScrollRef}
+              className="divide-y divide-[#d8d8d8] lg:flex-1 lg:overflow-y-auto"
+            >
               {paginatedJobs.map((job) => {
                 const isSelected = selectedJob
                   ? selectedJob.id === job.id
@@ -121,7 +167,7 @@ export default function CareerSearchListingsDetails({
               })}
             </div>
 
-            <div className="flex items-center justify-center gap-3 px-6 py-8 border-t border-[#d8d8d8]">
+            <div className="flex items-center justify-center gap-3 px-6 py-8 border-t border-[#d8d8d8] bg-white">
               <button
                 type="button"
                 onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}

@@ -112,7 +112,6 @@ function PropertyItem({ property, categorySlug }: PropertyItemProps) {
     () => emblaApi && emblaApi.scrollNext(),
     [emblaApi]
   );
-  console.log(property, "property");
   return (
     <div
       className={`grid grid-cols-1 md:grid-cols-[30%_70%] gap-0 mb-8 shadow-sm transition-colors ${
@@ -391,7 +390,8 @@ export function PropertyList({
           )}
 
           {/* Pagination */}
-          {propertyCategoryUrlSlug &&
+          {displayProperties?.length > 0 &&
+            propertyCategoryUrlSlug &&
             totalPropertyCount !== undefined &&
             totalPropertyCount > 0 && (
               <Pagination

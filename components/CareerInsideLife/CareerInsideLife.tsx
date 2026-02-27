@@ -23,7 +23,7 @@ export default function CareerInsideLife({ content }: CareerInsideLifeProps) {
           </p>
           <div className="mt-5">
             <Link href={content.ctaHref}>
-              <Button variant="signature" size="default">
+              <Button variant="signature-outline" size="lg">
                 {content.ctaLabel}
               </Button>
             </Link>

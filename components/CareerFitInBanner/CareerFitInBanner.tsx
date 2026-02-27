@@ -18,24 +18,24 @@ export default function CareerFitInBanner({ content }: CareerFitInBannerProps) {
 
       <div className="absolute inset-0 z-10 flex items-center justify-center px-6">
         <div className="w-full max-w-[980px] text-center">
-          <h2 className="text-white text-4xl md:text-[40px] leading-tight font-display-semi tracking-tight">
+          <h1 className="animate-fade-in-zoom text-2xl md:text-[28px] font-display-semi text-white mb-6 tracking-tight">
             {content.title}
-          </h2>
+          </h1>
 
           {content.description ? (
-            <p className="mt-4 text-sm md:text-lg text-white/85 leading-relaxed max-w-[860px] mx-auto">
+            <p className="animate-fade-in-zoom-delay-1 mt-4 text-sm md:text-lg text-white/85 leading-relaxed max-w-[860px] mx-auto">
               {content.description}
             </p>
           ) : null}
 
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          <div className="animate-fade-in-zoom-delay-2 mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Link href={content.primaryCtaHref}>
-              <Button variant="hero" size="lg" className="w-full sm:w-auto">
+              <Button variant="hero-outline" size="lg">
                 {content.primaryCtaLabel}
               </Button>
             </Link>
             <Link href={content.secondaryCtaHref}>
-              <Button variant="hero" size="lg" className="w-full sm:w-auto">
+              <Button variant="hero-outline" size="lg">
                 {content.secondaryCtaLabel}
               </Button>
             </Link>

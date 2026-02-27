@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
@@ -14,11 +15,18 @@ type CareerGrowthExposureCarouselProps = {
 export default function CareerGrowthExposureCarousel({
   slides,
 }: CareerGrowthExposureCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: "start",
-    loop: false,
-    containScroll: "trimSnaps",
-  });
+  const autoplay = useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      align: "start",
+      loop: false,
+      containScroll: "trimSnaps",
+    },
+    [autoplay.current]
+  );
 
   const [scrollProgress, setScrollProgress] = useState(0);
   const [canPrev, setCanPrev] = useState(false);
@@ -58,7 +66,10 @@ export default function CareerGrowthExposureCarousel({
       <div className="absolute -top-12 right-8 z-20 md:flex items-center gap-3 hidden">
         <button
           aria-label="Previous"
-          onClick={() => emblaApi?.scrollPrev()}
+          onClick={() => {
+            emblaApi?.scrollPrev();
+            autoplay.current?.reset();
+          }}
           disabled={!canPrev}
           className={`grid place-items-center text-gold-beige transition-opacity ${
             canPrev ? "opacity-100" : "opacity-40 cursor-not-allowed"
@@ -68,7 +79,10 @@ export default function CareerGrowthExposureCarousel({
         </button>
         <button
           aria-label="Next"
-          onClick={() => emblaApi?.scrollNext()}
+          onClick={() => {
+            emblaApi?.scrollNext();
+            autoplay.current?.reset();
+          }}
           disabled={!canNext}
           className={`grid place-items-center text-gold-beige transition-opacity ${
             canNext ? "opacity-100" : "opacity-40 cursor-not-allowed"
