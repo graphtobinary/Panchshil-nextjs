@@ -10,22 +10,23 @@ const CATEGORY_SLUGS = new Set([
 ]);
 
 export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname } = request.nextUrl;
   const segments = pathname.split("/").filter(Boolean);
 
-  if (segments.length !== 1) {
-    return NextResponse.next();
-  }
+  // Match: /categorySlug/page
+  if (segments.length === 2) {
+    const [categorySlug, pageSegment] = segments;
 
-  const categorySlug = segments[0];
-  if (CATEGORY_SLUGS.has(categorySlug)) {
-    const targetUrl = new URL(`/${categorySlug}/page/1`, request.url);
-    return NextResponse.redirect(targetUrl, 301);
+    if (CATEGORY_SLUGS.has(categorySlug) && pageSegment === "page") {
+      const targetUrl = new URL(`/${categorySlug}/page/1`, request.url);
+
+      return NextResponse.redirect(targetUrl, 301);
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/:categorySlug"],
+  matcher: ["/:categorySlug/page"],
 };

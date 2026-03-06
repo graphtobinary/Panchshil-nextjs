@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import PlayButton from "@/assets/images/play-button.png";
+import React from "react";
 import { PropertyVirtualTourSectionType } from "@/interfaces";
 
 interface PropertyPanoramicViewProps {
@@ -10,101 +8,26 @@ interface PropertyPanoramicViewProps {
 const PropertyPanoramicView = ({
   property_virtual_tour_section,
 }: PropertyPanoramicViewProps) => {
-  // Panoramic View Section state
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const youtubeVideoId =
-    property_virtual_tour_section?.property_virtual_youtube_video_id || "";
-  const youtubeEmbedUrl = youtubeVideoId
-    ? `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&rel=0&modestbranding=1`
-    : "";
+  const videoEmbedUrl =
+    property_virtual_tour_section?.property_virtual_video_embed_link || "";
+
+  if (!videoEmbedUrl) return null;
   return (
     <>
-      {/* Panoramic View Section */}
       <section className="w-full py-16 md:py-24 bg-white">
         <div className=" mx-auto ">
-          {/* Header Text */}
-          <div className="text-center mb-8 md:mb-12 px-4 md:px-0">
-            <p className="text-[#9E8C70] text-sm md:text-base font-medium mb-4 tracking-wider">
-              VIRTUAL TOUR
-            </p>
-            <h2 className="text-2xl md:text-[28px] font-display-semi text-black uppercase tracking-tight leading-tight max-w-4xl mx-auto">
-              {/* EACH RESIDENCE IS SURROUNDED BY 360-
-              <br />
-              DEGREE PANORAMIC VIEWS OF THE CITY */}
-              {property_virtual_tour_section?.property_virtual_video_caption}
-            </h2>
-          </div>
-
-          {/* Poster Image with Play Button */}
-          <div
-            className="relative w-full aspect-video cursor-pointer group overflow-hidden "
-            onClick={() => setIsVideoModalOpen(true)}
-          >
-            <Image
-              src={
-                property_virtual_tour_section?.property_virtual_video_thumbnail ||
-                "/assets/images/testimonial-video-poster.png"
-              }
-              alt="Panoramic View"
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              priority
-            />
-
-            {/* Play Button Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-              <div className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
-                <Image
-                  src={PlayButton}
-                  alt="Play Button"
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 md:w-20 md:h-20"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Fullscreen Video Modal */}
-      {isVideoModalOpen && (
-        <div className="fixed inset-0 z-9999 bg-black">
-          <button
-            onClick={() => setIsVideoModalOpen(false)}
-            className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
-            aria-label="Close video"
-          >
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-          {youtubeEmbedUrl ? (
+          <div className="relative w-full aspect-video cursor-pointer group overflow-hidden">
             <iframe
-              src={youtubeEmbedUrl}
+              src={videoEmbedUrl}
               title="Virtual Tour"
               className="w-full h-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-white/80 text-lg">
-              Video not available
-            </div>
-          )}
+          </div>
         </div>
-      )}
+      </section>
     </>
   );
 };
