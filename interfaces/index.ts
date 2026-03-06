@@ -480,9 +480,7 @@ export type LandmarkNormalized = {
 };
 
 export interface PropertyVirtualTourSectionType {
-  property_virtual_video_caption: string;
-  property_virtual_youtube_video_id: string;
-  property_virtual_video_thumbnail: string;
+  property_virtual_video_embed_link: string;
 }
 
 export type PropertyAmenitiesSliderType = {
