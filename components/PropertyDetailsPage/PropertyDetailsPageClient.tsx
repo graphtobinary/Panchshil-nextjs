@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { Button } from "@/components/Button";
 // import { FloorPlans } from "@/components/FloorPlans";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -72,16 +70,6 @@ export default function PropertyDetailsPageClient({
             <p className="text-lg md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
               {slide?.master_slider_description}
             </p>
-
-            {/* CTA Button */}
-            <Link
-              href={slide?.master_slider_link || "#"}
-              className="pointer-events-auto z-50 relative"
-            >
-              <Button variant="hero-outline" size="lg">
-                {slide?.master_slider_button_caption || "Discover"}
-              </Button>
-            </Link>
           </div>
         </div>
 
