@@ -14,16 +14,23 @@ function ActionButton({
   children,
   onClick,
   type = "button",
+  disabled = false,
 }: {
   children: React.ReactNode;
   onClick?: () => void;
   type?: "button" | "submit";
+  disabled?: boolean;
 }) {
   const baseClasses =
-    "px-6 py-3 text-base font-medium hover:opacity-90 transition-all shadow-sm w-full cursor-pointer bg-gold-beige text-white";
+    "px-6 py-3 text-base font-medium hover:opacity-90 transition-all shadow-sm w-full cursor-pointer bg-gold-beige text-white disabled:opacity-70 disabled:cursor-not-allowed";
 
   return (
-    <button type={type} onClick={onClick} className={baseClasses}>
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={baseClasses}
+    >
       {children}
     </button>
   );
@@ -391,7 +398,9 @@ export function EnquiryForm({
               </div>
 
               <div className="md:col-span-2 mt-4 w-50">
-                <ActionButton type="submit">Submit Enquiry</ActionButton>
+                <ActionButton type="submit" disabled={isSubmittingApi}>
+                  {isSubmittingApi ? "Submitting..." : "Submit Enquiry"}
+                </ActionButton>
               </div>
             </div>
           )}
