@@ -25,6 +25,8 @@ const API_CONSTANTS = {
   PROPERTY_FOOTER_BLOCKS: `/property-category/footer-block`,
   PROPERTIES_BY_CATEGORY_API: "/api/properties-by-category",
   PROPERTY_DETAIL: `/property/{property_category_url_slug}/{property_url_slug}`,
+  ENQUIRY_PROPERTY_FORM_DETAILS: `/enquiry/property-form-details`,
+  ENQUIRY_GET_PROPERTY_LIST: `/enquiry/properties`,
 };
 
 // Pagination constants
