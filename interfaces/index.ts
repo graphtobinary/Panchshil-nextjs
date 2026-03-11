@@ -4,6 +4,35 @@ export interface ArrowLeftIconProps {
   height?: number;
 }
 
+export interface EnquiryFormProps {
+  isOpen: boolean;
+  onClose: () => void;
+  propertyName?: string;
+}
+
+export interface EnquiryFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  phoneIsoCode: string;
+  projectInterested: string;
+  message: string;
+}
+
+export interface EnquiryFormErrors {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  projectInterested?: string;
+}
+
+export interface EnquiryPropertyGroup {
+  property_category_name: string;
+  properties: string[];
+}
+
 export interface ProjectCardData {
   id: string;
   title: string;

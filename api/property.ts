@@ -1,4 +1,4 @@
-import { doGet } from ".";
+import { doGet, doPost } from ".";
 import API_CONSTANTS from "./constants";
 
 export const getPropertyCategory = (
@@ -97,6 +97,56 @@ export const getPropertyFooterBlocks = (token: string) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    }
+  );
+};
+
+export const getEnquiryPropertyList = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ENQUIRY_GET_PROPERTY_LIST,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const submitPropertyEnquiryFormDetails = (
+  token: string,
+  propertyEnquiryFirstName: string,
+  propertyEnquiryLastName: string,
+  propertyEnquiryContactNumber: string,
+  propertyEnquiryEmailId: string,
+  propertyEnquiryPropertyName: string,
+  propertyEnquiryMessage: string,
+  ipAddress: string
+) => {
+  const formData = new URLSearchParams();
+  formData.append("property_enquiry_first_name", propertyEnquiryFirstName);
+  formData.append("property_enquiry_last_name", propertyEnquiryLastName);
+  formData.append(
+    "property_enquiry_contact_number",
+    `+${propertyEnquiryContactNumber}`
+  );
+  formData.append("property_enquiry_email_id", propertyEnquiryEmailId);
+  formData.append(
+    "property_enquiry_property_name",
+    propertyEnquiryPropertyName
+  );
+  formData.append("property_enquiry_message", propertyEnquiryMessage);
+  formData.append("ip_address", ipAddress || "");
+
+  return doPost(
+    API_CONSTANTS.ENQUIRY_PROPERTY_FORM_DETAILS,
+    {},
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData.toString(),
     }
   );
 };

@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { PropertyDetailResponse } from "@/interfaces";
+import { EnquiryForm } from "./EnquiryForm";
 
 export function PropertyInfo({
   propertyInfo,
@@ -9,6 +11,7 @@ export function PropertyInfo({
   propertyInfo: PropertyDetailResponse | undefined;
 }) {
   const info = propertyInfo;
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
 
   return (
     <section className="fixed bottom-0 left-0 right-0 z-50 w-full bg-[#FFFAF7] py-2 md:py-3 shadow-lg">
@@ -57,13 +60,23 @@ export function PropertyInfo({
             </Link>
             <Link
               href={info?.property_brochure || "#"}
-              className="flex-1 lg:flex-none bg-[#35393B] hover:bg-black text-white px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium transition-colors duration-200 whitespace-nowrap text-center"
+              className="flex-1 lg:flex-none bg-[#35393B] hover:bg-black text-white px-3 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium transition-colors duration-200 whitespace-nowrap text-center cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsEnquiryOpen(true);
+              }}
             >
               Get In Touch
             </Link>
           </div>
         </div>
       </div>
+
+      <EnquiryForm
+        isOpen={isEnquiryOpen}
+        onClose={() => setIsEnquiryOpen(false)}
+        propertyName={info?.property_name}
+      />
     </section>
   );
 }
