@@ -122,7 +122,7 @@ export const careerPageDummyData: CareerPageDummyData = {
     },
     secondaryCta: {
       label: "Discover Life @ Panchshil",
-      href: "#",
+      href: "/careers/life-at-panchshil",
     },
   },
   stats: [
@@ -308,7 +308,7 @@ export const careerPageDummyData: CareerPageDummyData = {
     description:
       "From corporate offices to site teams and hospitality properties, life @ panchshil combines structured work with real responsibility. Teams come together to solve problems, deliver large scale developments and maintain experience for thousands of occupants every day.",
     ctaLabel: "EXPLORE LIFE @ PANCHSHIL",
-    ctaHref: "#",
+    ctaHref: "/careers/life-at-panchshil",
     slides: [
       {
         title: "Design And Planning Reviews At Our Pune Head Office",
@@ -331,7 +331,7 @@ export const careerPageDummyData: CareerPageDummyData = {
     primaryCtaLabel: "Explore Career Opportunities",
     primaryCtaHref: "#",
     secondaryCtaLabel: "Discover Life @ Panchshil",
-    secondaryCtaHref: "#",
+    secondaryCtaHref: "/careers/life-at-panchshil",
   },
   departments: [
     {
