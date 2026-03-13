@@ -38,10 +38,10 @@ export default function LifeHowPeopleGrow({ content }: LifeHowPeopleGrowProps) {
                   className="flex cursor-pointer items-center gap-4 justify-between py-6 px-4 md:px-8 border-b border-black/15 w-4/5 mx-auto transition-colors"
                 >
                   <div className="flex items-center gap-6 w-full justify-between">
-                    <span className="text-2xl font-display-semi text-black-chocolate">
+                    <span className="text-xl font-display-semi text-black-chocolate">
                       {String(item.id).padStart(2, "0")}
                     </span>
-                    <span className="text-2xl md:text-xl font-display-semi text-black-chocolate">
+                    <span className="text-xl md:text-xl font-display-semi text-black-chocolate text-right">
                       {item.title}
                     </span>
                   </div>
