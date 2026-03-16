@@ -120,8 +120,12 @@ export default function PropertyDetailsPageClient({
         title="AMENITIES"
         property_amenities_section={propertyInfo?.property_amenities_section}
       />
-      <AmenitiesKeyTenants />
-      <AmenitiesAwardsCertificates />
+      <AmenitiesKeyTenants
+        property_key_tenants={propertyInfo?.property_key_tenants}
+      />
+      <AmenitiesAwardsCertificates
+        property_award_certificates={propertyInfo?.property_award_certificates}
+      />
 
       <LocationMap
         title="MAPS"

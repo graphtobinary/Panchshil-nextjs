@@ -1,58 +1,25 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { EmblaCardsCarousel } from "./EmblaCardsCarousel";
-
-import bscAward1 from "@/assets/images/awards/award-1.png";
-
-export type AwardsCertificateItem = {
-  id: string;
-  imageSrc?: string | StaticImageData;
-  caption: string;
-};
-
-const fallbackAwards: AwardsCertificateItem[] = [
-  {
-    id: "bsc-1",
-    imageSrc: bscAward1,
-    caption: "British Safety Council’s International Safety Awards -2021, 2022",
-  },
-  {
-    id: "bsc-2",
-    imageSrc: bscAward1,
-    caption: "British Safety Council’s International Safety Awards -2021, 2022",
-  },
-  {
-    id: "bsc-3",
-    imageSrc: bscAward1,
-    caption: "British Safety Council’s International Safety Awards -2021, 2022",
-  },
-  {
-    id: "bsc-4",
-    imageSrc: bscAward1,
-    caption: "British Safety Council’s International Safety Awards -2021, 2022",
-  },
-  {
-    id: "bsc-5",
-    imageSrc: bscAward1,
-    caption: "British Safety Council’s International Safety Awards -2021, 2022",
-  },
-];
+import type { PropertyAwardCertificate } from "@/interfaces";
 
 type Props = {
   title?: string;
   subTitle?: string;
   description?: string;
-  items?: AwardsCertificateItem[];
+  property_award_certificates?: PropertyAwardCertificate[] | null;
 };
 
 export function AmenitiesAwardsCertificates({
   title = "AMENITIES",
   subTitle = "AWARDS & CERTIFICATES",
   description,
-  items = fallbackAwards,
+  property_award_certificates,
 }: Props) {
+  const items = property_award_certificates ?? [];
+
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -72,14 +39,19 @@ export function AmenitiesAwardsCertificates({
     return () => observer.disconnect();
   }, []);
 
-  const slides = items.map((item) => (
-    <div key={item.id} className="w-full pb-10">
+  if (items.length === 0) return null;
+
+  const slides = items.map((item, index) => (
+    <div
+      key={`${item.property_award_certificate_caption}-${index}`}
+      className="w-full pb-10"
+    >
       <div className="overflow-hidden">
-        <div className="relative  bg-white">
-          {item.imageSrc ? (
+        <div className="relative bg-white">
+          {item.property_award_certificate_image ? (
             <Image
-              src={item.imageSrc}
-              alt={item.caption}
+              src={item.property_award_certificate_image}
+              alt={item.property_award_certificate_caption}
               width={479}
               height={243}
               className="h-auto w-[479px] max-w-full object-contain"
@@ -91,8 +63,8 @@ export function AmenitiesAwardsCertificates({
           )}
         </div>
       </div>
-      <div className="mt-5 text-center text-sm md:text-base text-black-chocolate px-8 w-[479px]">
-        {item.caption}
+      <div className="mt-5 text-center text-sm md:text-base text-black-chocolate px-8 w-[479px] max-w-full mx-auto">
+        {item.property_award_certificate_caption}
       </div>
     </div>
   ));
