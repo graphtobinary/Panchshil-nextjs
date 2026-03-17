@@ -51,6 +51,7 @@ export function Amenities({
       (amenity) => amenity.property_amenity_slider_image
     ) || [];
 
+  if (property_amenities_section?.property_amenities?.length === 0) return null;
   return (
     <section ref={sectionRef} className="w-full py-10 md:py-20 bg-white">
       <div className="mx-auto">
