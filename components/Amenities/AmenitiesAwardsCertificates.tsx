@@ -44,7 +44,7 @@ export function AmenitiesAwardsCertificates({
   const slides = items.map((item, index) => (
     <div
       key={`${item.property_award_certificate_caption}-${index}`}
-      className="w-full pb-10"
+      className="w-full pb-10 flex items-center flex-col"
     >
       <div className="overflow-hidden">
         <div className="relative bg-white">
