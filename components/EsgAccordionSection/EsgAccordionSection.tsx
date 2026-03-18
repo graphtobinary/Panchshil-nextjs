@@ -16,18 +16,6 @@ export default function EsgAccordionSection({
   return (
     <section className="bg-white pb-16 md:pb-20" id="esg-progress">
       <div className="max-w-[1540px] mx-auto pt-6 md:pt-20">
-        <div className="px-6 md:px-10 mb-10">
-          <div className="text-lg tracking-[0.2em] font-medium text-gold-beige mb-2">
-            {content.heading}
-          </div>
-          <h2 className="text-2xl md:text-[28px] font-display-semi text-black-chocolate">
-            {content.title}
-          </h2>
-          <p className="mt-3 text-sm md:text-base text-black/70 max-w-[1200px] leading-relaxed">
-            {content.description}
-          </p>
-        </div>
-
         <div className="">
           {content.items.map((item) => {
             const isOpen = item.id === openId;
