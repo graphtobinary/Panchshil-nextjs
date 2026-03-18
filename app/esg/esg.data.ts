@@ -111,14 +111,14 @@ export const esgPageData: EsgPageData = {
     title: "OUR SUSTAINABILITY FOCUS",
     description:
       "Our sustainability approach spans energy, water, waste and procurement—ensuring every aspect of our operations contributes to a better future.",
-    defaultOpen: 3,
+    defaultOpen: 1,
     items: [
       {
         id: 1,
         title: "Energy & Climate Action",
         description:
           "Driving energy efficiency and climate action across all our office parks and developments.",
-        imageSrc: "/assets/images/esg/futuristic-city.png",
+        imageSrc: "/assets/images/esg/waste-management.png",
         imageAlt: "Energy & Climate Action",
       },
       {
@@ -126,7 +126,7 @@ export const esgPageData: EsgPageData = {
         title: "Water Stewardship",
         description:
           "Sustainable water management and conservation practices across our campuses.",
-        imageSrc: "/assets/images/esg/smart-agriculture.png",
+        imageSrc: "/assets/images/esg/waste-management.png",
         imageAlt: "Water Stewardship",
       },
       {

@@ -13,10 +13,10 @@ export default function EsgBeyondTheBuild({ content }: EsgBeyondTheBuildProps) {
 
   return (
     <>
-      <section className="relative bg-[#FFFAF7] py-14 md:py-20 overflow-visible">
+      <section className="relative bg-[#FFFAF7] py-14 md:py-20 overflow-hidden md:overflow-visible">
         {/* Decorative: Leaf top-left */}
         {content.leafImageSrc && (
-          <div className="absolute -top-30 left-0 z-0 w-48 md:w-68 h-48 md:h-68 opacity-90">
+          <div className="absolute -top-5 md:-top-30 left-0 z-0 w-48 md:w-68 h-48 md:h-68 opacity-90">
             <Image
               src={content.leafImageSrc}
               alt=""
@@ -28,7 +28,7 @@ export default function EsgBeyondTheBuild({ content }: EsgBeyondTheBuildProps) {
         )}
         {/* Decorative: Bird top-right */}
         {content.birdImageSrc && (
-          <div className="absolute top-50 right-50 z-0 w-32 md:w-48 h-32 md:h-48 opacity-90">
+          <div className="absolute top-10 md:top-50 right-10 md:right-50 z-0 w-32 md:w-48 h-32 md:h-48 opacity-90">
             <Image
               src={content.birdImageSrc}
               alt=""
@@ -41,7 +41,7 @@ export default function EsgBeyondTheBuild({ content }: EsgBeyondTheBuildProps) {
 
         {/* Decorative: Leaf bottom-right */}
         {content.leafImageSrc && (
-          <div className="absolute bottom-30 -right-14 z-0 w-40 md:w-90 h-40 md:h-90 opacity-90">
+          <div className="absolute bottom-30 -right-6 md:-right-14 z-0 w-40 md:w-90 h-40 md:h-90 opacity-90">
             <Image
               src={content.leafImageSrc2}
               alt=""
@@ -52,7 +52,7 @@ export default function EsgBeyondTheBuild({ content }: EsgBeyondTheBuildProps) {
           </div>
         )}
 
-        <div className="relative z-10 mx-auto px-6 md:px-20">
+        <div className="relative z-10 mx-auto px-6 md:px-20 pt-20 md:pt-0">
           <h2 className="text-center text-2xl md:text-[28px] font-display-semi text-black mb-4">
             {content.title}
           </h2>
