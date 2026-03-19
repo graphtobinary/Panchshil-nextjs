@@ -12,7 +12,7 @@ type AwardsPageClientProps = {
 
 export default function AwardsPageClient({ data }: AwardsPageClientProps) {
   return (
-    <main className="min-h-screen bg-[#FFFAF7]">
+    <main className="min-h-screen overflow-x-hidden bg-[#FFFAF7]">
       <Header />
       <section className="min-h-screen flex flex-col bg-white">
         <CareerHero hero={data.hero} />

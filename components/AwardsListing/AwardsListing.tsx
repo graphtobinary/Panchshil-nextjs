@@ -24,13 +24,16 @@ export default function AwardsListing({
   }, [safeCurrentPage, itemsPerPage, awards]);
 
   return (
-    <section className="bg-white py-10 md:py-14">
-      <div className="mx-auto max-w-[1440px] px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+    <section className="overflow-x-hidden bg-white py-10 md:py-14">
+      <div className="mx-auto w-full max-w-[1440px] px-4 md:px-8">
+        <div className="grid min-w-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {paginatedAwards.map((award) => (
-            <article key={award.id} className="flex flex-col text-center">
-              <div className="flex aspect-4/3 items-center justify-center  bg-white p-6">
-                <div className="relative w-full h-full">
+            <article
+              key={award.id}
+              className="flex min-w-0 flex-col text-center"
+            >
+              <div className="flex min-w-0 aspect-[4/3] items-center justify-center overflow-hidden bg-white p-6">
+                <div className="relative h-full w-full min-w-0">
                   <Image
                     src={award.imageSrc}
                     alt={award.imageAlt}
@@ -40,10 +43,10 @@ export default function AwardsListing({
                   />
                 </div>
               </div>
-              <h3 className="mt-6 text-xl md:text-[22px] leading-tight font-display-semi text-[#1f1f1f]">
+              <h3 className="mt-6 break-words text-xl md:text-[22px] leading-tight font-display-semi text-[#1f1f1f]">
                 {award.title}
               </h3>
-              <p className="mt-3 text-[15px] md:text-[16px] leading-relaxed text-[#4a4a4a]">
+              <p className="mt-3 break-words text-[15px] md:text-[16px] leading-relaxed text-[#4a4a4a]">
                 {award.description}
               </p>
             </article>
