@@ -36,10 +36,10 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
     },
     { title: "Meet The City", link: "https://www.panchshil.com/meet-the-city" },
     { title: "PREC", link: "https://www.panchshil.com/prec" },
-    { title: "Clients", link: "https://www.panchshil.com/clients" },
+    { title: "Clients", link: "/clients" },
     {
       title: "Awards",
-      link: "https://www.panchshil.com/awards-and-recognitions",
+      link: "/awards",
     },
   ];
   const [isSubmitting, setIsSubmitting] = useState(false);
