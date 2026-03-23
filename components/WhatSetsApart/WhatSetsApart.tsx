@@ -6,6 +6,12 @@ const WhatSetsApart = ({
 }: {
   property_defining_features_section: PropertyDefiningFeaturesSectionType;
 }) => {
+  if (
+    !(
+      property_defining_features_section?.property_defining_features?.length > 0
+    )
+  )
+    return null;
   return (
     <section className="w-full bg-[#FFFAF7] py-16 md:py-24">
       <div className="mx-auto px-6 md:px-16">
