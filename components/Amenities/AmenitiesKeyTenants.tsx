@@ -1,56 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import { EmblaCardsCarousel } from "./EmblaCardsCarousel";
-
-import bmcLogo from "@/assets/images/tenants/bmc-logo.png";
-import deutscheBankLogo from "@/assets/images/tenants/deutsche-bank-logo.png";
-import hsbcLogo from "@/assets/images/tenants/hsbc-logo.png";
-import marshMcLennanLogo from "@/assets/images/tenants/marshmaclennan.png";
-import mastercardLogo from "@/assets/images/tenants/mastercard.png";
-
-export type KeyTenantItem = {
-  id: string;
-  name: string;
-  logoSrc?: string | StaticImageData;
-};
-
-const fallbackKeyTenants: KeyTenantItem[] = [
-  { id: "bmc", name: "BMC", logoSrc: bmcLogo },
-  {
-    id: "deutsche-bank",
-    name: "Deutsche Bank",
-    logoSrc: deutscheBankLogo,
-  },
-  { id: "hsbc", name: "HSBC", logoSrc: hsbcLogo },
-  {
-    id: "marsh-mclennan",
-    name: "Marsh McLennan",
-    logoSrc: marshMcLennanLogo,
-  },
-  {
-    id: "mastercard",
-    name: "Mastercard",
-    logoSrc: mastercardLogo,
-  },
-  { id: "bmc1", name: "BMC", logoSrc: bmcLogo },
-  {
-    id: "deutsche-bank1",
-    name: "Deutsche Bank",
-    logoSrc: deutscheBankLogo,
-  },
-];
+import type { PropertyKeyTenant } from "@/interfaces";
 
 type Props = {
   title?: string;
-  items?: KeyTenantItem[];
+  property_key_tenants?: PropertyKeyTenant[] | null;
 };
 
 export function AmenitiesKeyTenants({
   title = "AMENITIES",
-  items = fallbackKeyTenants,
+  property_key_tenants,
 }: Props) {
+  const items = property_key_tenants ?? [];
+
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -70,22 +35,24 @@ export function AmenitiesKeyTenants({
     return () => observer.disconnect();
   }, []);
 
-  const slides = items.map((item) => (
+  if (items.length === 0) return null;
+
+  const slides = items.map((item, index) => (
     <div
-      key={item.id}
+      key={`${item.property_key_tenant_caption}-${index}`}
       className="w-full flex items-center justify-center pb-10"
     >
-      {item.logoSrc ? (
+      {item.property_key_tenant_image ? (
         <Image
-          src={item.logoSrc}
-          alt={item.name}
+          src={item.property_key_tenant_image}
+          alt={item.property_key_tenant_caption}
           width={310}
           height={146}
           className="h-auto w-[310px] max-w-full object-contain"
         />
       ) : (
         <div className="text-black-chocolate font-display-semi text-lg">
-          {item.name}
+          {item.property_key_tenant_caption}
         </div>
       )}
     </div>

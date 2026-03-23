@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="88.098" height="88.098" viewBox="0 0 88.098 88.098">
+  <g id="Group_3107" data-name="Group 3107" transform="translate(-2799 -2001.999)">
+    <rect id="Rectangle_444" data-name="Rectangle 444" width="88.098" height="88.098" transform="translate(2799 2001.999)" fill="#fbc764"/>
+    <g id="Group_3108" data-name="Group 3108" transform="translate(0 3.858)">
+      <g id="Group_3106" data-name="Group 3106" transform="translate(0.312)">
+        <path id="Path_4286" data-name="Path 4286" d="M151.912,162.54a7.644,7.644,0,1,1-7.644-7.644,7.644,7.644,0,0,1,7.644,7.644" transform="translate(2699 1902)" fill="#fff"/>
+        <circle id="Ellipse_47" data-name="Ellipse 47" cx="10.463" cy="10.463" r="10.463" transform="translate(2832.805 2054.077)" fill="none" stroke="#fff" stroke-width="1"/>
+        <path id="Path_4287" data-name="Path 4287" d="M144.268,149.66a12.857,12.857,0,0,1,1.463.089l-1.463-3.788-1.463,3.788a12.857,12.857,0,0,1,1.463-.089" transform="translate(2699 1902)" fill="#fff"/>
+        <path id="Path_4288" data-name="Path 4288" d="M154.346,154.534l1.645-3.717-3.717,1.645a12.932,12.932,0,0,1,2.072,2.072" transform="translate(2699 1902)" fill="#fff"/>
+        <path id="Path_4289" data-name="Path 4289" d="M160.847,162.54l-3.788-1.463a12.071,12.071,0,0,1,0,2.926Z" transform="translate(2699 1902)" fill="#fff"/>
+        <path id="Path_4290" data-name="Path 4290" d="M136.261,152.462l-3.717-1.645,1.645,3.717a12.932,12.932,0,0,1,2.072-2.072" transform="translate(2699 1902)" fill="#fff"/>
+        <path id="Path_4291" data-name="Path 4291" d="M144.268,175.421a12.857,12.857,0,0,1-1.463-.089l1.463,3.788,1.463-3.788a12.857,12.857,0,0,1-1.463.089" transform="translate(2699 1902)" fill="#fff"/>
+        <path id="Path_4292" data-name="Path 4292" d="M131.387,162.54a12.857,12.857,0,0,1,.089-1.463l-3.788,1.463L131.476,164a12.857,12.857,0,0,1-.089-1.463" transform="translate(2699 1902)" fill="#fff"/>
+        <path id="Path_4294" data-name="Path 4294" d="M134.189,170.547l-1.645,3.717,3.717-1.645a12.933,12.933,0,0,1-2.072-2.072" transform="translate(2699 1902)" fill="#fff"/>
+      </g>
+      <g id="Group_3105" data-name="Group 3105">
+        <text id="_07" data-name="07" transform="translate(2835 2019.142)" fill="#fff" font-size="14" font-family="Roboto-Bold, Roboto" font-weight="700"><tspan x="0" y="0">07</tspan></text>
+        <text id="AFFORDABLE_" data-name="AFFORDABLE " transform="translate(2818 2032.517)" fill="#fff" font-size="8" font-family="Roboto-Bold, Roboto" font-weight="700"><tspan x="0" y="0">AFFORDABLE </tspan></text>
+        <text id="AND_CLEAN_ENERGY" data-name="AND CLEAN ENERGY" transform="translate(2806 2042.116)" fill="#fff" font-size="8" font-family="Roboto-Bold, Roboto" font-weight="700"><tspan x="0" y="0">AND CLEAN ENERGY</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
