@@ -1,5 +1,5 @@
 import API_CONSTANTS from "./constants";
-import { doGet, doPost } from "@/api";
+import { doFetch, doGet, doPost } from "@/api";
 
 export const getAuthToken = () => {
   return doGet(
@@ -257,4 +257,50 @@ export const getPropertyDetail = (
       },
     }
   );
+};
+
+export const getAwards = (token: string) => {
+  return doGet(
+    API_CONSTANTS.AWARDS,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAwardsAPI = (baseUrl?: string) => {
+  const apiUrl = baseUrl
+    ? `${baseUrl.replace(/\/$/, "")}${API_CONSTANTS.AWARDS_API}`
+    : API_CONSTANTS.AWARDS_API;
+
+  return doFetch(apiUrl, {
+    method: "GET",
+    cache: "no-store",
+  });
+};
+
+export const getClients = (token: string) => {
+  return doGet(
+    API_CONSTANTS.CLIENTS,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getClientsAPI = (baseUrl?: string) => {
+  const apiUrl = baseUrl
+    ? `${baseUrl.replace(/\/$/, "")}${API_CONSTANTS.CLIENTS_API}`
+    : API_CONSTANTS.CLIENTS_API;
+
+  return doFetch(apiUrl, {
+    method: "GET",
+    cache: "no-store",
+  });
 };

@@ -177,3 +177,31 @@ export const doDelete = (
     }
   );
 };
+
+/**
+ * Used for fetching same-origin/internal API routes directly.
+ * This avoids NEXT_PUBLIC_BASE_API_ENDPOINT rewriting done by doGet/doPost.
+ */
+export const doFetch = async (
+  uri: string,
+  options: RequestInit = {}
+): Promise<unknown> => {
+  return fetch(uri, options).then((response: Response) => {
+    if (response.ok === false) {
+      return response.json().then((res) => {
+        const message = `Request: ${uri} ${response.statusText}`;
+        throw new ApiException(message, response.status, {
+          ...res,
+          ...res.error,
+          status: response.status,
+        });
+      });
+    }
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      return response.json();
+    }
+    return response.text();
+  });
+};
