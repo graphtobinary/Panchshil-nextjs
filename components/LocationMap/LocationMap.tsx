@@ -83,6 +83,7 @@ export default function LocationMap({
   property_location,
   property_landmark_categories,
   property_landmarks,
+  property_3d_map_link,
 }: LocationMapProps) {
   const [mapView, setMapView] = useState<"2d" | "3d">("2d");
   const [active, setActive] = useState<string | null>(null);
@@ -408,9 +409,9 @@ export default function LocationMap({
                 mapView === "2d" ? "block" : "hidden"
               }`}
             />
-            {mapView === "3d" && (
+            {mapView === "3d" && property_3d_map_link && (
               <iframe
-                src="https://my.matterport.com/show/?m=ptAPb9Azymz"
+                src={property_3d_map_link}
                 title="3D Property View"
                 className="w-full h-full border-0 shadow-lg"
                 allow="xr-spatial-tracking; fullscreen"

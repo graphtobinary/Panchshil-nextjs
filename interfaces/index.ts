@@ -428,6 +428,7 @@ export type PropertyDetailResponse = {
       property_latitude: number;
       property_longitude: number;
     };
+    property_3d_map_link?: string;
   };
   property_landmark_categories?: unknown[];
   property_landmarks?: unknown[];
@@ -505,6 +506,7 @@ export interface LocationMapProps {
   property_location: PropertyLocation;
   property_landmark_categories: PropertyLandmarkCategory[];
   property_landmarks: PropertyLandmark[];
+  property_3d_map_link?: string;
 }
 
 export type LandmarkCategoryNormalized = {
