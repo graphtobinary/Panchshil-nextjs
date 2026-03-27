@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { ClientItem } from "@/app/clients/clients.data";
 
@@ -11,17 +10,19 @@ type ClientsListingProps = {
 
 export default function ClientsListing({
   clients,
-  itemsPerPage = 24,
+  itemsPerPage: _itemsPerPage = 24,
 }: ClientsListingProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+  // Pagination is temporarily disabled.
+  // const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.max(1, Math.ceil(clients.length / itemsPerPage));
-  const safeCurrentPage = Math.min(currentPage, totalPages);
+  // const totalPages = Math.max(1, Math.ceil(clients.length / itemsPerPage));
+  // const safeCurrentPage = Math.min(currentPage, totalPages);
 
-  const paginatedClients = useMemo(() => {
-    const startIndex = (safeCurrentPage - 1) * itemsPerPage;
-    return clients.slice(startIndex, startIndex + itemsPerPage);
-  }, [safeCurrentPage, itemsPerPage, clients]);
+  // const paginatedClients = useMemo(() => {
+  //   const startIndex = (safeCurrentPage - 1) * itemsPerPage;
+  //   return clients.slice(startIndex, startIndex + itemsPerPage);
+  // }, [safeCurrentPage, itemsPerPage, clients]);
+  const paginatedClients = clients;
 
   return (
     <section className="bg-white py-10 md:py-14">
@@ -45,7 +46,8 @@ export default function ClientsListing({
           ))}
         </div>
 
-        {totalPages > 1 && (
+        {/* Pagination is temporarily disabled */}
+        {/* {totalPages > 1 && (
           <div className="flex items-center justify-center gap-3 mt-5">
             <button
               type="button"
@@ -87,7 +89,7 @@ export default function ClientsListing({
               →
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );

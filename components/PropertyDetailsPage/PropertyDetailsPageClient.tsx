@@ -137,6 +137,9 @@ export default function PropertyDetailsPageClient({
         property_landmarks={
           propertyInfo?.property_landmarks as unknown as PropertyLandmark[]
         }
+        property_3d_map_link={
+          propertyInfo?.property_location?.property_3d_map_link
+        }
       />
       {/* <Testimonials
         testimonial={{

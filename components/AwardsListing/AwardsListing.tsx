@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { AwardItem } from "@/app/awards/awards.data";
 
@@ -11,17 +10,19 @@ type AwardsListingProps = {
 
 export default function AwardsListing({
   awards,
-  itemsPerPage = 6,
+  itemsPerPage: _itemsPerPage = 6,
 }: AwardsListingProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+  // Pagination is temporarily disabled.
+  // const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.max(1, Math.ceil(awards.length / itemsPerPage));
-  const safeCurrentPage = Math.min(currentPage, totalPages);
+  // const totalPages = Math.max(1, Math.ceil(awards.length / itemsPerPage));
+  // const safeCurrentPage = Math.min(currentPage, totalPages);
 
-  const paginatedAwards = useMemo(() => {
-    const startIndex = (safeCurrentPage - 1) * itemsPerPage;
-    return awards.slice(startIndex, startIndex + itemsPerPage);
-  }, [safeCurrentPage, itemsPerPage, awards]);
+  // const paginatedAwards = useMemo(() => {
+  //   const startIndex = (safeCurrentPage - 1) * itemsPerPage;
+  //   return awards.slice(startIndex, startIndex + itemsPerPage);
+  // }, [safeCurrentPage, itemsPerPage, awards]);
+  const paginatedAwards = awards;
 
   return (
     <section className="overflow-x-hidden bg-white py-10 md:py-14">
@@ -53,7 +54,8 @@ export default function AwardsListing({
           ))}
         </div>
 
-        {totalPages > 1 && (
+        {/* Pagination is temporarily disabled */}
+        {/* {totalPages > 1 && (
           <div className="flex items-center justify-center gap-3 mt-12 md:mt-16">
             <button
               type="button"
@@ -95,7 +97,7 @@ export default function AwardsListing({
               →
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );

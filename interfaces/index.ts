@@ -428,6 +428,7 @@ export type PropertyDetailResponse = {
       property_latitude: number;
       property_longitude: number;
     };
+    property_3d_map_link?: string;
   };
   property_landmark_categories?: unknown[];
   property_landmarks?: unknown[];
@@ -505,6 +506,7 @@ export interface LocationMapProps {
   property_location: PropertyLocation;
   property_landmark_categories: PropertyLandmarkCategory[];
   property_landmarks: PropertyLandmark[];
+  property_3d_map_link?: string;
 }
 
 export type LandmarkCategoryNormalized = {
@@ -554,3 +556,31 @@ export interface MapLocation {
   zoom?: number;
   icon: string;
 }
+
+export type ClientsApiItem = {
+  id?: string | number;
+  _id?: string | number;
+  name?: string;
+  title?: string;
+  client_name?: string;
+  image?: string;
+  image_url?: string;
+  image_path?: string;
+  client_logo?: string;
+  logo?: string;
+  client_image?: string;
+};
+
+export type AwardsApiItem = {
+  id?: string | number;
+  _id?: string | number;
+  title?: string;
+  name?: string;
+  award_name?: string;
+  description?: string;
+  award_description?: string;
+  image?: string;
+  image_url?: string;
+  image_path?: string;
+  award_image?: string;
+};
