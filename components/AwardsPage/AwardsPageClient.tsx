@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { CareerHero } from "@/components/CareerHero";
 import { AwardsListing } from "@/components/AwardsListing";
-import { AwardsPageData } from "@/app/awards/awards.data";
+import { AwardsPageData } from "@/app/awards-and-recognitions/awards.data";
 
 type AwardsPageClientProps = {
   data: AwardsPageData;
