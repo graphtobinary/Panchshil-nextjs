@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { AwardItem } from "@/app/awards/awards.data";
+import type { AwardItem } from "@/app/awards-and-recognitions/awards.data";
 
 type AwardsListingProps = {
   awards: AwardItem[];

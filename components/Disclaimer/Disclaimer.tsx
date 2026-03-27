@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 
 interface DisclaimerProps {
   disclaimer?: string | null;
@@ -23,11 +23,11 @@ export function Disclaimer({
     {
       id: 1,
       title: "DISCLAIMER",
-      content: (
+      content: disclaimerData ? (
         <p className="text-black-chocolate text-sm md:text-base font-normal leading-relaxed">
           {disclaimerData}
         </p>
-      ),
+      ) : null,
     },
     {
       id: 2,
@@ -86,6 +86,7 @@ export function Disclaimer({
         >
           {accordionItems.map((item) => {
             const isOpen = openItem === item.id;
+            if (!item.content) return null;
             return (
               <div
                 key={item.id}
