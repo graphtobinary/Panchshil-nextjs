@@ -25,7 +25,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
   const quickLinks: { title: string; link: string }[] = [
     { title: "About Us", link: "https://www.panchshil.com/about" },
     { title: "Services", link: "https://www.panchshil.com/services" },
-    { title: "Testimonials", link: "https://www.panchshil.com/testimonials" },
+    { title: "Testimonials", link: "/testimonials" },
     { title: "Media", link: "https://www.panchshil.com/press" },
     { title: "Blogs", link: "https://www.panchshil.com/blog" },
   ];
@@ -34,8 +34,8 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
       title: "Panchshil Privilege",
       link: "https://www.panchshilprivilege.com/",
     },
-    { title: "Meet The City", link: "https://www.panchshil.com/meet-the-city" },
-    { title: "PREC", link: "https://www.panchshil.com/prec" },
+    { title: "Meet The City", link: "/meet-the-city" },
+    { title: "PREC", link: "/prec" },
     { title: "Clients", link: "/clients" },
     {
       title: "Awards",
@@ -318,7 +318,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
                 and agree with the{" "}
                 <Link
                   className="underline"
-                  href="https://www.panchshil.com/privacy-policy"
+                  href="/privacy-policy"
                   target="_blank"
                 >
                   data protection policy
@@ -354,7 +354,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
               className={
                 !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
               }
-              href="https://www.panchshil.com/terms-and-conditions"
+              href="/terms-conditions"
             >
               {" "}
               Term Of Use
@@ -364,7 +364,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
               className={
                 !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
               }
-              href="https://www.panchshil.com/privacy-policy"
+              href="/privacy-policy"
             >
               Privacy
             </Link>
@@ -373,7 +373,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
               className={
                 !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
               }
-              href="https://www.panchshil.com/disclaimer"
+              href="/disclaimer"
             >
               Disclaimer
             </Link>

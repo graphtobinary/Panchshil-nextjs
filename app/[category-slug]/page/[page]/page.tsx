@@ -142,6 +142,15 @@ export default async function PaginatedListPage({
         : null,
   };
 
+  const category = data.propertyCategory as PropertyCategoryProps | null;
+  if (
+    !category ||
+    typeof category.property_category_title !== "string" ||
+    !category.property_category_title.trim()
+  ) {
+    notFound();
+  }
+
   return (
     <ListClient
       propertyCategory={data.propertyCategory as PropertyCategoryProps}

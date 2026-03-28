@@ -393,8 +393,14 @@ export type PropertyAwardCertificate = {
   property_award_certificate_image: string;
 };
 
+export interface PropertyQrCode {
+  property_rera_number: string;
+  property_qr_code_image: string;
+}
+
 export type PropertyDetailResponse = {
   property_name: string;
+  property_qr_codes: PropertyQrCode[];
   banner_data?: {
     banner_image: string | null;
     banner_image_caption: string;
