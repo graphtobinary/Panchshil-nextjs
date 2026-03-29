@@ -1,12 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 import { LifeAtPanchshilPageData } from "@/app/careers/life-at-panchshil/life-at-panchshil.data";
-import DoubleQuotesIcon from "@/assets/svgs/DoubleQuotesIcon";
+import { ResidentVoiceTestimonialCard } from "@/components/ResidentVoiceTestimonialCard";
 
 type LifeResidentsVoicesProps = {
   content: LifeAtPanchshilPageData["residentsVoices"];
@@ -96,41 +95,16 @@ export default function LifeResidentsVoices({
           <div className="embla-projects mx-0" ref={emblaRef}>
             <div className="embla-projects__container gap-8">
               {content.testimonials.map((item, index) => (
-                <article
+                <ResidentVoiceTestimonialCard
                   key={`${item.author}-${index}`}
-                  className="embla-projects__slide basis-[96%] md:basis-[48%] shrink-0 grow-0 bg-[#F1EFEC] border border-black/5"
-                >
-                  <div className="p-6 md:p-8 bg-white">
-                    <div className="flex items-start justify-end text-[64px] leading-[0.8] text-gold-beige font-display-semi rotate-180">
-                      <DoubleQuotesIcon width={64} height={64} />
-                    </div>
-                    <p className="mt-2 text-base md:text-[16px] font-semibold text-black/90 leading-5">
-                      {item.quote}
-                    </p>
-                    <p className="mt-6 text-sm md:text-base text-black/80 leading-relaxed">
-                      {item.details}
-                    </p>
-                  </div>
-
-                  <div className="bg-[#AB9B81] px-6 md:px-8 py-4 flex items-center gap-4">
-                    <div className="relative w-14 h-14 shrink-0 overflow-hidden">
-                      <Image
-                        src={item.avatarSrc}
-                        alt={item.avatarAlt}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-white font-display-semi text-xl md:text-[18px] leading-tight">
-                        {item.author}
-                      </p>
-                      <p className="text-white/90 text-sm md:text-lg">
-                        {item.role}
-                      </p>
-                    </div>
-                  </div>
-                </article>
+                  quote={item.quote}
+                  details={item.details}
+                  author={item.author}
+                  role={item.role}
+                  avatarSrc={item.avatarSrc}
+                  avatarAlt={item.avatarAlt}
+                  className="embla-projects__slide basis-[96%] md:basis-[48%] shrink-0 grow-0"
+                />
               ))}
             </div>
           </div>

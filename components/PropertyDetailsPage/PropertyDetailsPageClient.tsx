@@ -154,6 +154,7 @@ export default function PropertyDetailsPageClient({
       {/* Disclaimer section */}
       <Disclaimer
         disclaimer={propertyInfo?.property_disclaimer as string | null}
+        property_qr_codes={propertyInfo?.property_qr_codes}
       />
       <Footer />
     </main>

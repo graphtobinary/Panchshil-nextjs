@@ -1,24 +1,28 @@
 "use client";
 
+import { PropertyQrCode } from "@/interfaces";
+import Image from "next/image";
 import { ReactNode, useEffect, useRef, useState } from "react";
-// import Image from "next/image";
 
-interface DisclaimerProps {
+export interface DisclaimerProps {
   disclaimer?: string | null;
   reraNumber?: string | null;
+  property_qr_codes?: PropertyQrCode[];
 }
 
 export function Disclaimer({
   disclaimer = "",
   reraNumber = "",
+  property_qr_codes = [],
 }: DisclaimerProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [openItem, setOpenItem] = useState(1);
 
-  // Sample data - can be replaced with props from CMS
-
   const disclaimerData = disclaimer || "";
+  const firstQr = property_qr_codes?.[0];
+  const displayRera = firstQr?.property_rera_number ?? reraNumber ?? "";
+
   const accordionItems: { id: number; title: string; content: ReactNode }[] = [
     {
       id: 1,
@@ -31,20 +35,20 @@ export function Disclaimer({
     },
     {
       id: 2,
-      title: `RERA NUMBER (${reraNumber})`,
+      title: displayRera ? `RERA NUMBER (${displayRera})` : "RERA NUMBER",
       content: (
         <div className="bg-white w-48 h-48 max-w-md aspect-square shadow-sm flex items-center justify-center">
-          {/* {disclaimerData ? (
+          {firstQr?.property_qr_code_image ? (
             <Image
-              src={disclaimerData}
-              alt="RERA Certificate"
-              width={100}
-              height={100}
+              src={firstQr.property_qr_code_image}
+              alt={displayRera ? `RERA QR code ${displayRera}` : "RERA QR code"}
+              width={192}
+              height={192}
               className="w-full h-full object-contain p-4"
             />
           ) : (
-            <div className="text-transparent text-sm"></div>
-          )} */}
+            <div className="text-transparent text-sm" aria-hidden />
+          )}
         </div>
       ),
     },
