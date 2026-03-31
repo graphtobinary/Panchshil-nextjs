@@ -203,22 +203,26 @@ export function InteriorExteriorCarousel({
       caption: item?.property_exterior_slider_caption || "Exterior image",
     }))
     .filter((item) => !!item.image);
-
+  if (!normalizedInteriorItems && !normalizedExteriorItems) return null;
   return (
     <section className="w-full bg-[#FFFAF7] py-12 md:py-20">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {/* Interior Column */}
-          <SingleColumnCarousel
-            title="INTERIOR"
-            items={normalizedInteriorItems}
-          />
+          {normalizedInteriorItems.length > 0 && (
+            <SingleColumnCarousel
+              title="INTERIOR"
+              items={normalizedInteriorItems}
+            />
+          )}
 
           {/* Exterior Column */}
-          <SingleColumnCarousel
-            title="EXTERIOR"
-            items={normalizedExteriorItems}
-          />
+          {normalizedExteriorItems.length > 0 && (
+            <SingleColumnCarousel
+              title="EXTERIOR"
+              items={normalizedExteriorItems}
+            />
+          )}
         </div>
       </div>
     </section>

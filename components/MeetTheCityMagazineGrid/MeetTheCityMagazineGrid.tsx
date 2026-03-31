@@ -50,7 +50,7 @@ export default function MeetTheCityMagazineGrid({
           ))}
         </div>
 
-        {totalPages > 1 && (
+        {/* {totalPages > 1 && (
           <div className="mt-12 md:mt-16 flex items-center justify-center gap-3">
             <button
               type="button"
@@ -92,7 +92,7 @@ export default function MeetTheCityMagazineGrid({
               →
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );

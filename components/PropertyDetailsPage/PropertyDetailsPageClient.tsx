@@ -53,23 +53,29 @@ export default function PropertyDetailsPageClient({
     <main className="min-h-screen bg-[#FFFAF7]">
       <Header />
       <div className="relative w-full h-screen overflow-hidden">
-        <PropertyDetailsHero
-          shouldShowVideo={!!slide?.master_slider_video}
-          slide={slide as MasterSliderData}
-          setVideoErrors={() => new Set()}
-        />
+        {slide && (
+          <PropertyDetailsHero
+            shouldShowVideo={!!slide?.master_slider_video}
+            slide={slide as MasterSliderData}
+            setVideoErrors={() => new Set()}
+          />
+        )}
         {/* Content Overlay */}
         <div className="absolute inset-0 flex items-end justify-center z-40 pb-16 pointer-events-none">
           <div className="max-w-[1200px] mx-auto px-6 text-center">
             {/* Main Title */}
-            <h1 className="text-2xl md:text-[28px] font-display-semi text-white mb-6 tracking-tight">
-              {slide?.master_slider_title}
-            </h1>
+            {slide?.master_slider_title && (
+              <h1 className="text-2xl md:text-[28px] font-display-semi text-white mb-6 tracking-tight">
+                {slide?.master_slider_title}
+              </h1>
+            )}
 
             {/* Description */}
-            <p className="text-lg md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
-              {slide?.master_slider_description}
-            </p>
+            {slide?.master_slider_description && (
+              <p className="text-lg md:text-lg lg:text-lg text-white/90 max-w-4xl mx-auto mb-8 leading-relaxed">
+                {slide?.master_slider_description}
+              </p>
+            )}
           </div>
         </div>
 

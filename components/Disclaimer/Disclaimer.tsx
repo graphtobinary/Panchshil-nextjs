@@ -23,7 +23,11 @@ export function Disclaimer({
   const firstQr = property_qr_codes?.[0];
   const displayRera = firstQr?.property_rera_number ?? reraNumber ?? "";
 
-  const accordionItems: { id: number; title: string; content: ReactNode }[] = [
+  const accordionItems: {
+    id: number;
+    title: string | null;
+    content: ReactNode;
+  }[] = [
     {
       id: 1,
       title: "DISCLAIMER",
@@ -35,8 +39,8 @@ export function Disclaimer({
     },
     {
       id: 2,
-      title: displayRera ? `RERA NUMBER (${displayRera})` : "RERA NUMBER",
-      content: (
+      title: displayRera ? `RERA NUMBER (${displayRera})` : null,
+      content: firstQr?.property_qr_code_image ? (
         <div className="bg-white w-48 h-48 max-w-md aspect-square shadow-sm flex items-center justify-center">
           {firstQr?.property_qr_code_image ? (
             <Image
@@ -50,7 +54,7 @@ export function Disclaimer({
             <div className="text-transparent text-sm" aria-hidden />
           )}
         </div>
-      ),
+      ) : null,
     },
   ];
 
@@ -79,6 +83,11 @@ export function Disclaimer({
     };
   }, []);
 
+  if (
+    (!property_qr_codes || property_qr_codes?.length === 0) &&
+    !disclaimerData
+  )
+    return null;
   return (
     <section
       ref={sectionRef}
