@@ -8,14 +8,20 @@ import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 
 interface FloorPlanCarouselProps {
   images: string[];
+  captions?: string[];
   title: string;
   isInView: boolean;
+  selectedIndex?: number;
+  onIndexChange?: (index: number) => void;
 }
 
 export function FloorPlanCarousel({
   images,
+  captions,
   title,
   isInView,
+  selectedIndex,
+  onIndexChange,
 }: FloorPlanCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
@@ -37,12 +43,22 @@ export function FloorPlanCarousel({
     }
   }, [emblaApi, images]);
 
+  // Scroll carousel when selectedIndex changes (e.g. tab click)
+  useEffect(() => {
+    if (!emblaApi) return;
+    if (typeof selectedIndex !== "number") return;
+    if (selectedIndex < 0 || selectedIndex > images.length - 1) return;
+    emblaApi.scrollTo(selectedIndex);
+  }, [emblaApi, images.length, selectedIndex]);
+
   // Sync carousel with selected index
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setCanPrev(emblaApi.canScrollPrev());
     setCanNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
+    const idx = emblaApi.selectedScrollSnap();
+    onIndexChange?.(idx);
+  }, [emblaApi, onIndexChange]);
 
   const onScroll = useCallback(() => {
     if (!emblaApi) return;
@@ -120,11 +136,15 @@ export function FloorPlanCarousel({
             {images.map((image, index) => (
               <div
                 key={index}
-                className="embla-projects__slide basis-full shrink-0 grow-0 relative aspect-[5/2] rounded-sm overflow-hidden"
+                className="embla-projects__slide basis-full shrink-0 grow-0 relative aspect-5/2 rounded-sm overflow-hidden"
               >
                 <Image
                   src={image}
-                  alt={`${title} - Image ${index + 1}`}
+                  alt={
+                    captions?.[index]
+                      ? `${title} - ${captions[index]}`
+                      : `${title} - Image ${index + 1}`
+                  }
                   fill
                   className="object-contain"
                   priority={index === 0}

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 
-// import { FloorPlans } from "@/components/FloorPlans";
+import { FloorPlans } from "@/components/FloorPlans";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import PropertyAreaDetails from "@/components/PropertyAreaDetails";
@@ -51,6 +51,7 @@ export default function PropertyDetailsPageClient({
   property_location_co_ordinates,
 }: Props) {
   const galleryRef = useRef<HTMLDivElement | null>(null);
+  const floorPlanRef = useRef<HTMLDivElement | null>(null);
   const amenitiesRef = useRef<HTMLDivElement | null>(null);
   const keyTenantsRef = useRef<HTMLDivElement | null>(null);
   const awardsRef = useRef<HTMLDivElement | null>(null);
@@ -64,13 +65,15 @@ export default function PropertyDetailsPageClient({
     const target =
       filter === "gallery"
         ? galleryRef.current
-        : filter === "amenities"
-          ? amenitiesRef.current
-          : filter === "key-tenants"
-            ? keyTenantsRef.current
-            : filter === "awards"
-              ? awardsRef.current
-              : null;
+        : filter === "floor-plan"
+          ? floorPlanRef.current
+          : filter === "amenities"
+            ? amenitiesRef.current
+            : filter === "key-tenants"
+              ? keyTenantsRef.current
+              : filter === "awards"
+                ? awardsRef.current
+                : null;
 
     if (!target) return;
 
@@ -154,7 +157,23 @@ export default function PropertyDetailsPageClient({
       />
 
       {/* Full width banner with play button */}
-      {/* <FloorPlans title="FLOOR PLANS" /> */}
+      <div ref={floorPlanRef}>
+        <FloorPlans
+          title="FLOOR PLANS"
+          property_floor_plan_section={
+            propertyInfo?.property_floor_plan_section as
+              | {
+                  property_floor_plan_caption: string;
+                  property_floor_plans: {
+                    property_floor_plan_image_caption: string;
+                    property_floor_plan_image: string;
+                  }[];
+                }
+              | null
+              | undefined
+          }
+        />
+      </div>
       <div ref={amenitiesRef}>
         <Amenities
           title="AMENITIES"
