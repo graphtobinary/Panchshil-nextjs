@@ -50,7 +50,10 @@ export default function PropertyDetailsPageClient({
   propertyInfo,
   property_location_co_ordinates,
 }: Props) {
+  const galleryRef = useRef<HTMLDivElement | null>(null);
   const amenitiesRef = useRef<HTMLDivElement | null>(null);
+  const keyTenantsRef = useRef<HTMLDivElement | null>(null);
+  const awardsRef = useRef<HTMLDivElement | null>(null);
   const searchParams = useSearchParams();
 
   const slide = heroSlide;
@@ -58,12 +61,23 @@ export default function PropertyDetailsPageClient({
   useEffect(() => {
     const filter = searchParams.get("filter");
 
-    if (filter === "amenities" && amenitiesRef.current) {
-      amenitiesRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+    const target =
+      filter === "gallery"
+        ? galleryRef.current
+        : filter === "amenities"
+          ? amenitiesRef.current
+          : filter === "key-tenants"
+            ? keyTenantsRef.current
+            : filter === "awards"
+              ? awardsRef.current
+              : null;
+
+    if (!target) return;
+
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }, [searchParams]);
 
   return (
@@ -115,14 +129,16 @@ export default function PropertyDetailsPageClient({
       />
 
       {/* Interior Exterior Carousel section */}
-      <InteriorExteriorCarousel
-        interiorItems={
-          propertyInfo?.property_interior_sliders as PropertyInteriorSliderType[]
-        }
-        exteriorItems={
-          propertyInfo?.property_exterior_sliders as PropertyExteriorSliderType[]
-        }
-      />
+      <div ref={galleryRef}>
+        <InteriorExteriorCarousel
+          interiorItems={
+            propertyInfo?.property_interior_sliders as PropertyInteriorSliderType[]
+          }
+          exteriorItems={
+            propertyInfo?.property_exterior_sliders as PropertyExteriorSliderType[]
+          }
+        />
+      </div>
 
       <PropertyPanoramicView
         property_virtual_tour_section={
@@ -145,12 +161,18 @@ export default function PropertyDetailsPageClient({
           property_amenities_section={propertyInfo?.property_amenities_section}
         />
       </div>
-      <AmenitiesKeyTenants
-        property_key_tenants={propertyInfo?.property_key_tenants}
-      />
-      <AmenitiesAwardsCertificates
-        property_award_certificates={propertyInfo?.property_award_certificates}
-      />
+      <div ref={keyTenantsRef}>
+        <AmenitiesKeyTenants
+          property_key_tenants={propertyInfo?.property_key_tenants}
+        />
+      </div>
+      <div ref={awardsRef}>
+        <AmenitiesAwardsCertificates
+          property_award_certificates={
+            propertyInfo?.property_award_certificates
+          }
+        />
+      </div>
 
       <LocationMap
         title="MAPS"
