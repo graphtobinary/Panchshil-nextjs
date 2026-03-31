@@ -227,47 +227,58 @@ function PropertyItem({ property, categorySlug }: PropertyItemProps) {
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-wrap gap-5">
-          {!property.listing_only && (
-            <ActionButton
-              href={`/${categorySlug}/${property.property_url_slug}` || "#"}
-              isDarkMode={isDarkMode}
-            >
-              View Project
-            </ActionButton>
-          )}
-          {property.property_brochure && (
-            <ActionButton
-              href={property.property_brochure || "#"}
-              isDarkMode={isDarkMode}
-              target="_blank"
-            >
-              Download Brochure
-            </ActionButton>
-          )}
-          {!property.listing_only && (
-            <ActionButton
-              href={
-                `/${categorySlug}/${property.property_url_slug}?filter=floor-plan` ||
-                "#"
-              }
-              isDarkMode={isDarkMode}
-            >
-              View Floor Plans
-            </ActionButton>
-          )}
-          {!property.listing_only && (
-            <ActionButton
-              href={
-                `/${categorySlug}/${property.property_url_slug}?filter=amenities` ||
-                "#"
-              }
-              isDarkMode={isDarkMode}
-            >
-              View Amenities
-            </ActionButton>
-          )}
-        </div>
+        {property?.buttons?.length > 0 && (
+          <div className="flex flex-wrap gap-5">
+            {property?.buttons?.map((button) => (
+              <ActionButton
+                key={button?.label}
+                href={button?.url}
+                isDarkMode={isDarkMode}
+              >
+                {button?.label}
+              </ActionButton>
+            ))}
+            {/* {!property.listing_only && (
+              <ActionButton
+                href={`/${categorySlug}/${property.property_url_slug}` || "#"}
+                isDarkMode={isDarkMode}
+              >
+                View Project
+              </ActionButton>
+            )}
+            {property.property_brochure && (
+              <ActionButton
+                href={property.property_brochure || "#"}
+                isDarkMode={isDarkMode}
+                target="_blank"
+              >
+                Download Brochure
+              </ActionButton>
+            )}
+            {!property.listing_only && (
+              <ActionButton
+                href={
+                  `/${categorySlug}/${property.property_url_slug}?filter=floor-plan` ||
+                  "#"
+                }
+                isDarkMode={isDarkMode}
+              >
+                View Floor Plans
+              </ActionButton>
+            )}
+            {!property.listing_only && (
+              <ActionButton
+                href={
+                  `/${categorySlug}/${property.property_url_slug}?filter=amenities` ||
+                  "#"
+                }
+                isDarkMode={isDarkMode}
+              >
+                View Amenities
+              </ActionButton>
+            )} */}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -259,6 +259,10 @@ export interface PropertyProps {
   property_basic_information: PropertyBasicInformationProps[];
   property_url_slug: string;
   listing_only: boolean;
+  buttons: {
+    label: string;
+    url: string;
+  }[];
 }
 
 export interface PropertyListProps {
