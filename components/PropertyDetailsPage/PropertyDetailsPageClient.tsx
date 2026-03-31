@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+
 // import { FloorPlans } from "@/components/FloorPlans";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -47,7 +50,21 @@ export default function PropertyDetailsPageClient({
   propertyInfo,
   property_location_co_ordinates,
 }: Props) {
+  const amenitiesRef = useRef<HTMLDivElement | null>(null);
+  const searchParams = useSearchParams();
+
   const slide = heroSlide;
+
+  useEffect(() => {
+    const filter = searchParams.get("filter");
+
+    if (filter === "amenities" && amenitiesRef.current) {
+      amenitiesRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [searchParams]);
 
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
@@ -122,10 +139,12 @@ export default function PropertyDetailsPageClient({
 
       {/* Full width banner with play button */}
       {/* <FloorPlans title="FLOOR PLANS" /> */}
-      <Amenities
-        title="AMENITIES"
-        property_amenities_section={propertyInfo?.property_amenities_section}
-      />
+      <div ref={amenitiesRef}>
+        <Amenities
+          title="AMENITIES"
+          property_amenities_section={propertyInfo?.property_amenities_section}
+        />
+      </div>
       <AmenitiesKeyTenants
         property_key_tenants={propertyInfo?.property_key_tenants}
       />
