@@ -354,7 +354,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
               className={
                 !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
               }
-              href="/terms-conditions"
+              href="/terms-and-conditions"
             >
               {" "}
               Term Of Use

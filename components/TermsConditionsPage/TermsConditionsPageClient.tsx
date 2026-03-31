@@ -3,7 +3,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CareerHero } from "@/components/CareerHero";
-import { TermsConditionsPageData } from "@/app/terms-conditions/terms-conditions-page.data";
+import { TermsConditionsPageData } from "@/app/terms-and-conditions/terms-conditions-page.data";
 import TermsConditionsLegalBody from "./TermsConditionsLegalBody";
 
 type TermsConditionsPageClientProps = {

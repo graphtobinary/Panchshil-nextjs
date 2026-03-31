@@ -285,6 +285,7 @@ export default function LocationMap({
     google.maps.event.trigger(mapInstance.current, "resize");
     if (center) mapInstance.current.setCenter(center);
   }, [mapView]);
+  if (!property_location_co_ordinates) return null;
   return (
     <section ref={sectionRef} className="w-full pt-0 md:pt-20 bg-white">
       <div className="mx-auto max-w-[1920px]">
