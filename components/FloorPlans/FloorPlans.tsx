@@ -1,19 +1,28 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { floorPlansData } from "./floorPlansData";
 import { FloorPlanCarousel } from "./FloorPlanCarousel";
 
 interface FloorPlansProps {
   title?: string;
+  property_floor_plan_section?: PropertyFloorPlanSectionProps | null;
 }
 
-export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
+interface PropertyFloorPlanSectionProps {
+  property_floor_plan_caption: string;
+  property_floor_plans: {
+    property_floor_plan_image_caption: string;
+    property_floor_plan_image: string;
+  }[];
+}
+
+export function FloorPlans({
+  title = "FLOOR PLANS",
+  property_floor_plan_section,
+}: FloorPlansProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<string>(
-    floorPlansData[0]?.id || ""
-  );
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,13 +40,15 @@ export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
     return () => observer.disconnect();
   }, []);
 
-  const selectedFloorPlan = floorPlansData.find(
-    (plan) => plan.id === selectedTab
-  );
+  const plans = property_floor_plan_section?.property_floor_plans ?? [];
+  const images = plans.map((p) => p.property_floor_plan_image).filter(Boolean);
+  const captions = plans
+    .map((p) => p.property_floor_plan_image_caption)
+    .filter(Boolean);
 
-  // Get image gallery from selected floor plan
-  const imageGallery = selectedFloorPlan?.imageGallery || [];
-
+  const activeIndex =
+    images.length === 0 ? 0 : Math.min(selectedIndex, images.length - 1);
+  if (!property_floor_plan_section) return null;
   return (
     <section ref={sectionRef} className="w-full  py-20 bg-white">
       <div className="mx-auto ">
@@ -50,10 +61,11 @@ export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
           <div className="text-lg font-medium tracking-[0.2em] text-gold-beige mb-2">
             {title}
           </div>
-          <h2 className="text-2xl md:text-[28px] font-display-semi text-black">
-            SPACIOUS LAYOUTS DESIGNED FOR <br />
-            COMFORT AND PRIVACY
-          </h2>
+          {!!property_floor_plan_section?.property_floor_plan_caption && (
+            <h2 className="text-2xl md:text-[28px] font-display-semi text-black">
+              {property_floor_plan_section.property_floor_plan_caption}
+            </h2>
+          )}
         </div>
 
         {/* Tabs */}
@@ -62,30 +74,35 @@ export function FloorPlans({ title = "FLOOR PLANS" }: FloorPlansProps) {
             isInView ? "animate-fade-in-up-delay-1" : "opacity-0"
           }`}
         >
-          {floorPlansData.map((plan) => {
-            const isActive = plan.id === selectedTab;
+          {plans.map((plan, index) => {
+            const isActive = index === activeIndex;
             return (
               <button
-                key={plan.id}
-                onClick={() => setSelectedTab(plan.id)}
+                key={`${plan.property_floor_plan_image}-${index}`}
+                onClick={() => setSelectedIndex(index)}
                 className={`text-[12px] md:text-[16px] font-medium tracking-wider transition-colors ${
                   isActive
                     ? "text-gold-beige border-b-3 border-gold-beige"
                     : "text-gold-beige/60 hover:text-gold-beige"
                 }`}
               >
-                {plan.title}
+                {plan.property_floor_plan_image_caption}
               </button>
             );
           })}
         </div>
 
         {/* Floor Plan Image Carousel */}
-        {selectedFloorPlan && imageGallery.length > 0 && (
+        {images.length > 0 && (
           <FloorPlanCarousel
-            images={imageGallery}
-            title={selectedFloorPlan.title}
+            images={images}
+            captions={captions}
+            title={
+              property_floor_plan_section?.property_floor_plan_caption ?? title
+            }
             isInView={isInView}
+            selectedIndex={activeIndex}
+            onIndexChange={setSelectedIndex}
           />
         )}
       </div>
