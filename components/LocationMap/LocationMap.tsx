@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import {
   LandmarkCategoryNormalized,
@@ -90,6 +90,16 @@ export default function LocationMap({
   const sectionRef = useRef<HTMLElement>(null);
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
+  const propertyPositionRef = useRef<google.maps.LatLng | null>(null);
+  const directionsServiceRef = useRef<google.maps.DirectionsService | null>(
+    null
+  );
+  const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(
+    null
+  );
+  const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
+  const markersRef = useRef<Record<string, google.maps.Marker>>({});
+  const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [isInView, setIsInView] = useState(false);
   const normalizedCategories: LandmarkCategoryNormalized[] = useMemo(
     () =>
@@ -109,45 +119,53 @@ export default function LocationMap({
     [property_landmark_categories]
   );
 
-  const normalizedLandmarks: LandmarkNormalized[] = useMemo(() => {
-    const mapped: LandmarkNormalized[] = [];
+  const normalizedLandmarks: (LandmarkNormalized & { description?: string })[] =
+    useMemo(() => {
+      const mapped: (LandmarkNormalized & { description?: string })[] = [];
 
-    property_landmarks.forEach((landmark) => {
-      const landmarkRecord = landmark as unknown as Record<string, unknown>;
-      const coordinates = landmarkRecord.property_location_co_ordinates as
-        | Record<string, unknown>
-        | undefined;
+      property_landmarks.forEach((landmark) => {
+        const landmarkRecord = landmark as unknown as Record<string, unknown>;
+        const coordinates = landmarkRecord.property_location_co_ordinates as
+          | Record<string, unknown>
+          | undefined;
 
-      const lat =
-        (landmarkRecord.property_landmark_latitude as number) ??
-        (coordinates?.property_latitude as number | undefined);
-      const lng =
-        (landmarkRecord.property_landmark_longitude as number) ??
-        (coordinates?.property_longitude as number | undefined);
+        const lat =
+          (landmarkRecord.property_landmark_latitude as number) ??
+          (coordinates?.property_latitude as number | undefined);
+        const lng =
+          (landmarkRecord.property_landmark_longitude as number) ??
+          (coordinates?.property_longitude as number | undefined);
 
-      if (typeof lat !== "number" || typeof lng !== "number") return;
+        if (typeof lat !== "number" || typeof lng !== "number") return;
 
-      mapped.push({
-        name:
-          (landmarkRecord.property_landmark_name as string) ||
-          (landmarkRecord.property_location_caption as string) ||
-          "Landmark",
-        lat,
-        lng,
-        icon:
-          (landmarkRecord.property_location_marker as string) ||
-          (landmarkRecord.property_landmark_marker as string) ||
-          "atm.png",
-        categoryKey:
-          (landmarkRecord.property_landmark_category_title as string) ||
-          (landmarkRecord.property_landmark_category_name as string) ||
-          (landmarkRecord.property_landmark_category as string) ||
-          undefined,
+        const descriptionRaw =
+          (landmarkRecord.property_landmark_description as string) ??
+          (landmarkRecord.property_location_description as string) ??
+          undefined;
+
+        mapped.push({
+          name:
+            (landmarkRecord.property_landmark_name as string) ||
+            (landmarkRecord.property_location_caption as string) ||
+            "Landmark",
+          lat,
+          lng,
+          icon:
+            (landmarkRecord.property_location_marker as string) ||
+            (landmarkRecord.property_landmark_marker as string) ||
+            "atm.png",
+          categoryKey:
+            (landmarkRecord.property_landmark_category_title as string) ||
+            (landmarkRecord.property_landmark_category_name as string) ||
+            (landmarkRecord.property_landmark_category as string) ||
+            undefined,
+          description:
+            typeof descriptionRaw === "string" ? descriptionRaw : undefined,
+        });
       });
-    });
 
-    return mapped;
-  }, [property_landmarks]);
+      return mapped;
+    }, [property_landmarks]);
 
   const locations: MapLocation[] = useMemo(() => {
     if (!normalizedCategories.length) {
@@ -187,6 +205,152 @@ export default function LocationMap({
     return mapped;
   }, [normalizedCategories, normalizedLandmarks]);
 
+  const drawRouteTo = useCallback(
+    async (
+      destination: google.maps.LatLng,
+      opts?: { suppressDestinationMarker?: boolean }
+    ) => {
+      const origin = propertyPositionRef.current;
+      const service = directionsServiceRef.current;
+      const renderer = directionsRendererRef.current;
+      const map = mapInstance.current;
+      if (!origin || !service || !renderer || !map) return;
+
+      if (opts?.suppressDestinationMarker) {
+        destinationMarkerRef.current?.setMap(null);
+        destinationMarkerRef.current = null;
+      } else {
+        destinationMarkerRef.current?.setMap(null);
+        destinationMarkerRef.current = new google.maps.Marker({
+          position: destination,
+          map,
+          title: "Destination",
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 7,
+            fillColor: "#202020",
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeOpacity: 1,
+            strokeWeight: 2,
+          },
+        });
+      }
+
+      try {
+        const res = await service.route({
+          origin,
+          destination,
+          travelMode: google.maps.TravelMode.DRIVING,
+        });
+        renderer.setDirections(res);
+        const leg = res.routes?.[0]?.legs?.[0];
+        return {
+          distanceText: leg?.distance?.text,
+          durationText: leg?.duration?.text,
+        };
+      } catch {
+        // If routing fails (no road access, quota, etc.), we simply don't draw.
+        renderer.setDirections({
+          routes: [],
+        } as unknown as google.maps.DirectionsResult);
+        return;
+      }
+    },
+    []
+  );
+
+  const getLocationMeta = useCallback(
+    (id: string) => {
+      const idx = Number(id.replace("landmark-", ""));
+      const landmark = Number.isFinite(idx)
+        ? normalizedLandmarks[idx]
+        : undefined;
+      const category =
+        normalizedCategories[idx]?.title || landmark?.categoryKey;
+      return {
+        placeName: landmark?.name,
+        description: landmark?.description,
+        category,
+      };
+    },
+    [normalizedCategories, normalizedLandmarks]
+  );
+
+  const openPlaceInfo = useCallback(
+    (args: {
+      anchor: google.maps.Marker;
+      title: string;
+      description?: string;
+      category?: string;
+      distanceText?: string;
+      durationText?: string;
+    }) => {
+      const map = mapInstance.current;
+      if (!map) return;
+
+      if (!infoWindowRef.current) {
+        infoWindowRef.current = new google.maps.InfoWindow({
+          maxWidth: 320,
+        });
+      }
+
+      const safeTitle = escapeHtml(args.title);
+      const safeCategory = args.category
+        ? escapeHtml(args.category)
+        : undefined;
+      const safeDistance = args.distanceText
+        ? escapeHtml(args.distanceText)
+        : undefined;
+      const safeDuration = args.durationText
+        ? escapeHtml(args.durationText)
+        : undefined;
+      const safeDescription = args.description
+        ? escapeHtml(args.description)
+        : undefined;
+
+      infoWindowRef.current.setContent(
+        `
+        <div style="font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; padding: 8px 10px; min-width: 240px;">
+          <div style="font-size: 16px; font-weight: 600; color: #111; margin-bottom: 6px;">
+            ${safeTitle}
+          </div>
+          ${
+            safeDescription
+              ? `<div style="font-size: 12px; color: #4b5563; line-height: 1.35; margin-bottom: 8px;">
+                  ${safeDescription}
+                </div>`
+              : ""
+          }
+          <div style="display: grid; gap: 4px;">
+            ${
+              safeDistance
+                ? `<div style="font-size: 12px; color: #111;"><span style="color:#6b7280;">Distance:</span> ${safeDistance}</div>`
+                : ""
+            }
+            ${
+              safeDuration
+                ? `<div style="font-size: 12px; color: #111;"><span style="color:#6b7280;">Driving time:</span> ${safeDuration}</div>`
+                : ""
+            }
+            ${
+              safeCategory
+                ? `<div style="font-size: 12px; color: #111;"><span style="color:#6b7280;">Category:</span> ${safeCategory}</div>`
+                : ""
+            }
+          </div>
+        </div>
+        `.trim()
+      );
+
+      infoWindowRef.current.open({
+        map,
+        anchor: args.anchor,
+      });
+    },
+    []
+  );
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -209,7 +373,7 @@ export default function LocationMap({
       v: "weekly",
     });
 
-    Promise.all([importLibrary("maps")]).then(() => {
+    Promise.all([importLibrary("maps"), importLibrary("routes")]).then(() => {
       if (!mapRef.current || !property_location_co_ordinates) return;
 
       const { property_latitude, property_longitude } =
@@ -218,6 +382,7 @@ export default function LocationMap({
         property_latitude,
         property_longitude
       );
+      propertyPositionRef.current = propertyPosition;
 
       const map = new google.maps.Map(mapRef.current, {
         center: propertyPosition,
@@ -240,24 +405,81 @@ export default function LocationMap({
         },
       });
 
+      // Routing (click anywhere → route from property → clicked place)
+      directionsServiceRef.current = new google.maps.DirectionsService();
+      directionsRendererRef.current = new google.maps.DirectionsRenderer({
+        map,
+        suppressMarkers: true,
+        preserveViewport: true,
+        polylineOptions: {
+          strokeColor: "#9E8C70",
+          strokeOpacity: 0.9,
+          strokeWeight: 5,
+        },
+      });
+
+      const clickListener = map.addListener(
+        "click",
+        (e: google.maps.MapMouseEvent) => {
+          if (!e.latLng) return;
+          drawRouteTo(e.latLng);
+        }
+      );
+
       const bounds = new google.maps.LatLngBounds();
       bounds.extend(propertyPosition);
 
       // Add markers from API landmarks
+      Object.values(markersRef.current).forEach((m) => m.setMap(null));
+      markersRef.current = {};
       locations.forEach((loc) => {
-        new google.maps.Marker({
+        const marker = new google.maps.Marker({
           position: { lat: loc.lat, lng: loc.lng },
           map,
           title: loc.title,
           icon: getMarkerIcon(loc.icon),
         });
+        markersRef.current[loc.id] = marker;
+
+        marker.addListener("click", async () => {
+          setActive(loc.id);
+          map.panTo({ lat: loc.lat, lng: loc.lng });
+          map.panBy(0, -100);
+
+          const meta = getLocationMeta(loc.id);
+          const routeInfo = await drawRouteTo(
+            new google.maps.LatLng(loc.lat, loc.lng),
+            { suppressDestinationMarker: true }
+          );
+          openPlaceInfo({
+            anchor: marker,
+            title: meta.placeName || loc.title,
+            description: meta.description,
+            category: meta.category,
+            distanceText: routeInfo?.distanceText,
+            durationText: routeInfo?.durationText,
+          });
+        });
+
         bounds.extend({ lat: loc.lat, lng: loc.lng });
       });
 
       // Fit map to show property + all nearby places with padding
       map.fitBounds(bounds, { top: 60, right: 60, bottom: 60, left: 60 });
+
+      return () => {
+        google.maps.event.removeListener(clickListener);
+        Object.values(markersRef.current).forEach((m) => m.setMap(null));
+        markersRef.current = {};
+      };
     });
-  }, [locations, property_location_co_ordinates]);
+  }, [
+    drawRouteTo,
+    getLocationMeta,
+    locations,
+    openPlaceInfo,
+    property_location_co_ordinates,
+  ]);
 
   const panToLocation = (location: MapLocation) => {
     if (!mapInstance.current) return;
@@ -277,6 +499,23 @@ export default function LocationMap({
     }
 
     setActive(location.id);
+
+    // Also draw route from property → this landmark
+    const marker = markersRef.current[location.id];
+    const meta = getLocationMeta(location.id);
+    drawRouteTo(new google.maps.LatLng(location.lat, location.lng), {
+      suppressDestinationMarker: true,
+    }).then((routeInfo) => {
+      if (!marker) return;
+      openPlaceInfo({
+        anchor: marker,
+        title: meta.placeName || location.title,
+        description: meta.description,
+        category: meta.category,
+        distanceText: routeInfo?.distanceText,
+        durationText: routeInfo?.durationText,
+      });
+    });
   };
 
   useEffect(() => {
@@ -432,4 +671,13 @@ function getMarkerIcon(iconName: string) {
     url: resolveIconSrc(iconName),
     scaledSize: new google.maps.Size(36, 36),
   };
+}
+
+function escapeHtml(input: string) {
+  return input
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
