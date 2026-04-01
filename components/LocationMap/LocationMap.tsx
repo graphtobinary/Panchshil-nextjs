@@ -98,6 +98,8 @@ export default function LocationMap({
     null
   );
   const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
+  const routePolylineRef = useRef<google.maps.Polyline | null>(null);
+  const routeAnimFrameRef = useRef<number | null>(null);
   const markersRef = useRef<Record<string, google.maps.Marker>>({});
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [isInView, setIsInView] = useState(false);
@@ -205,6 +207,51 @@ export default function LocationMap({
     return mapped;
   }, [normalizedCategories, normalizedLandmarks]);
 
+  const clearRoute = useCallback(() => {
+    if (routeAnimFrameRef.current) {
+      cancelAnimationFrame(routeAnimFrameRef.current);
+      routeAnimFrameRef.current = null;
+    }
+    routePolylineRef.current?.setMap(null);
+    routePolylineRef.current = null;
+  }, []);
+
+  const animateRoute = useCallback(
+    (routePath: google.maps.LatLng[], durationMs = 1400) => {
+      const map = mapInstance.current;
+      if (!map || routePath.length < 2) return;
+
+      clearRoute();
+
+      const polyline = new google.maps.Polyline({
+        map,
+        path: [],
+        strokeColor: "#9E8C70",
+        strokeOpacity: 0.9,
+        strokeWeight: 5,
+        geodesic: true,
+      });
+      routePolylineRef.current = polyline;
+
+      const start = performance.now();
+      const totalPoints = routePath.length;
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / durationMs);
+        const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+        const count = Math.max(2, Math.floor(eased * totalPoints));
+        polyline.setPath(routePath.slice(0, count));
+        if (t < 1) {
+          routeAnimFrameRef.current = requestAnimationFrame(step);
+        } else {
+          routeAnimFrameRef.current = null;
+          polyline.setPath(routePath);
+        }
+      };
+      routeAnimFrameRef.current = requestAnimationFrame(step);
+    },
+    [clearRoute]
+  );
+
   const drawRouteTo = useCallback(
     async (
       destination: google.maps.LatLng,
@@ -212,9 +259,8 @@ export default function LocationMap({
     ) => {
       const origin = propertyPositionRef.current;
       const service = directionsServiceRef.current;
-      const renderer = directionsRendererRef.current;
       const map = mapInstance.current;
-      if (!origin || !service || !renderer || !map) return;
+      if (!origin || !service || !map) return;
 
       if (opts?.suppressDestinationMarker) {
         destinationMarkerRef.current?.setMap(null);
@@ -243,7 +289,14 @@ export default function LocationMap({
           destination,
           travelMode: google.maps.TravelMode.DRIVING,
         });
-        renderer.setDirections(res);
+        const path = res.routes?.[0]?.overview_path as
+          | google.maps.LatLng[]
+          | undefined;
+        if (path?.length) {
+          animateRoute(path);
+        } else {
+          clearRoute();
+        }
         const leg = res.routes?.[0]?.legs?.[0];
         return {
           distanceText: leg?.distance?.text,
@@ -251,13 +304,11 @@ export default function LocationMap({
         };
       } catch {
         // If routing fails (no road access, quota, etc.), we simply don't draw.
-        renderer.setDirections({
-          routes: [],
-        } as unknown as google.maps.DirectionsResult);
+        clearRoute();
         return;
       }
     },
-    []
+    [animateRoute, clearRoute]
   );
 
   const getLocationMeta = useCallback(
@@ -311,7 +362,13 @@ export default function LocationMap({
 
       infoWindowRef.current.setContent(
         `
-        <div style="font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; padding: 8px 10px; min-width: 240px;">
+        <style>
+          @keyframes lmPopIn {
+            0% { transform: scale(0.92); opacity: 0; filter: blur(2px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0); }
+          }
+        </style>
+        <div style="font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; padding: 8px 10px; min-width: 240px; transform-origin: 80% 10%; animation: lmPopIn 180ms ease-out;">
           <div style="font-size: 16px; font-weight: 600; color: #111; margin-bottom: 6px;">
             ${safeTitle}
           </div>
@@ -417,6 +474,8 @@ export default function LocationMap({
           strokeWeight: 5,
         },
       });
+      // We draw our own animated polyline; keep the renderer detached.
+      directionsRendererRef.current.setMap(null);
 
       const clickListener = map.addListener(
         "click",
@@ -471,10 +530,12 @@ export default function LocationMap({
         google.maps.event.removeListener(clickListener);
         Object.values(markersRef.current).forEach((m) => m.setMap(null));
         markersRef.current = {};
+        clearRoute();
       };
     });
   }, [
     drawRouteTo,
+    clearRoute,
     getLocationMeta,
     locations,
     openPlaceInfo,
