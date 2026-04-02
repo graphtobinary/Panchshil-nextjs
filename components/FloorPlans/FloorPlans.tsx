@@ -48,7 +48,8 @@ export function FloorPlans({
 
   const activeIndex =
     images.length === 0 ? 0 : Math.min(selectedIndex, images.length - 1);
-  if (!property_floor_plan_section) return null;
+
+  if (plans.length === 0) return null;
   return (
     <section ref={sectionRef} className="w-full  py-20 bg-white">
       <div className="mx-auto ">
