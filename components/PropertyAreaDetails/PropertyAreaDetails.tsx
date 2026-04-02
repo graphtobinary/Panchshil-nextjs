@@ -69,15 +69,15 @@ const PropertyAreaDetails = ({
           {/* Stats Row */}
           {property_details_informations &&
             property_details_informations?.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-8 mb-12 md:w-3/5 w-full mx-auto ">
+              <div className="flex flex-wrap justify-center gap-4 md:gap-10 mb-12 md:w-3/5 w-full mx-auto">
                 {property_details_informations?.map(
                   (stat: PropertyDetailsInformationType) => {
                     return (
                       <div
-                        className="flex items-center justify-center gap-3"
+                        className="flex items-center justify-center gap-3 max-w-36 overflow-hidden"
                         key={stat?.property_details_information_title}
                       >
-                        <div className="mt-0.5 shrink-0 transition-colors text-[#030303]">
+                        <div className="mt-0.5 transition-colors text-[#030303]">
                           <div className="flex flex-col justify-center items-center gap-2">
                             <Image
                               src={stat?.property_details_information_icon}
@@ -85,11 +85,11 @@ const PropertyAreaDetails = ({
                               width={30}
                               height={30}
                             />
-                            <div className="flex flex-col">
-                              <p className="text-sm md:text-md transition-colors text-[#030303]">
+                            <div className="flex flex-col items-center text-center flex-wrap">
+                              <p className="text-sm md:text-md transition-colors text-[#030303] text-center">
                                 {stat?.property_details_information_title}
                               </p>
-                              <p className="text-xs md:text-md transition-colors text-[#030303]">
+                              <p className="text-xs md:text-md transition-colors text-[#030303] text-center">
                                 {stat?.property_details_information_caption}
                               </p>
                             </div>

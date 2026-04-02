@@ -451,14 +451,27 @@ export default function LocationMap({
       mapInstance.current = map;
 
       // Property drop pin marker
+      const hasCustomPropertyMarker =
+        !!property_location?.property_location_marker;
+      const propertyMarkerUrl = hasCustomPropertyMarker
+        ? resolveIconSrc(property_location.property_location_marker)
+        : PROPERTY_PIN_ICON;
       new google.maps.Marker({
         position: propertyPosition,
         map,
         title: "Property Location",
         icon: {
-          url: PROPERTY_PIN_ICON,
-          scaledSize: new google.maps.Size(48, 65),
-          anchor: new google.maps.Point(24, 65),
+          url: propertyMarkerUrl,
+          ...(hasCustomPropertyMarker
+            ? {
+                // Avoid distorting square assets into the default pin aspect ratio.
+                scaledSize: new google.maps.Size(56, 56),
+                anchor: new google.maps.Point(28, 28),
+              }
+            : {
+                scaledSize: new google.maps.Size(48, 65),
+                anchor: new google.maps.Point(24, 65),
+              }),
         },
       });
 
@@ -540,6 +553,7 @@ export default function LocationMap({
     locations,
     openPlaceInfo,
     property_location_co_ordinates,
+    property_location?.property_location_marker,
   ]);
 
   const panToLocation = (location: MapLocation) => {
