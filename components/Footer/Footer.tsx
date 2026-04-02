@@ -22,6 +22,14 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
     (state) => state.contactDetails
   );
 
+  const normalizeHref = (menuURL?: string | null) => {
+    const url = (menuURL ?? "").trim();
+    if (!url) return "";
+    if (url.startsWith("http://") || url.startsWith("https://")) return url;
+    if (url.startsWith("/")) return url;
+    return `/${url}`;
+  };
+
   const quickLinks: { title: string; link: string }[] = [
     { title: "About Us", link: "https://www.panchshil.com/about" },
     { title: "Services", link: "https://www.panchshil.com/services" },
@@ -158,6 +166,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
                   item?.menuTitle === "International Projects"
                 )
                   return null;
+
                 return (
                   <li key={item.menuTitle + i}>
                     <Link
@@ -166,7 +175,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
                           ? "hover:text-gold-beige"
                           : "hover:opacity-80"
                       }
-                      href={item.menuURL || ""}
+                      href={normalizeHref(item.menuURL)}
                     >
                       {item.menuTitle}
                     </Link>
@@ -196,7 +205,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
                     className={
                       !isDarkMode ? "hover:text-gold-beige" : "hover:opacity-80"
                     }
-                    href={item.menuURL || ""}
+                    href={normalizeHref(item.menuURL)}
                   >
                     {item.menuTitle}
                   </Link>
