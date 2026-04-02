@@ -22,6 +22,9 @@ export function Disclaimer({
   const disclaimerData = disclaimer || "";
   const firstQr = property_qr_codes?.[0];
   const displayRera = firstQr?.property_rera_number ?? reraNumber ?? "";
+  const qrItems = (property_qr_codes ?? []).filter(
+    (qr) => !!qr?.property_qr_code_image
+  );
 
   const accordionItems: {
     id: number;
@@ -40,21 +43,30 @@ export function Disclaimer({
     {
       id: 2,
       title: displayRera ? `RERA NUMBER (${displayRera})` : null,
-      content: firstQr?.property_qr_code_image ? (
-        <div className="bg-white w-48 h-48 max-w-md aspect-square shadow-sm flex items-center justify-center">
-          {firstQr?.property_qr_code_image ? (
-            <Image
-              src={firstQr.property_qr_code_image}
-              alt={displayRera ? `RERA QR code ${displayRera}` : "RERA QR code"}
-              width={192}
-              height={192}
-              className="w-full h-full object-contain p-4"
-            />
-          ) : (
-            <div className="text-transparent text-sm" aria-hidden />
-          )}
-        </div>
-      ) : null,
+      content:
+        qrItems.length > 0 ? (
+          <div className="flex flex-wrap gap-6">
+            {qrItems.map((qr, idx) => {
+              const rera = qr.property_rera_number || displayRera || "";
+              return (
+                <div
+                  key={`${qr.property_qr_code_image}-${idx}`}
+                  className="flex flex-col items-start gap-3"
+                >
+                  <div className="bg-white w-48 h-48 max-w-md aspect-square shadow-sm flex items-center justify-center">
+                    <Image
+                      src={qr.property_qr_code_image}
+                      alt={rera ? `RERA QR code ${rera}` : "RERA QR code"}
+                      width={192}
+                      height={192}
+                      className="w-full h-full object-contain p-4"
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : null,
     },
   ];
 
