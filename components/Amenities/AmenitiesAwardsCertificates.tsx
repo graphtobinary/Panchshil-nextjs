@@ -52,9 +52,9 @@ export function AmenitiesAwardsCertificates({
             <Image
               src={item.property_award_certificate_image}
               alt={item.property_award_certificate_caption}
-              width={479}
-              height={243}
-              className="h-auto w-[479px] max-w-full object-contain"
+              width={383}
+              height={294}
+              className="h-auto max-w-full object-contain"
             />
           ) : (
             <div className="w-full h-full grid place-items-center text-black-chocolate/60">

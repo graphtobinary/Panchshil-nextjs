@@ -46,9 +46,9 @@ export function AmenitiesKeyTenants({
         <Image
           src={item.property_key_tenant_image}
           alt={item.property_key_tenant_caption}
-          width={310}
-          height={146}
-          className="h-auto w-[310px] max-w-full object-contain"
+          width={248}
+          height={248}
+          className="h-auto  max-w-full object-contain"
         />
       ) : (
         <div className="text-black-chocolate font-display-semi text-lg">
