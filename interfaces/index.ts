@@ -270,7 +270,12 @@ export interface PropertyListProps {
   allProperties?: PropertyProps[];
   propertyCategoryUrlSlug?: string;
   totalPropertyCount?: number;
-  propertyCities?: string[] | Array<Record<string, string[]>>;
+  propertyCities?:
+    | string[]
+    | Array<Record<string, string[]>>
+    | Record<string, string[]>;
+  /** Set on the server from the URL so filters initialize before client `useSearchParams` is ready. */
+  propertyCountryKeysFromUrl?: string[];
   propertyStatuses?: string[];
   footerRef?: React.RefObject<HTMLElement | null>;
   currentPage?: number;
@@ -319,7 +324,10 @@ export interface StickyBottomBarProps {
   onLocationChange?: (value: string[] | null) => void;
   onPropertyChange?: (value: string[] | null) => void;
   isVisible?: boolean;
-  propertyCities?: string[] | Array<Record<string, string[]>>;
+  propertyCities?:
+    | string[]
+    | Array<Record<string, string[]>>
+    | Record<string, string[]>;
   propertyStatuses?: string[];
 }
 

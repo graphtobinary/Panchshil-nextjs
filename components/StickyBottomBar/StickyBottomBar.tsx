@@ -3,6 +3,7 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useThemeStore } from "@/store/themeStore";
 import { DropdownMenuProps, StickyBottomBarProps } from "@/interfaces";
+import { flattenPropertyCities } from "@/utils/propertyCities";
 
 const ALL_OPTION = "All";
 
@@ -146,41 +147,10 @@ export function StickyBottomBar({
       ? [selectedProperty]
       : [];
 
-  const normalizedPropertyCities = useMemo((): string[] => {
-    if (!propertyCities) return [];
-
-    // Old format: ["Pune", "Mumbai"]
-    if (
-      Array.isArray(propertyCities) &&
-      propertyCities.length > 0 &&
-      typeof propertyCities[0] === "string"
-    ) {
-      return propertyCities as string[];
-    }
-
-    // New format example:
-    // [{ india: ["Pune"], maldives: ["..."], "sri-lanka": ["..."] }]
-    if (Array.isArray(propertyCities)) {
-      const flattened: string[] = [];
-
-      for (const group of propertyCities) {
-        if (!group || typeof group !== "object") continue;
-        for (const cities of Object.values(group as Record<string, unknown>)) {
-          if (Array.isArray(cities)) {
-            for (const city of cities) {
-              if (typeof city === "string" && city.trim()) {
-                flattened.push(city);
-              }
-            }
-          }
-        }
-      }
-
-      return Array.from(new Set(flattened));
-    }
-
-    return [];
-  }, [propertyCities]);
+  const normalizedPropertyCities = useMemo(
+    () => flattenPropertyCities(propertyCities),
+    [propertyCities]
+  );
 
   // Get labels for selected items
   const getSelectedLocationLabel = () => {
