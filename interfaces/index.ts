@@ -267,6 +267,7 @@ export interface PropertyProps {
 
 export interface PropertyListProps {
   properties: PropertyProps[];
+  allProperties?: PropertyProps[];
   propertyCategoryUrlSlug?: string;
   totalPropertyCount?: number;
   propertyCities?: string[];

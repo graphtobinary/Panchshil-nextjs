@@ -286,6 +286,7 @@ function PropertyItem({ property, categorySlug }: PropertyItemProps) {
 
 export function PropertyList({
   properties,
+  allProperties,
   propertyCategoryUrlSlug,
   totalPropertyCount,
   propertyCities = [],
@@ -340,8 +341,17 @@ export function PropertyList({
     setSelectedProperty(value || []);
   };
 
-  // Apply filters to current page properties
-  const displayProperties = (properties || []).filter((property) => {
+  const hasActiveFilters =
+    selectedLocation.length > 0 || selectedProperty.length > 0;
+
+  // Use full dataset when filters are active, otherwise current page only
+  const sourceProperties =
+    hasActiveFilters && allProperties && allProperties.length > 0
+      ? allProperties
+      : properties || [];
+
+  // Apply filters to the chosen source properties
+  const displayProperties = sourceProperties.filter((property) => {
     // Filter by location - check both property_city_name and property_basic_information
     let matchesLocation = true;
     if (selectedLocation.length > 0) {
@@ -403,6 +413,7 @@ export function PropertyList({
           {/* Pagination */}
           {displayProperties?.length > 0 &&
             propertyCategoryUrlSlug &&
+            !hasActiveFilters &&
             totalPropertyCount !== undefined &&
             totalPropertyCount > 0 && (
               <Pagination
@@ -417,7 +428,9 @@ export function PropertyList({
       {/* Sticky Bottom Bar */}
       {propertyCategoryUrlSlug && (
         <StickyBottomBar
-          projectCount={totalPropertyCount}
+          projectCount={
+            hasActiveFilters ? displayProperties.length : totalPropertyCount
+          }
           selectedLocation={selectedLocation}
           selectedProperty={selectedProperty}
           onLocationChange={handleLocationChange}

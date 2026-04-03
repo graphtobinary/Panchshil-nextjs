@@ -25,6 +25,7 @@ interface ListClientProps {
   otherPropertyCategories?: PropertyCategories[];
   propertyFooterBlocks?: CategoryFooterBlocksProps;
   properties?: PropertyProps[];
+  allProperties?: PropertyProps[];
   currentPage?: number;
 }
 
@@ -33,6 +34,7 @@ export default function ListClient({
   propertyCities,
   propertyStatuses,
   properties,
+  allProperties,
   otherPropertyCategories,
   propertyFooterBlocks,
   currentPage = 1,
@@ -60,6 +62,7 @@ export default function ListClient({
         {/* Properties List */}
         <PropertyList
           properties={properties || []}
+          allProperties={allProperties || []}
           propertyCategoryUrlSlug={categorySlug}
           totalPropertyCount={propertyCategory?.property_count}
           propertyCities={propertyCities}
