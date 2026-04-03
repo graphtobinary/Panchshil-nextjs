@@ -270,7 +270,7 @@ export interface PropertyListProps {
   allProperties?: PropertyProps[];
   propertyCategoryUrlSlug?: string;
   totalPropertyCount?: number;
-  propertyCities?: string[];
+  propertyCities?: string[] | Array<Record<string, string[]>>;
   propertyStatuses?: string[];
   footerRef?: React.RefObject<HTMLElement | null>;
   currentPage?: number;
@@ -319,7 +319,7 @@ export interface StickyBottomBarProps {
   onLocationChange?: (value: string[] | null) => void;
   onPropertyChange?: (value: string[] | null) => void;
   isVisible?: boolean;
-  propertyCities?: string[];
+  propertyCities?: string[] | Array<Record<string, string[]>>;
   propertyStatuses?: string[];
 }
 

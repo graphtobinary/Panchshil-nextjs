@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { useThemeStore } from "@/store/themeStore";
 import { DropdownMenuProps, StickyBottomBarProps } from "@/interfaces";
 
@@ -146,13 +146,50 @@ export function StickyBottomBar({
       ? [selectedProperty]
       : [];
 
+  const normalizedPropertyCities = useMemo((): string[] => {
+    if (!propertyCities) return [];
+
+    // Old format: ["Pune", "Mumbai"]
+    if (
+      Array.isArray(propertyCities) &&
+      propertyCities.length > 0 &&
+      typeof propertyCities[0] === "string"
+    ) {
+      return propertyCities as string[];
+    }
+
+    // New format example:
+    // [{ india: ["Pune"], maldives: ["..."], "sri-lanka": ["..."] }]
+    if (Array.isArray(propertyCities)) {
+      const flattened: string[] = [];
+
+      for (const group of propertyCities) {
+        if (!group || typeof group !== "object") continue;
+        for (const cities of Object.values(group as Record<string, unknown>)) {
+          if (Array.isArray(cities)) {
+            for (const city of cities) {
+              if (typeof city === "string" && city.trim()) {
+                flattened.push(city);
+              }
+            }
+          }
+        }
+      }
+
+      return Array.from(new Set(flattened));
+    }
+
+    return [];
+  }, [propertyCities]);
+
   // Get labels for selected items
   const getSelectedLocationLabel = () => {
     if (selectedLocationsArray.length === 0) return "Select Location";
     if (selectedLocationsArray.length === 1) {
       return (
-        propertyCities?.find((loc) => loc === selectedLocationsArray[0]) ||
-        "Select Location"
+        normalizedPropertyCities?.find(
+          (loc) => loc === selectedLocationsArray[0]
+        ) || "Select Location"
       );
     }
     return `${selectedLocationsArray.length} selected`;
@@ -263,7 +300,7 @@ export function StickyBottomBar({
               </button>
 
               <DropdownMenu
-                options={propertyCities}
+                options={normalizedPropertyCities}
                 selectedValues={selectedLocationsArray}
                 isOpen={isLocationOpen}
                 onSelect={handleLocationToggle}

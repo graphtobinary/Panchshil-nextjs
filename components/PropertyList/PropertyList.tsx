@@ -48,7 +48,7 @@ function ActionButton({
   );
 }
 
-function PropertyItem({ property, categorySlug }: PropertyItemProps) {
+function PropertyItem({ property }: PropertyItemProps) {
   const { theme } = useThemeStore();
   const params = useParams();
   const isAllowedPage = isAllowedPageForTheme(
