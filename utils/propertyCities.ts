@@ -101,15 +101,91 @@ function locationTextMatchesCountrySlug(text: string, slug: string): boolean {
       return t.includes("india");
     case "dubai":
     case "uae":
-    case "united arab emirates":
+    case "united-arab-emirates":
       return (
         t.includes("dubai") ||
         t.includes("uae") ||
         t.includes("united arab emirates")
       );
     default:
-      return t.includes(slug.replace(/-/g, " "));
+      // Never substring-match arbitrary slugs (e.g. "ho" matches "hotel").
+      return false;
   }
+}
+
+/**
+ * Allowed `property-country` query values only (full slug match after trim + lowercase).
+ * Unknown or partial strings like `ho`, `mi`, `rte` are ignored.
+ */
+export const VALID_PROPERTY_COUNTRY_SLUGS = new Set([
+  "india",
+  "maldives",
+  "sri-lanka",
+  "srilanka",
+  "dubai",
+  "uae",
+  "united-arab-emirates",
+]);
+
+function normalizePropertyCountrySlugInput(raw: string): string {
+  return raw.trim().toLowerCase().replace(/\s+/g, "-");
+}
+
+/** Keep only whitelisted country slugs (deduped). */
+export function sanitizePropertyCountrySlugs(slugs: string[]): string[] {
+  const out: string[] = [];
+  for (const s of slugs) {
+    const n = normalizePropertyCountrySlugInput(s);
+    if (!n) continue;
+    if (VALID_PROPERTY_COUNTRY_SLUGS.has(n)) {
+      out.push(n);
+    }
+  }
+  return Array.from(new Set(out));
+}
+
+/**
+ * When the cities API returns one flat list, Indian listings often omit the word "India"
+ * (e.g. "Pune", "Candolim, Goa"). Exclude known Maldives / Sri Lanka city names from the
+ * same list so `?property-country=india` still selects all domestic cities.
+ */
+const CITY_NAMES_NOT_INDIA = new Set(
+  [
+    "Dhigufinolhu",
+    "Kudakurathu",
+    "Pottuvil",
+    "Rangali Island",
+    "Veligandu Huraa",
+  ].map((c) => c.toLowerCase())
+);
+
+function isClearlyInternationalListing(text: string): boolean {
+  const t = text.toLowerCase();
+  return (
+    t.includes("maldives") ||
+    /sri[\s-]?lanka/.test(t) ||
+    t.includes("srilanka") ||
+    t.includes("dubai") ||
+    t.includes("uae") ||
+    t.includes("united arab emirates")
+  );
+}
+
+/** India: explicit "India" in text, or known Indian city in allow list and not intl. */
+function countryMatchesForFlatListInference(
+  blob: string,
+  slug: string,
+  canonicalCityFromAllowList: string | undefined
+): boolean {
+  if (locationTextMatchesCountrySlug(blob, slug)) return true;
+
+  if (slug !== "india" || !canonicalCityFromAllowList) return false;
+
+  const cityLower = canonicalCityFromAllowList.trim().toLowerCase();
+  if (CITY_NAMES_NOT_INDIA.has(cityLower)) return false;
+  if (isClearlyInternationalListing(blob)) return false;
+
+  return true;
 }
 
 export type PropertyRowForCityInference = {
@@ -161,20 +237,19 @@ export function inferCitiesForCountrySlugsFromProperties(
 
   for (const p of properties) {
     const blob = buildInferenceBlob(p);
-    if (!blob.trim()) continue;
+    const rawCity = p.property_city_name?.trim();
+    const canonical = rawCity
+      ? allowByLower.get(rawCity.toLowerCase())
+      : undefined;
 
     const countryMatch = slugs.some((slug) =>
-      locationTextMatchesCountrySlug(blob, slug)
+      countryMatchesForFlatListInference(blob, slug, canonical)
     );
     if (!countryMatch) continue;
 
-    const rawCity = p.property_city_name?.trim();
-    if (rawCity) {
-      const canonical = allowByLower.get(rawCity.toLowerCase());
-      if (canonical) {
-        out.add(canonical);
-        continue;
-      }
+    if (canonical) {
+      out.add(canonical);
+      continue;
     }
 
     const blobLower = blob.toLowerCase();
@@ -201,13 +276,30 @@ export function resolveCitiesForPropertyCountries(
   /** Used when `allProperties` is empty (e.g. API) so page slice can still drive inference. */
   pageProperties?: PropertyRowForCityInference[] | undefined
 ): string[] {
+  const countrySlugsSafe = sanitizePropertyCountrySlugs(countrySlugs);
+  if (!countrySlugsSafe.length) return [];
+
   const fromGroups = getCitiesForPropertyCountries(
     propertyCities,
-    countrySlugs
+    countrySlugsSafe
   );
   if (fromGroups.length > 0) return fromGroups;
 
   if (isFlatStringList(propertyCities)) {
+    const slugs = countrySlugsSafe;
+
+    // Flat list has no country keys: `?property-country=india` should select every Indian
+    // city in the list, not only cities that happen to appear on a property whose copy
+    // contains the word "India".
+    if (slugs.length === 1 && slugs[0] === "india") {
+      const indiaCities = propertyCities.filter(
+        (c) => !CITY_NAMES_NOT_INDIA.has(c.trim().toLowerCase())
+      );
+      if (indiaCities.length > 0) {
+        return Array.from(new Set(indiaCities));
+      }
+    }
+
     const rows =
       allProperties && allProperties.length > 0
         ? allProperties
@@ -216,7 +308,7 @@ export function resolveCitiesForPropertyCountries(
           : undefined;
     return inferCitiesForCountrySlugsFromProperties(
       propertyCities,
-      countrySlugs,
+      countrySlugsSafe,
       rows
     );
   }
@@ -233,7 +325,8 @@ export function parsePropertyCountryKeysFromPageSearchParams(
   if (raw == null) return [];
   const parts = Array.isArray(raw) ? raw : [raw];
   const keys = parts.flatMap((p) => String(p).split(","));
-  return keys.map((k) => k.trim().toLowerCase()).filter(Boolean);
+  const trimmed = keys.map((k) => k.trim()).filter(Boolean);
+  return sanitizePropertyCountrySlugs(trimmed);
 }
 
 /**

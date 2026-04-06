@@ -14,6 +14,7 @@ import { isAllowedPageForTheme } from "@/utils/utils";
 import {
   normalizePropertyCitiesRaw,
   resolveCitiesForPropertyCountries,
+  sanitizePropertyCountrySlugs,
 } from "@/utils/propertyCities";
 import { useParams, useSearchParams } from "next/navigation";
 import {
@@ -486,17 +487,16 @@ export function PropertyList(props: PropertyListProps) {
   );
 
   const clientCountryKeys = useMemo(
-    () =>
-      searchParams
-        .getAll("property-country")
-        .map((k) => k.trim().toLowerCase())
-        .filter(Boolean),
+    () => searchParams.getAll("property-country").map((k) => k.trim()),
     [searchParams]
   );
 
   const propertyCountryKeys = useMemo(() => {
-    if (clientCountryKeys.length > 0) return clientCountryKeys;
-    return propertyCountryKeysFromUrl ?? [];
+    const raw =
+      clientCountryKeys.length > 0
+        ? clientCountryKeys
+        : (propertyCountryKeysFromUrl ?? []);
+    return sanitizePropertyCountrySlugs(raw);
   }, [clientCountryKeys, propertyCountryKeysFromUrl]);
 
   const citiesSyncFingerprint = useMemo(() => {
