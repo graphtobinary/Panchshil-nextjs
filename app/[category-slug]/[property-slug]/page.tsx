@@ -133,12 +133,9 @@ export default async function PropertyDetailPage({
 
   // Hero slide mapping (best-effort)
   const heroSlide: MasterSliderData | undefined = (() => {
-    const title = detail?.property_name || detail?.meta_data?.meta_title || "";
-
-    const description =
-      detail?.property_introduction_description ||
-      detail?.banner_data?.banner_image_description ||
-      "";
+    const title =
+      detail?.banner_data?.banner_image_caption || detail?.property_name || "";
+    const description = detail?.banner_data?.banner_image_description || "";
 
     const link = detail?.meta_data?.canonical_tag || "";
 
