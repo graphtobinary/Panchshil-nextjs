@@ -20,12 +20,17 @@ import {
 
 interface ListClientProps {
   propertyCategory?: PropertyCategoryProps;
-  propertyCities?: string[];
+  propertyCities?:
+    | string[]
+    | Array<Record<string, string[]>>
+    | Record<string, string[]>;
   propertyStatuses?: string[];
   otherPropertyCategories?: PropertyCategories[];
   propertyFooterBlocks?: CategoryFooterBlocksProps;
   properties?: PropertyProps[];
+  allProperties?: PropertyProps[];
   currentPage?: number;
+  propertyCountryKeysFromUrl?: string[];
 }
 
 export default function ListClient({
@@ -33,9 +38,11 @@ export default function ListClient({
   propertyCities,
   propertyStatuses,
   properties,
+  allProperties,
   otherPropertyCategories,
   propertyFooterBlocks,
   currentPage = 1,
+  propertyCountryKeysFromUrl,
 }: ListClientProps) {
   const { theme } = useThemeStore();
   const params = useParams();
@@ -60,9 +67,11 @@ export default function ListClient({
         {/* Properties List */}
         <PropertyList
           properties={properties || []}
+          allProperties={allProperties || []}
           propertyCategoryUrlSlug={categorySlug}
           totalPropertyCount={propertyCategory?.property_count}
           propertyCities={propertyCities}
+          propertyCountryKeysFromUrl={propertyCountryKeysFromUrl}
           propertyStatuses={propertyStatuses}
           footerRef={footerRef}
           currentPage={currentPage}

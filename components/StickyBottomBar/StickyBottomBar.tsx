@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { useThemeStore } from "@/store/themeStore";
 import { DropdownMenuProps, StickyBottomBarProps } from "@/interfaces";
+import { flattenPropertyCities } from "@/utils/propertyCities";
 
 const ALL_OPTION = "All";
 
@@ -146,13 +147,19 @@ export function StickyBottomBar({
       ? [selectedProperty]
       : [];
 
+  const normalizedPropertyCities = useMemo(
+    () => flattenPropertyCities(propertyCities),
+    [propertyCities]
+  );
+
   // Get labels for selected items
   const getSelectedLocationLabel = () => {
     if (selectedLocationsArray.length === 0) return "Select Location";
     if (selectedLocationsArray.length === 1) {
       return (
-        propertyCities?.find((loc) => loc === selectedLocationsArray[0]) ||
-        "Select Location"
+        normalizedPropertyCities?.find(
+          (loc) => loc === selectedLocationsArray[0]
+        ) || "Select Location"
       );
     }
     return `${selectedLocationsArray.length} selected`;
@@ -263,7 +270,7 @@ export function StickyBottomBar({
               </button>
 
               <DropdownMenu
-                options={propertyCities}
+                options={normalizedPropertyCities}
                 selectedValues={selectedLocationsArray}
                 isOpen={isLocationOpen}
                 onSelect={handleLocationToggle}

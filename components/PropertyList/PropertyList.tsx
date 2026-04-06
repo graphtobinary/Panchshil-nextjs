@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
@@ -11,7 +11,12 @@ import { Pagination } from "@/components/Pagination";
 
 import Link from "next/link";
 import { isAllowedPageForTheme } from "@/utils/utils";
-import { useParams } from "next/navigation";
+import {
+  normalizePropertyCitiesRaw,
+  resolveCitiesForPropertyCountries,
+  sanitizePropertyCountrySlugs,
+} from "@/utils/propertyCities";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   ActionButtonProps,
   PropertyItemProps,
@@ -48,7 +53,7 @@ function ActionButton({
   );
 }
 
-function PropertyItem({ property, categorySlug }: PropertyItemProps) {
+function PropertyItem({ property }: PropertyItemProps) {
   const { theme } = useThemeStore();
   const params = useParams();
   const isAllowedPage = isAllowedPageForTheme(
@@ -126,11 +131,7 @@ function PropertyItem({ property, categorySlug }: PropertyItemProps) {
               <div key={index} className="flex-[0_0_100%] relative">
                 <Image
                   src={image}
-                  alt={
-                    !isDarkMode
-                      ? property?.property_thumbnail
-                      : property?.property_thumbnail_night_mode
-                  }
+                  alt={property?.property_name}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 60vw"
@@ -284,8 +285,13 @@ function PropertyItem({ property, categorySlug }: PropertyItemProps) {
   );
 }
 
-export function PropertyList({
+type PropertyListInnerProps = PropertyListProps & {
+  propertyCountryKeys: string[];
+};
+
+function PropertyListInner({
   properties,
+  allProperties,
   propertyCategoryUrlSlug,
   totalPropertyCount,
   propertyCities = [],
@@ -293,7 +299,8 @@ export function PropertyList({
   footerRef,
   currentPage = 1,
   categorySlug,
-}: PropertyListProps) {
+  propertyCountryKeys,
+}: PropertyListInnerProps) {
   const { theme } = useThemeStore();
   const params = useParams();
   const isAllowedPage = isAllowedPageForTheme(
@@ -301,8 +308,17 @@ export function PropertyList({
   );
   const isDarkMode = isAllowedPage ? theme === "night" : false;
 
-  // Filter state management
-  const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
+  // Filter state management — initial cities from `?property-country=` when present
+  const [selectedLocation, setSelectedLocation] = useState<string[]>(() =>
+    propertyCountryKeys.length === 0
+      ? []
+      : resolveCitiesForPropertyCountries(
+          propertyCities,
+          propertyCountryKeys,
+          allProperties,
+          properties
+        )
+  );
   const [selectedProperty, setSelectedProperty] = useState<string[]>([]);
   const [isStickyBarVisible, setIsStickyBarVisible] = useState(true);
 
@@ -331,6 +347,22 @@ export function PropertyList({
     };
   }, [footerRef]);
 
+  // URL-driven country keys can resolve after hydration; grouped cities API can normalize late — sync selection once keys + data can produce a list.
+  useEffect(() => {
+    const cities = resolveCitiesForPropertyCountries(
+      propertyCities,
+      propertyCountryKeys,
+      allProperties,
+      properties
+    );
+
+    if (propertyCountryKeys.length === 0 || cities.length === 0) return;
+
+    queueMicrotask(() => {
+      setSelectedLocation((prev) => (prev.length === 0 ? cities : prev));
+    });
+  }, [propertyCities, propertyCountryKeys, allProperties, properties]);
+
   // Handler functions for filter changes
   const handleLocationChange = (value: string[] | null) => {
     setSelectedLocation(value || []);
@@ -340,8 +372,17 @@ export function PropertyList({
     setSelectedProperty(value || []);
   };
 
-  // Apply filters to current page properties
-  const displayProperties = (properties || []).filter((property) => {
+  const hasActiveFilters =
+    selectedLocation.length > 0 || selectedProperty.length > 0;
+
+  // Use full dataset when filters are active, otherwise current page only
+  const sourceProperties =
+    hasActiveFilters && allProperties && allProperties.length > 0
+      ? allProperties
+      : properties || [];
+
+  // Apply filters to the chosen source properties
+  const displayProperties = sourceProperties.filter((property) => {
     // Filter by location - check both property_city_name and property_basic_information
     let matchesLocation = true;
     if (selectedLocation.length > 0) {
@@ -403,6 +444,7 @@ export function PropertyList({
           {/* Pagination */}
           {displayProperties?.length > 0 &&
             propertyCategoryUrlSlug &&
+            !hasActiveFilters &&
             totalPropertyCount !== undefined &&
             totalPropertyCount > 0 && (
               <Pagination
@@ -417,7 +459,9 @@ export function PropertyList({
       {/* Sticky Bottom Bar */}
       {propertyCategoryUrlSlug && (
         <StickyBottomBar
-          projectCount={totalPropertyCount}
+          projectCount={
+            hasActiveFilters ? displayProperties.length : totalPropertyCount
+          }
           selectedLocation={selectedLocation}
           selectedProperty={selectedProperty}
           onLocationChange={handleLocationChange}
@@ -428,5 +472,51 @@ export function PropertyList({
         />
       )}
     </>
+  );
+}
+
+export function PropertyList(props: PropertyListProps) {
+  const { propertyCountryKeysFromUrl, ...listProps } = props;
+  const searchParams = useSearchParams();
+
+  const propertyCitiesNormalized = useMemo(
+    () =>
+      normalizePropertyCitiesRaw(listProps.propertyCities) ??
+      listProps.propertyCities,
+    [listProps.propertyCities]
+  );
+
+  const clientCountryKeys = useMemo(
+    () => searchParams.getAll("property-country").map((k) => k.trim()),
+    [searchParams]
+  );
+
+  const propertyCountryKeys = useMemo(() => {
+    const raw =
+      clientCountryKeys.length > 0
+        ? clientCountryKeys
+        : (propertyCountryKeysFromUrl ?? []);
+    return sanitizePropertyCountrySlugs(raw);
+  }, [clientCountryKeys, propertyCountryKeysFromUrl]);
+
+  const citiesSyncFingerprint = useMemo(() => {
+    const pc = propertyCitiesNormalized;
+    if (pc == null) return "";
+    if (Array.isArray(pc) && pc.length === 0) return "";
+    if (typeof pc === "object" && !Array.isArray(pc)) {
+      if (Object.keys(pc as object).length === 0) return "";
+    }
+    return JSON.stringify(pc);
+  }, [propertyCitiesNormalized]);
+
+  const filterStateKey = `${propertyCountryKeys.slice().sort().join(",")}__${citiesSyncFingerprint}`;
+
+  return (
+    <PropertyListInner
+      key={filterStateKey}
+      {...listProps}
+      propertyCities={propertyCitiesNormalized}
+      propertyCountryKeys={propertyCountryKeys}
+    />
   );
 }

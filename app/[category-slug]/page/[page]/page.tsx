@@ -12,9 +12,14 @@ import {
   CategoryFooterBlocksProps,
   PropertyCategories,
   PropertyCategoryProps,
+  PropertyListProps,
   PropertyProps,
 } from "@/interfaces";
 import { PER_PAGE_LIMIT } from "@/api/constants";
+import {
+  normalizePropertyCitiesRaw,
+  parsePropertyCountryKeysFromPageSearchParams,
+} from "@/utils/propertyCities";
 import ListClient from "../../../ListClient";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -22,10 +27,11 @@ import type { Metadata } from "next";
 export const revalidate = 600; // 10 minutes
 
 interface PaginatedListPageProps {
-  params: {
+  params: Promise<{
     "category-slug": string;
     page: string;
-  };
+  }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export async function generateMetadata({
@@ -76,8 +82,12 @@ export async function generateMetadata({
 
 export default async function PaginatedListPage({
   params,
+  searchParams,
 }: PaginatedListPageProps) {
   const resolvedParams = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const propertyCountryKeysFromUrl =
+    parsePropertyCountryKeysFromPageSearchParams(resolvedSearchParams);
 
   const propertyCategoryUrlSlug = resolvedParams["category-slug"];
   const pageParam = resolvedParams.page;
@@ -104,12 +114,15 @@ export default async function PaginatedListPage({
           getPropertyCategory(token, propertyCategoryUrlSlug),
           getPropertyCities(token, propertyCategoryUrlSlug),
           getPropertyStatuses(token, propertyCategoryUrlSlug),
+          // Paginated properties for default view
           getPropertiesByCategory(
             token,
             propertyCategoryUrlSlug,
             PER_PAGE_LIMIT,
             PER_PAGE_LIMIT * (page - 1)
           ),
+          // Full list of properties for filtering (no limit/skip)
+          getPropertiesByCategory(token, propertyCategoryUrlSlug),
           getOtherPropertyCategories(token, propertyCategoryUrlSlug),
           getPropertyFooterBlocks(token),
         ]
@@ -120,6 +133,7 @@ export default async function PaginatedListPage({
     propertyCities,
     propertyStatuses,
     properties,
+    allProperties,
     otherPropertyCategories,
     propertyFooterBlocks,
   ] = await Promise.allSettled(apiCalls);
@@ -132,6 +146,8 @@ export default async function PaginatedListPage({
     propertyStatuses:
       propertyStatuses?.status === "fulfilled" ? propertyStatuses?.value : null,
     properties: properties?.status === "fulfilled" ? properties?.value : null,
+    allProperties:
+      allProperties?.status === "fulfilled" ? allProperties?.value : null,
     otherPropertyCategories:
       otherPropertyCategories?.status === "fulfilled"
         ? otherPropertyCategories?.value
@@ -151,12 +167,19 @@ export default async function PaginatedListPage({
     notFound();
   }
 
+  const propertyCitiesForClient =
+    normalizePropertyCitiesRaw(data.propertyCities) ??
+    (data.propertyCities as PropertyListProps["propertyCities"]);
+
   return (
     <ListClient
       propertyCategory={data.propertyCategory as PropertyCategoryProps}
-      propertyCities={data.propertyCities as string[]}
+      propertyCities={
+        propertyCitiesForClient as PropertyListProps["propertyCities"]
+      }
       propertyStatuses={data.propertyStatuses as string[]}
       properties={data.properties as PropertyProps[]}
+      allProperties={data.allProperties as PropertyProps[]}
       otherPropertyCategories={
         data.otherPropertyCategories as PropertyCategories[]
       }
@@ -164,6 +187,7 @@ export default async function PaginatedListPage({
         data.propertyFooterBlocks as CategoryFooterBlocksProps
       }
       currentPage={page}
+      propertyCountryKeysFromUrl={propertyCountryKeysFromUrl}
     />
   );
 }
