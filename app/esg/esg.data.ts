@@ -95,6 +95,58 @@ export type EsgPageData = {
   reports: EsgReportsContent;
 };
 
+export const emptyEsgAccordion: EsgAccordionContent = {
+  heading: "",
+  title: "",
+  description: "",
+  defaultOpen: 1,
+  items: [],
+};
+
+export const emptyEsgPeopleCommunities: EsgPeopleCommunitiesContent = {
+  heading: "",
+  title: "",
+  tabs: [],
+};
+
+export const emptyEsgSteeringCommittee: EsgSteeringCommitteeContent = {
+  heading: "",
+  title: "",
+  cards: [],
+};
+
+export const emptyEsgBeyondTheBuild: EsgBeyondTheBuildContent = {
+  title: "",
+  description: "",
+  stats: [],
+  leafImageSrc: "",
+  leafImageSrc2: "",
+  birdImageSrc: "",
+};
+
+export const emptyEsgRecognitionsCertificates: EsgRecognitionsCertificatesContent =
+  {
+    heading: "",
+    title: "",
+    slides: [],
+  };
+
+export const emptyEsgReports: EsgReportsContent = {
+  heading: "",
+  title: "",
+  reports: [],
+};
+
+/** Layout-only artwork when milestone content is loaded from CMS */
+export const esgBeyondTheBuildDecorDefaults: Pick<
+  EsgBeyondTheBuildContent,
+  "leafImageSrc" | "leafImageSrc2" | "birdImageSrc"
+> = {
+  leafImageSrc: "/assets/images/esg/left-leaf-artwork.png",
+  leafImageSrc2: "/assets/images/esg/right-leaf-artwork.png",
+  birdImageSrc: "/assets/images/esg/bird-background.png",
+};
+
 export const esgPageData: EsgPageData = {
   hero: {
     imageSrc: "/assets/images/esg/esg-hero-banner.png",

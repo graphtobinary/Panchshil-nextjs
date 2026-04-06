@@ -37,10 +37,10 @@ export default function EsgRecognitionsCertificates({
           className={`text-center mb-10 ${isInView ? "animate-fade-in-up" : "opacity-0"} px-4 md:px-0`}
         >
           <div className="text-lg font-medium tracking-[0.2em] text-gold-beige mb-2">
-            {content.heading}
+            {content.heading || "AWARDS"}
           </div>
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black">
-            {content.title}
+            {content.title || "RECOGNITIONS & CERTIFICATES"}
           </h2>
         </div>
 

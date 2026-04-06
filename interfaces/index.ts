@@ -590,6 +590,93 @@ export type ClientsApiItem = {
   client_image?: string;
 };
 
+export type TestimonialsApiItem = {
+  id?: string | number;
+  _id?: string | number;
+  testimonial_name?: string;
+  testimonial_designation?: string;
+  testimonial_content?: string;
+  testimonial_thumbnail?: string;
+};
+
+export type PrecIntroApiResponse = {
+  prec_headling?: string;
+  prec_heading?: string;
+  prec_description?: string;
+  prec_image?: string;
+};
+
+export type PrecBenefitApiItem = {
+  benefit_title?: string;
+  benefit_description?: string;
+  benefit_icon?: string;
+};
+
+export type PrecFaqApiItem = {
+  faq_question?: string;
+  faq_answer?: string;
+};
+
+export type MeetTheCityMagazineApiItem = {
+  magazine_edition?: string;
+  magazine_thumbnail?: string;
+  magazine_pdf?: string;
+};
+
+/** Backend field names use this spelling */
+export type EsgInitiativeApiItem = {
+  iniatiative_name?: string;
+  iniatiative_description?: string;
+  iniatiative_image?: string;
+};
+
+export type EsgCommunityApiItem = {
+  community_name?: string;
+  community_description?: string;
+  community_image?: string;
+};
+
+export type EsgPolicyApiItem = {
+  policy_name?: string;
+  policy_description?: string;
+  policy_image?: string;
+};
+
+export type EsgMilestonesIntroApiResponse = {
+  intro_heading?: string;
+  intro_caption?: string;
+};
+
+export type EsgMilestoneApiItem = {
+  milestone_count?: string;
+  milestone_description?: string;
+};
+
+export type EsgAwardCarbonCreditApiItem = {
+  esg_award_carbon_credit_caption?: string;
+  esg_award_carbon_credit_image?: string;
+};
+
+export type EsgAwardApiItem = {
+  esg_property_name?: string;
+  esg_award_achievements?: string[];
+  esg_award_description?: string;
+  esg_award_carbon_credits?: EsgAwardCarbonCreditApiItem[];
+  esg_award_banner_image?: string;
+};
+
+export type EsgReportsIntroApiResponse = {
+  reports_heading?: string;
+  reports_caption?: string;
+};
+
+export type EsgReportApiItem = {
+  report_name?: string;
+  report_year?: string;
+  report_thumbnail?: string;
+  report_pdf?: string;
+};
+
 export type AwardsApiItem = {
   id?: string | number;
   _id?: string | number;

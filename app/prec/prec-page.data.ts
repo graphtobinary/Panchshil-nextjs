@@ -65,6 +65,24 @@ export type PrecPageData = {
   };
 };
 
+export const emptyPrecIntro: PrecPageData["intro"] = {
+  heading: "",
+  paragraphs: [],
+  imageSrc: "",
+  imageAlt: "",
+};
+
+export const emptyPrecBenefits: PrecPageData["benefits"] = {
+  heading: "",
+  items: [],
+};
+
+export const emptyPrecFaqs: PrecPageData["faqs"] = {
+  kicker: "",
+  heading: "",
+  items: [],
+};
+
 export const precPageDummyData: PrecPageData = {
   hero: {
     imageSrc: "/assets/images/career/build-career-that-shape-cities.png",
@@ -193,7 +211,7 @@ export const precPageDummyData: PrecPageData = {
     ],
   },
   faqs: {
-    kicker: "Lorem Ipsum",
+    kicker: "",
     heading: "Frequently Asked Questions",
     items: [
       {

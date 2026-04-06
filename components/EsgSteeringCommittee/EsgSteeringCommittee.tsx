@@ -65,7 +65,8 @@ export default function EsgSteeringCommittee({
             </div>
           )}
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black max-w-[1200px] mx-auto">
-            {content.title}
+            {content.title ||
+              "OUR ESG STEERING COMMITTEE ENSURES THAT 24 GROUP WIDE POLICIES UPHOLD TRANSPARENCY, ETHICS AND ACCOUNTABILITY"}
           </h2>
         </div>
 

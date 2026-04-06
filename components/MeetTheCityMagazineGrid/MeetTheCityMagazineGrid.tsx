@@ -27,27 +27,46 @@ export default function MeetTheCityMagazineGrid({
     <section className="overflow-x-hidden bg-white py-10 md:py-14">
       <div className="mx-auto w-full max-w-[1440px] px-4 md:px-8">
         <div className="grid min-w-0 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-          {paginatedEditions.map((edition) => (
-            <article
-              key={edition.id}
-              className="flex min-w-0 w-full flex-col items-center"
-            >
-              <div className="flex min-h-0 w-full aspect-[4/3] items-center justify-center overflow-hidden bg-white">
-                <div className="relative h-full w-full min-w-0">
-                  <Image
-                    src={edition.imageSrc}
-                    alt={edition.imageAlt}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
+          {paginatedEditions.map((edition) => {
+            const body = (
+              <>
+                <div className="flex min-h-0 w-full aspect-square items-center justify-center overflow-hidden bg-white">
+                  <div className="relative h-full w-full min-w-0">
+                    <Image
+                      src={edition.imageSrc}
+                      alt={edition.imageAlt}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
                 </div>
-              </div>
-              <h3 className=" w-full text-left pt-3 pl-5 wrap-break-word text-base md:text-[17px] font-normal font-display-semi leading-snug text-[#4a4a4a]">
-                {edition.title}
-              </h3>
-            </article>
-          ))}
+                <h3 className=" w-full text-left pt-3 pl-5 wrap-break-word text-base md:text-[17px] font-normal font-display-semi leading-snug text-[#4a4a4a]">
+                  {edition.title}
+                </h3>
+              </>
+            );
+
+            return (
+              <article
+                key={edition.id}
+                className="flex min-w-0 w-full flex-col items-center"
+              >
+                {edition.pdfUrl ? (
+                  <a
+                    href={edition.pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex w-full flex-col items-center text-inherit no-underline hover:opacity-90 transition-opacity"
+                  >
+                    {body}
+                  </a>
+                ) : (
+                  body
+                )}
+              </article>
+            );
+          })}
         </div>
 
         {/* {totalPages > 1 && (

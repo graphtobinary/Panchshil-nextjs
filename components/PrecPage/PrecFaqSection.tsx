@@ -17,7 +17,7 @@ export default function PrecFaqSection({ content }: PrecFaqSectionProps) {
           {content.kicker}
         </p>
         <h2 className="mt-2 text-center text-2xl md:text-[28px] font-display-semi text-black">
-          {content.heading}
+          {content.heading || "FREQUENTLY ASKED QUESTIONS"}
         </h2>
 
         <div className="mt-10 md:mt-14 border-t border-black/20">
