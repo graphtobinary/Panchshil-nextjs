@@ -6,6 +6,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+/** Matches desktop nav: About → external URL; other top-level items → `/${menuURL}`. */
+function getTopLevelNavHref(item: {
+  menuURL?: string;
+  menuTitle?: string;
+}): string {
+  const link =
+    item?.menuURL === "about"
+      ? "https://www.panchshil.com/about"
+      : item?.menuURL;
+  if (!link) return "";
+  return item?.menuTitle === "About" ? link : `/${link}`;
+}
+
 export function Header() {
   const navigationMenu = useNavigationMenu();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -104,10 +117,6 @@ export function Header() {
             }`}
           >
             {navigationMenu?.map((item, i) => {
-              const link =
-                item?.menuURL === "about"
-                  ? "https://www.panchshil.com/about"
-                  : item?.menuURL;
               return (
                 <li key={item?.menuURL + i} className="relative">
                   <div
@@ -118,13 +127,7 @@ export function Header() {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     <Link
-                      href={
-                        link
-                          ? item?.menuTitle === "About"
-                            ? `${link}`
-                            : `/${link}`
-                          : ""
-                      }
+                      href={getTopLevelNavHref(item)}
                       className="text-sm lg:text-lg hover:opacity-80 transition-opacity font-light block"
                     >
                       {item.menuTitle}
@@ -196,7 +199,7 @@ export function Header() {
               {navigationMenu?.map((item, i) => (
                 <li key={item?.menuURL + i}>
                   <Link
-                    href={item?.menuURL || ""}
+                    href={getTopLevelNavHref(item)}
                     className="text-lg font-light hover:text-gray-600 transition-colors block"
                     onClick={closeMobileMenu}
                   >
