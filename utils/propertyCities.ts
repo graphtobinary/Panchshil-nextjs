@@ -146,8 +146,9 @@ export function sanitizePropertyCountrySlugs(slugs: string[]): string[] {
 
 /**
  * When the cities API returns one flat list, Indian listings often omit the word "India"
- * (e.g. "Pune", "Candolim, Goa"). Exclude known Maldives / Sri Lanka city names from the
- * same list so `?property-country=india` still selects all domestic cities.
+ * (e.g. "Pune", "Candolim, Goa"). Exclude non-Indian bucket cities that appear in the same
+ * combined list (Maldives, Sri Lanka, UAE, etc.) so `?property-country=india` does not
+ * select e.g. Dubai.
  */
 const CITY_NAMES_NOT_INDIA = new Set(
   [
@@ -156,6 +157,9 @@ const CITY_NAMES_NOT_INDIA = new Set(
     "Pottuvil",
     "Rangali Island",
     "Veligandu Huraa",
+    "Dubai",
+    "Abu Dhabi",
+    "Sharjah",
   ].map((c) => c.toLowerCase())
 );
 
@@ -256,9 +260,13 @@ export function inferCitiesForCountrySlugsFromProperties(
     const byLength = [...flatCityAllowList].sort(
       (a, b) => b.trim().length - a.trim().length
     );
+    const indiaOnlySlug = slugs.length === 1 && slugs[0] === "india";
     for (const c of byLength) {
       const t = c.trim();
       if (!t) continue;
+      if (indiaOnlySlug && CITY_NAMES_NOT_INDIA.has(t.toLowerCase())) {
+        continue;
+      }
       if (blobLower.includes(t.toLowerCase())) {
         out.add(t);
       }
