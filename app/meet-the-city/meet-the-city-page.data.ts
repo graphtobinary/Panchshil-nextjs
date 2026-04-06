@@ -9,12 +9,16 @@ export type MeetTheCityEdition = {
   title: string;
   imageSrc: string;
   imageAlt: string;
+  /** When set, the card links to this PDF (e.g. from CMS). */
+  pdfUrl?: string;
 };
 
 export type MeetTheCityPageData = {
   hero: CareerHeroContent;
   editions: MeetTheCityEdition[];
 };
+
+export const emptyMeetTheCityEditions: MeetTheCityEdition[] = [];
 
 export const meetTheCityPageDummyData: MeetTheCityPageData = {
   hero: {

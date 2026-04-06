@@ -77,11 +77,11 @@ export default function EsgPeopleCommunities({
       <div className="max-w-[1540px] mx-auto px-6 md:px-10">
         {content.heading && (
           <div className="text-center text-lg tracking-[0.2em] font-medium text-gold-beige mb-2">
-            {content.heading}
+            {content.heading || ""}
           </div>
         )}
         <h2 className="text-center text-2xl md:text-[28px] font-display-semi text-black-chocolate">
-          {content.title}
+          {content.title || "OUR PEOPLE, OUR COMMUNITIES"}
         </h2>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-10">
