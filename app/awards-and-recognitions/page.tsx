@@ -3,6 +3,9 @@ import { awardsPageData } from "./awards.data";
 import { getAuthToken, getAwards, getAwardsAPI } from "@/api/CMS.api";
 import { AuthTokenResponse, AwardsApiItem } from "@/interfaces";
 
+// Revalidate this route every 30 minutes.
+export const revalidate = 1800;
+
 const toAbsoluteAssetUrl = (imageUrl: string | undefined): string => {
   if (!imageUrl) return "";
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {

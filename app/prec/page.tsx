@@ -22,6 +22,9 @@ import {
   PrecIntroApiResponse,
 } from "@/interfaces";
 
+// Revalidate this route every 30 minutes.
+export const revalidate = 1800;
+
 const toAbsoluteAssetUrl = (imageUrl: string | undefined): string => {
   if (!imageUrl) return "";
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
