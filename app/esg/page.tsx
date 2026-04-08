@@ -11,10 +11,10 @@ import {
   emptyEsgReports,
   emptyEsgSteeringCommittee,
   esgBeyondTheBuildDecorDefaults,
-  esgPageData,
 } from "./esg.data";
 import {
   getAuthToken,
+  getBanner,
   getEsgAwards,
   getEsgAwardsAPI,
   getEsgCommunities,
@@ -34,6 +34,7 @@ import {
 } from "@/api/CMS.api";
 import {
   AuthTokenResponse,
+  BannersProps,
   EsgAwardApiItem,
   EsgCommunityApiItem,
   EsgInitiativeApiItem,
@@ -262,6 +263,7 @@ export default async function EsgPage() {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || "";
 
+  let banner: BannersProps | null = null;
   let initiatives: EsgInitiativeApiItem[] | null = null;
   let communities: EsgCommunityApiItem[] | null = null;
   let policies: EsgPolicyApiItem[] | null = null;
@@ -274,6 +276,7 @@ export default async function EsgPage() {
   if (siteUrl) {
     try {
       const [
+        bannerRes,
         initiativesRes,
         communitiesRes,
         policiesRes,
@@ -283,6 +286,22 @@ export default async function EsgPage() {
         reportsIntroRes,
         reportsRes,
       ] = await Promise.all([
+        // Banner is fetched directly from CMS like Home (no /api proxy).
+        // We keep it inside this parallel section for consistent timing.
+        (async () => {
+          try {
+            const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+            const token =
+              tokenResponse?.token && typeof tokenResponse.token === "string"
+                ? tokenResponse.token
+                : null;
+            return token
+              ? ((await getBanner(token, "ESG")) as BannersProps)
+              : null;
+          } catch {
+            return null;
+          }
+        })(),
         getEsgInitiativesAPI(siteUrl),
         getEsgCommunitiesAPI(siteUrl),
         getEsgPoliciesAPI(siteUrl),
@@ -292,6 +311,10 @@ export default async function EsgPage() {
         getEsgReportsIntroAPI(siteUrl),
         getEsgReportsAPI(siteUrl),
       ]);
+
+      if (bannerRes && typeof bannerRes === "object") {
+        banner = bannerRes as BannersProps;
+      }
 
       const i1 = unwrapSuccessData(initiativesRes);
       if (Array.isArray(i1)) initiatives = i1 as EsgInitiativeApiItem[];
@@ -322,6 +345,7 @@ export default async function EsgPage() {
   }
 
   const needsDirect =
+    !banner ||
     !initiatives?.length ||
     !communities?.length ||
     !policies?.length ||
@@ -340,6 +364,17 @@ export default async function EsgPage() {
       }
     } catch (error) {
       console.error("Error fetching auth token for ESG:", error);
+    }
+  }
+
+  if (!banner && t) {
+    try {
+      const raw = (await getBanner(t, "ESG")) as BannersProps;
+      if (raw && typeof raw === "object") {
+        banner = raw;
+      }
+    } catch (e) {
+      console.error("Error fetching ESG banner:", e);
     }
   }
 
@@ -428,7 +463,11 @@ export default async function EsgPage() {
   }
 
   const data: EsgPageData = {
-    hero: esgPageData.hero,
+    hero: {
+      title: banner?.banner_image_caption ?? "",
+      description: banner?.banner_image_description ?? "",
+      imageSrc: toAbsoluteAssetUrl(banner?.banner_image),
+    },
     accordion: mapInitiatives(initiatives),
     peopleCommunities: mapCommunities(communities),
     steeringCommittee: mapPolicies(policies),

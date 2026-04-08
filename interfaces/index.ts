@@ -153,6 +153,8 @@ export type NavigationMenuProps = {
 
 export type BannersProps = {
   banner_image: string;
+  banner_image_caption: string;
+  banner_image_description: string;
 };
 export type FeaturedPropertiesIntroProps = {
   featured_properties_intro_heading: string;
