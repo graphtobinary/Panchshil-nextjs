@@ -45,6 +45,9 @@ import {
   EsgReportsIntroApiResponse,
 } from "@/interfaces";
 
+// Revalidate this route every 30 minutes.
+export const revalidate = 1800;
+
 const toAbsoluteAssetUrl = (url: string | undefined): string => {
   if (!url) return "";
   if (url.startsWith("http://") || url.startsWith("https://")) {
