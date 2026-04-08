@@ -591,10 +591,10 @@ export default function LocationMap({
     // Tab click should NOT open a popup; only marker clicks do that.
     infoWindowRef.current?.close();
 
-    // Still draw route from property → this landmark (no popup).
-    drawRouteTo(new google.maps.LatLng(location.lat, location.lng), {
-      suppressDestinationMarker: true,
-    });
+    // Tab click should NOT draw the route either. Clear any existing route.
+    clearRoute();
+    destinationMarkerRef.current?.setMap(null);
+    destinationMarkerRef.current = null;
   };
 
   useEffect(() => {
