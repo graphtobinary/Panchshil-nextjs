@@ -533,6 +533,7 @@ export interface LocationMapProps {
 export type LandmarkCategoryNormalized = {
   title: string;
   icon: string;
+  slug?: string;
 };
 
 export type LandmarkNormalized = {
@@ -541,6 +542,7 @@ export type LandmarkNormalized = {
   lng: number;
   icon: string;
   categoryKey?: string;
+  categorySlug?: string;
 };
 
 export interface PropertyVirtualTourSectionType {
@@ -576,6 +578,13 @@ export interface MapLocation {
   lng: number;
   zoom?: number;
   icon: string;
+  /**
+   * Optional metadata for map popups.
+   * Kept optional to avoid breaking other map consumers.
+   */
+  placeName?: string;
+  description?: string;
+  category?: string;
 }
 
 export type ClientsApiItem = {
