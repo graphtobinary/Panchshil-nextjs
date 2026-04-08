@@ -77,6 +77,16 @@ const CategoryIcon = ({ iconName }: { iconName: string }) => {
   return <Image src={src} alt={iconName} width={24} height={24} unoptimized />;
 };
 
+const normalizeText = (value?: string) =>
+  (value ?? "")
+    .trim()
+    .toLowerCase()
+    .replaceAll("&", "and")
+    .replace(/\s+/g, " ");
+
+const normalizeSlug = (value?: string) =>
+  (value ?? "").trim().toLowerCase().replace(/\s+/g, "-").replace(/-+/g, "-");
+
 export default function LocationMap({
   title = "MAPS",
   property_location_co_ordinates,
@@ -111,12 +121,16 @@ export default function LocationMap({
           (categoryRecord.property_landmark_category_title as string) ||
           (categoryRecord.property_landmark_category_name as string) ||
           "";
+        const slug =
+          (categoryRecord.property_landmark_category_slug as string) ||
+          (categoryRecord.property_landmark_category_key as string) ||
+          undefined;
         const icon =
           (categoryRecord.property_landmark_category_icon as string) ||
           (categoryRecord.property_landmark_category_image as string) ||
           "atm.png";
 
-        return { title, icon };
+        return { title, icon, slug };
       }),
     [property_landmark_categories]
   );
@@ -161,6 +175,10 @@ export default function LocationMap({
             (landmarkRecord.property_landmark_category_name as string) ||
             (landmarkRecord.property_landmark_category as string) ||
             undefined,
+          categorySlug:
+            (landmarkRecord.property_landmark_category_slug as string) ||
+            (landmarkRecord.property_landmark_category_key as string) ||
+            undefined,
           description:
             typeof descriptionRaw === "string" ? descriptionRaw : undefined,
         });
@@ -179,28 +197,42 @@ export default function LocationMap({
         lng: landmark.lng,
         zoom: 14,
         icon: landmark.icon,
+        placeName: landmark.name,
+        description: landmark.description,
+        category: landmark.categoryKey,
       }));
     }
 
     const mapped: MapLocation[] = [];
-    normalizedCategories.forEach((category, index) => {
-      const matchedLandmark =
-        normalizedLandmarks.find(
-          (landmark) =>
-            landmark.categoryKey?.trim().toLowerCase() ===
-            category.title.trim().toLowerCase()
-        ) || normalizedLandmarks[index];
+    normalizedCategories.forEach((category) => {
+      const categorySlug = normalizeSlug(category.slug);
+      const categoryTitle = normalizeText(category.title);
+      const matchedLandmark = normalizedLandmarks.find((landmark) => {
+        const landmarkSlug = normalizeSlug(landmark.categorySlug);
+        const landmarkTitle = normalizeText(landmark.categoryKey);
+        if (categorySlug && landmarkSlug) return landmarkSlug === categorySlug;
+        if (categoryTitle && landmarkTitle)
+          return landmarkTitle === categoryTitle;
+        return false;
+      });
 
+      // If we can't match by slug/title, skip rather than pairing with wrong data.
       if (!matchedLandmark) return;
 
+      const landmarkIndex = normalizedLandmarks.indexOf(matchedLandmark);
       mapped.push({
-        id: `landmark-${index}`,
+        // IMPORTANT: tie the id to the actual landmark we use for coordinates,
+        // so popup data never comes from a mismatched category/landmark.
+        id: `landmark-${Math.max(0, landmarkIndex)}`,
         title: category.title || matchedLandmark.name,
         type: "atm",
         lat: matchedLandmark.lat,
         lng: matchedLandmark.lng,
         zoom: 14,
         icon: category.icon || matchedLandmark.icon,
+        placeName: matchedLandmark.name,
+        description: matchedLandmark.description,
+        category: category.title || matchedLandmark.categoryKey,
       });
     });
 
@@ -309,23 +341,6 @@ export default function LocationMap({
       }
     },
     [animateRoute, clearRoute]
-  );
-
-  const getLocationMeta = useCallback(
-    (id: string) => {
-      const idx = Number(id.replace("landmark-", ""));
-      const landmark = Number.isFinite(idx)
-        ? normalizedLandmarks[idx]
-        : undefined;
-      const category =
-        normalizedCategories[idx]?.title || landmark?.categoryKey;
-      return {
-        placeName: landmark?.name,
-        description: landmark?.description,
-        category,
-      };
-    },
-    [normalizedCategories, normalizedLandmarks]
   );
 
   const openPlaceInfo = useCallback(
@@ -518,16 +533,15 @@ export default function LocationMap({
           map.panTo({ lat: loc.lat, lng: loc.lng });
           map.panBy(0, -100);
 
-          const meta = getLocationMeta(loc.id);
           const routeInfo = await drawRouteTo(
             new google.maps.LatLng(loc.lat, loc.lng),
             { suppressDestinationMarker: true }
           );
           openPlaceInfo({
             anchor: marker,
-            title: meta.placeName || loc.title,
-            description: meta.description,
-            category: meta.category,
+            title: loc.placeName || loc.title,
+            description: loc.description,
+            category: loc.category,
             distanceText: routeInfo?.distanceText,
             durationText: routeInfo?.durationText,
           });
@@ -549,7 +563,6 @@ export default function LocationMap({
   }, [
     drawRouteTo,
     clearRoute,
-    getLocationMeta,
     locations,
     openPlaceInfo,
     property_location_co_ordinates,
@@ -575,21 +588,12 @@ export default function LocationMap({
 
     setActive(location.id);
 
-    // Also draw route from property → this landmark
-    const marker = markersRef.current[location.id];
-    const meta = getLocationMeta(location.id);
+    // Tab click should NOT open a popup; only marker clicks do that.
+    infoWindowRef.current?.close();
+
+    // Still draw route from property → this landmark (no popup).
     drawRouteTo(new google.maps.LatLng(location.lat, location.lng), {
       suppressDestinationMarker: true,
-    }).then((routeInfo) => {
-      if (!marker) return;
-      openPlaceInfo({
-        anchor: marker,
-        title: meta.placeName || location.title,
-        description: meta.description,
-        category: meta.category,
-        distanceText: routeInfo?.distanceText,
-        durationText: routeInfo?.durationText,
-      });
     });
   };
 
