@@ -4,6 +4,9 @@ import { getPropertyCategory } from "@/api/property";
 import { AuthTokenResponse, PropertyCategoryProps } from "@/interfaces";
 import { KNOWN_PROPERTY_CATEGORY_SLUGS } from "@/lib/property-category-slugs";
 
+// Revalidate this route every 30 minutes.
+export const revalidate = 1800;
+
 interface ListPageProps {
   params: Promise<{
     "category-slug": string;
