@@ -49,19 +49,22 @@ const ListHeroBanner = ({
             propertyCategory?.property_category_milestones.length > 0 && (
               <div className="flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-8 text-white justify-center">
                 {propertyCategory?.property_category_milestones.map(
-                  (stat: PropertyCategoryMilestonesProps, index: number) => (
-                    <div
-                      key={index}
-                      className="flex items-center md:gap-2 flex-col border-b border-b-[rgba(255,255,255,0.5)] md:border-none pb-3 md:pb-0"
-                    >
-                      <span className="text-3xl md:text-4xl font-display-semi">
-                        {stat.milestone_count}
-                      </span>
-                      <span className="text-base md:text-lg font-display-semi">
-                        {stat.milestone_title}
-                      </span>
-                    </div>
-                  )
+                  (stat: PropertyCategoryMilestonesProps, index: number) => {
+                    if (!Object.keys(stat)?.length) return null;
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center md:gap-2 flex-col border-b border-b-[rgba(255,255,255,0.5)] md:border-none pb-3 md:pb-0"
+                      >
+                        <span className="text-3xl md:text-4xl font-display-semi">
+                          {stat.milestone_count}
+                        </span>
+                        <span className="text-base md:text-lg font-display-semi">
+                          {stat.milestone_title}
+                        </span>
+                      </div>
+                    );
+                  }
                 )}
               </div>
             )}

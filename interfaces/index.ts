@@ -403,6 +403,11 @@ export type PropertyKeyTenant = {
   property_key_tenant_image: string;
 };
 
+export type PropertyKeyTenantSection = {
+  property_key_tenants: PropertyKeyTenant[];
+  property_key_tenants_caption: string;
+};
+
 export type PropertyAwardCertificate = {
   property_award_certificate_caption: string;
   property_award_certificate_image: string;
@@ -454,7 +459,7 @@ export type PropertyDetailResponse = {
   property_landmark_categories?: unknown[];
   property_landmarks?: unknown[];
   property_amenities_section?: PropertyAmenitiesSection;
-  property_key_tenants?: PropertyKeyTenant[];
+  property_key_tenants_section?: PropertyKeyTenantSection;
   property_award_certificates?: PropertyAwardCertificate[];
 };
 
