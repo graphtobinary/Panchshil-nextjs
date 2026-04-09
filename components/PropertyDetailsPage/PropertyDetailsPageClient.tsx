@@ -182,7 +182,13 @@ export default function PropertyDetailsPageClient({
       </div>
       <div ref={keyTenantsRef}>
         <AmenitiesKeyTenants
-          property_key_tenants={propertyInfo?.property_key_tenants}
+          property_key_tenants={
+            propertyInfo?.property_key_tenants_section?.property_key_tenants
+          }
+          title={
+            propertyInfo?.property_key_tenants_section
+              ?.property_key_tenants_caption
+          }
         />
       </div>
       <div ref={awardsRef}>
