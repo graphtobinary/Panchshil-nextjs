@@ -675,16 +675,20 @@ export default function LocationMap({
                 >
                   2D
                 </button>
-                <button
-                  onClick={() => setMapView("3d")}
-                  className={`rounded-full px-5 py-2 text-lg font-semibold transition-colors ${
-                    mapView === "3d"
-                      ? "bg-white text-[#202020]"
-                      : "text-[#202020] hover:text-black"
-                  }`}
-                >
-                  3D
-                </button>
+                {property_3d_map_link && (
+                  <button
+                    onClick={() =>
+                      property_3d_map_link ? setMapView("3d") : null
+                    }
+                    className={`rounded-full px-5 py-2 text-lg font-semibold transition-colors ${
+                      mapView === "3d"
+                        ? "bg-white text-[#202020]"
+                        : "text-[#202020] hover:text-black"
+                    }`}
+                  >
+                    3D
+                  </button>
+                )}
               </div>
             </div>
 
