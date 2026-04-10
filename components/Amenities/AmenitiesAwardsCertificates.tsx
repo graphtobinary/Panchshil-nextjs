@@ -69,6 +69,7 @@ export function AmenitiesAwardsCertificates({
     </div>
   ));
 
+  if (items?.length === 0) return null;
   return (
     <section ref={sectionRef} className="w-full py-20 bg-white">
       <div className="mx-auto">
