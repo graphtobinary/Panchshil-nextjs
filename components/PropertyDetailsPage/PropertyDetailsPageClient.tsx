@@ -194,7 +194,12 @@ export default function PropertyDetailsPageClient({
       <div ref={awardsRef}>
         <AmenitiesAwardsCertificates
           property_award_certificates={
-            propertyInfo?.property_award_certificates
+            propertyInfo?.property_award_certificates_section
+              ?.property_award_certificates
+          }
+          title={
+            propertyInfo?.property_award_certificates_section
+              ?.property_award_certificates_caption
           }
         />
       </div>

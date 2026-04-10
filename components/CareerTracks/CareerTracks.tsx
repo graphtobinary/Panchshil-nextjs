@@ -1,9 +1,8 @@
 "use client";
 
 import { CareerTracksContent } from "@/app/careers/career-page.data";
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { CareerTrackPostCard } from "@/components/CareerTracks/CareerTrackPostCard";
 
 type CareerTracksProps = {
   content: CareerTracksContent;
@@ -53,31 +52,15 @@ export default function CareerTracks({ content }: CareerTracksProps) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-16">
           {content.posts.map((post, index) => (
-            <article
+            <CareerTrackPostCard
               key={`${post.title}-${index}`}
-              className={`${isInView ? "animate-fade-in-up-delay-2" : "opacity-0"}`}
-            >
-              <div className="relative w-full aspect-4/3 overflow-hidden">
-                <Image
-                  src={post.imageSrc}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="mt-4 text-2xl md:text-[25px] leading-tight text-black-chocolate font-display-semi">
-                {post.title}
-              </h3>
-              <p className="mt-2 text-sm md:text-base text-black/75 leading-relaxed">
-                {post.description}
-              </p>
-              <Link
-                href={post.ctaHref}
-                className="mt-4 inline-block text-sm md:text-base text-gold-beige underline underline-offset-4 hover:text-black-chocolate transition-colors"
-              >
-                {post.ctaLabel}
-              </Link>
-            </article>
+              imageSrc={post.imageSrc}
+              title={post.title}
+              description={post.description}
+              ctaHref={post.ctaHref}
+              ctaLabel={post.ctaLabel}
+              className={isInView ? "animate-fade-in-up-delay-2" : "opacity-0"}
+            />
           ))}
         </div>
       </div>

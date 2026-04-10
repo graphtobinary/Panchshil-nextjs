@@ -32,10 +32,10 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
 
   const quickLinks: { title: string; link: string }[] = [
     { title: "About Us", link: "https://www.panchshil.com/about" },
-    { title: "Services", link: "https://www.panchshil.com/services" },
+    { title: "Services", link: "/services" },
     { title: "Testimonials", link: "/testimonials" },
     { title: "Media", link: "https://www.panchshil.com/press" },
-    { title: "Blogs", link: "https://www.panchshil.com/blog" },
+    { title: "Blogs", link: "/blogs" },
   ];
   const usefulLinks: { title: string; link: string }[] = [
     {

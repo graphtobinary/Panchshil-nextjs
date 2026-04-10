@@ -403,6 +403,11 @@ export type PropertyKeyTenant = {
   property_key_tenant_image: string;
 };
 
+export type PropertyAwardCertificateSection = {
+  property_award_certificates: PropertyAwardCertificate[];
+  property_award_certificates_caption: string;
+};
+
 export type PropertyKeyTenantSection = {
   property_key_tenants: PropertyKeyTenant[];
   property_key_tenants_caption: string;
@@ -460,7 +465,7 @@ export type PropertyDetailResponse = {
   property_landmarks?: unknown[];
   property_amenities_section?: PropertyAmenitiesSection;
   property_key_tenants_section?: PropertyKeyTenantSection;
-  property_award_certificates?: PropertyAwardCertificate[];
+  property_award_certificates_section?: PropertyAwardCertificateSection;
 };
 
 export type PropertyInteriorSliderType = {
@@ -490,6 +495,13 @@ export type PropertyDefiningFeaturesType = {
 export type PropertyDefiningFeaturesSectionType = {
   property_defining_features: PropertyDefiningFeaturesType[];
   property_defining_features_caption: string;
+  property_defining_features_description?: string;
+  property_defining_features_subcaption?: string;
+  property_defining_features_cta?: {
+    label: string;
+    href: string;
+  };
+  property_defining_features_layout?: "imageLeft" | "imageRight";
   property_defining_features_thumbnail: string;
 };
 
