@@ -58,6 +58,7 @@ export function AmenitiesKeyTenants({
     </div>
   ));
 
+  if (items?.length === 0) return null;
   return (
     <section ref={sectionRef} className="w-full py-10 md:py-20">
       <div className="mx-auto">

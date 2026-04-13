@@ -25,11 +25,13 @@ const WhatSetsApart = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Text Content */}
           <div className={layout === "imageLeft" ? "lg:order-2" : ""}>
-            <h2 className="text-2xl md:text-[28px] font-display-semi text-black uppercase mb-8 md:mb-12">
-              {
-                property_defining_features_section?.property_defining_features_caption
-              }
-            </h2>
+            {property_defining_features_section?.property_defining_features_caption && (
+              <h2 className="text-2xl md:text-[28px] font-display-semi text-black uppercase mb-8 md:mb-12">
+                {
+                  property_defining_features_section?.property_defining_features_caption
+                }
+              </h2>
+            )}
             {property_defining_features_section?.property_defining_features_description ? (
               <p className="text-sm md:text-sm text-[#1F180D]/80 leading-relaxed mb-8 -mt-4 max-w-2xl">
                 {
