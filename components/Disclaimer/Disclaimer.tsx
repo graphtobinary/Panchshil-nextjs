@@ -147,7 +147,7 @@ export function Disclaimer({
                   </span>
                 </button>
                 {isOpen && (
-                  <div className="pb-6 md:pb-8 pl-[60px] md:pl-[72px]">
+                  <div className="pb-6 md:pb-8 md:pl-[72px]">
                     {item.content}
                   </div>
                 )}

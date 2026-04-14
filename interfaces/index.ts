@@ -372,8 +372,13 @@ export interface MasterSliderData {
   master_slider_description: string;
   master_slider_link: string;
   master_slider_image: string | null;
+  master_slider_image_mobile?: string | null;
   master_slider_video: string;
   master_slider_button_caption: string;
+  banner_image_mobile?: string;
+  banner_image_caption?: string;
+  banner_image_description?: string;
+  banner_image?: string;
 }
 
 export interface TestimonialData {
@@ -430,6 +435,7 @@ export type PropertyDetailResponse = {
     banner_image: string | null;
     banner_image_caption: string;
     banner_image_description: string;
+    banner_image_mobile: string | null;
   };
   meta_data?: {
     meta_title: string;
