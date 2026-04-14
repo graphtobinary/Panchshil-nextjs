@@ -60,7 +60,7 @@ export const blogsPageStaticData: BlogsPageData = {
       title: "Villas Or Penthouses - Which One Is Better?",
       excerpt:
         "In the game of luxury real estate, much like in ‘Game of Thrones’, every detail matters; from the grandeur of the Highgarden to the stark beauty of Winterfell, each property pledges allegiance to its owner’s vision.",
-      readMoreHref: "#",
+      readMoreHref: "/blogs/villas-penthouses",
       imageSrc: "/assets/images/blogs/sharing-caring.png",
       imageAlt: "Luxury residence with pool at dusk",
     },
@@ -81,7 +81,7 @@ export const blogsPageStaticData: BlogsPageData = {
         title: "Why Real Estate Properties Will Always Be A Good Investment",
         publishedOn: "05July, 2025",
         imageSrc: IMG_A,
-        href: "#",
+        href: "/blogs/villas-penthouses",
       },
       {
         id: "2",
@@ -89,7 +89,7 @@ export const blogsPageStaticData: BlogsPageData = {
         title: "Things To Keep In Mind When Investing In A Luxury Apartment",
         publishedOn: "08Aug, 2025",
         imageSrc: IMG_B,
-        href: "#",
+        href: "/blogs/villas-penthouses",
       },
       {
         id: "3",
@@ -97,7 +97,7 @@ export const blogsPageStaticData: BlogsPageData = {
         title: "Things To Keep In Mind When Investing In A Luxury Apartment",
         publishedOn: "05July, 2025",
         imageSrc: IMG_C,
-        href: "#",
+        href: "/blogs/villas-penthouses",
       },
       {
         id: "4",
@@ -106,7 +106,7 @@ export const blogsPageStaticData: BlogsPageData = {
           "How The Internet Of Things Is Poised To Elevate And Transform Any Home",
         publishedOn: "08Aug, 2025",
         imageSrc: IMG_D,
-        href: "#",
+        href: "/blogs/villas-penthouses",
       },
       {
         id: "5",
@@ -114,7 +114,7 @@ export const blogsPageStaticData: BlogsPageData = {
         title: "Community Initiatives That Strengthen Neighbourhoods",
         publishedOn: "12June, 2025",
         imageSrc: IMG_B,
-        href: "#",
+        href: "/blogs/villas-penthouses",
       },
       {
         id: "6",
@@ -122,7 +122,7 @@ export const blogsPageStaticData: BlogsPageData = {
         title: "Sustainability In Every Brick We Lay",
         publishedOn: "01May, 2025",
         imageSrc: IMG_A,
-        href: "#",
+        href: "/blogs/villas-penthouses",
       },
       {
         id: "7",
@@ -130,7 +130,7 @@ export const blogsPageStaticData: BlogsPageData = {
         title: "Design Trends Shaping Modern Workspaces",
         publishedOn: "20Apr, 2025",
         imageSrc: IMG_C,
-        href: "#",
+        href: "/blogs/villas-penthouses",
       },
       {
         id: "8",
@@ -138,7 +138,7 @@ export const blogsPageStaticData: BlogsPageData = {
         title: "Long-Term Value In Prime Locations",
         publishedOn: "15Mar, 2025",
         imageSrc: IMG_D,
-        href: "#",
+        href: "/blogs/villas-penthouses",
       },
     ],
   },
