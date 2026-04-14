@@ -130,7 +130,6 @@ export default async function PropertyDetailPage({
   }
 
   const detail = (propertyDetail || {}) as PropertyDetailResponse;
-
   // Hero slide mapping (best-effort)
   const heroSlide: MasterSliderData | undefined = (() => {
     const title =
@@ -139,8 +138,8 @@ export default async function PropertyDetailPage({
 
     const link = detail?.meta_data?.canonical_tag || "";
 
-    const image = detail?.banner_data?.banner_image ?? null;
-
+    const image = detail?.banner_data?.banner_image || null;
+    const mobileImage = detail?.banner_data?.banner_image_mobile || null;
     const video = "";
 
     const buttonCaption =
@@ -155,6 +154,7 @@ export default async function PropertyDetailPage({
       master_slider_description: description,
       master_slider_link: link,
       master_slider_image: image,
+      master_slider_image_mobile: mobileImage,
       master_slider_video: video,
       master_slider_button_caption: buttonCaption,
     };

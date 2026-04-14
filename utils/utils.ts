@@ -97,3 +97,13 @@ export const getVideoUrl = (videoUrl: string): string => {
   // For relative URLs, use directly (they're from the same origin)
   return videoUrl;
 };
+
+export type DeviceType = "mobile" | "desktop";
+
+/** Viewport-based check; on the server returns `"desktop"` (no `window`). */
+export const getDeviceType = (): DeviceType => {
+  if (typeof window === "undefined") {
+    return "desktop";
+  }
+  return window.innerWidth < 768 ? "mobile" : "desktop";
+};

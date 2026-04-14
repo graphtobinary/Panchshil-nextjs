@@ -34,14 +34,16 @@ export default function CommonHeroMedia({
             console.error("Video failed to load:", videoSrc, e);
           }}
         />
-      ) : (
+      ) : imageSrc ? (
         <Image
-          src={imageSrc ?? ""}
+          src={imageSrc}
           alt={imageAlt}
           fill
           className="object-cover"
           priority
         />
+      ) : (
+        <div className="absolute inset-0 bg-neutral-900" aria-hidden />
       )}
 
       <div
