@@ -229,6 +229,19 @@ export default async function RootLayout({
             fbq('track', 'PageView');
           `}
         </Script>
+        <Script id="verloop-livechat" strategy="afterInteractive">
+          {`
+            (function (w, d, s, u) {
+              w.Verloop = function (c) { w.Verloop._.push(c); };
+              w.Verloop._ = [];
+              w.Verloop.url = u;
+              var h = d.getElementsByTagName(s)[0], j = d.createElement(s);
+              j.async = true;
+              j.src = 'https://panchshil.verloop.io/livechat/script.min.js';
+              h.parentNode.insertBefore(j, h);
+            })(window, document, 'script', 'https://panchshil.verloop.io/livechat');
+          `}
+        </Script>
         <Script
           id="structured-data"
           type="application/ld+json"
@@ -237,6 +250,7 @@ export default async function RootLayout({
             __html: JSON.stringify(structuredData),
           }}
         />
+
         <meta
           property="og:title"
           content="Panchshil - India's Leading Luxury Developer"
