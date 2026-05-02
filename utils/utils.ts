@@ -79,6 +79,7 @@ export const isAllowedPageForTheme = (params: { [key: string]: string }) => {
     "hospitality",
     "data-centres",
     "retail",
+    "about",
   ];
   return allowedPages.includes(page);
 };

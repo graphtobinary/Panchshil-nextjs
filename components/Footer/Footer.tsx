@@ -31,7 +31,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
   };
 
   const quickLinks: { title: string; link: string }[] = [
-    { title: "About Us", link: "https://www.panchshil.com/about" },
+    { title: "About Us", link: "/about" },
     { title: "Services", link: "/services" },
     { title: "Testimonials", link: "/testimonials" },
     { title: "Media", link: "https://www.panchshil.com/press" },
