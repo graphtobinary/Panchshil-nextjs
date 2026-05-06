@@ -57,9 +57,27 @@ export type AboutUsPageDummyData = {
     label: string;
   }>;
   visibleImpact: AboutUsVisibleImpactContent;
+  milestones: AboutUsMilestonesContent;
   sustainability: AboutUsSustainabilityContent;
   ourValuedClients: OurValuedClientsType[];
   alliances: AboutUsAlliancesContent;
+};
+
+export type AboutUsMilestoneItem = {
+  year: string;
+  title: string;
+  description: {
+    title: string;
+    content: string;
+  }[];
+  imageSrc: string;
+  imageAlt: string;
+};
+
+export type AboutUsMilestonesContent = {
+  title: string;
+  subtitle: string;
+  milestones: AboutUsMilestoneItem[];
 };
 
 export type OurValuedClientsType = {
@@ -127,6 +145,81 @@ export const aboutUsPageDummyData: AboutUsPageDummyData = {
     points: [],
     imageSrc: "/assets/images/about/atul-chordia-chairman.png", // Using dummy image
     imageAlt: "Atul Chordia, Chairman, Panchshil Realty",
+  },
+  milestones: {
+    title: "GROWTH CHRONICLES",
+    subtitle: "",
+    milestones: [
+      {
+        year: "2024",
+        title: "LANDMARK DELIVERIES",
+        description: [
+          {
+            title: "January",
+            content:
+              "Several iconic projects were completed and delivered, creating new landmarks in Pune. Our commitment to quality construction and timely delivery earned us industry recognition.",
+          },
+          {
+            title: "January",
+            content:
+              "Several iconic projects were completed and delivered, creating new landmarks in Pune. Our commitment to quality construction and timely delivery earned us industry recognition.",
+          },
+          {
+            title: "January",
+            content:
+              "Several iconic projects were completed and delivered, creating new landmarks in Pune. Our commitment to quality construction and timely delivery earned us industry recognition.",
+          },
+        ],
+        imageSrc: "/assets/images/about/growth-chronicles-2024.png",
+        imageAlt: "Landmark project deliveries in 2015",
+      },
+      {
+        year: "2025",
+        title: "GLOBAL EXPANSION",
+        description: [
+          {
+            title: "January",
+            content:
+              "Panchshil expanded beyond India with projects in Dubai, Maldives, and Sri Lanka, bringing Indian luxury real estate expertise to international markets and global design sensibilities to every address.",
+          },
+          {
+            title: "January",
+            content:
+              "Panchshil expanded beyond India with projects in Dubai, Maldives, and Sri Lanka, bringing Indian luxury real estate expertise to international markets and global design sensibilities to every address.",
+          },
+          {
+            title: "January",
+            content:
+              "Panchshil expanded beyond India with projects in Dubai, Maldives, and Sri Lanka, bringing Indian luxury real estate expertise to international markets and global design sensibilities to every address.",
+          },
+        ],
+        imageSrc: "/assets/images/about/growth-chronicles-2024.png",
+        imageAlt: "Global expansion in 2020",
+      },
+      {
+        year: "2026",
+        title: "TODAY & BEYOND",
+        description: [
+          {
+            title: "January",
+            content:
+              "With over 35 million sq. ft. delivered and 40 million sq. ft. under construction across 3 countries, we continue to build legacies, shape lifestyles, and create integrated communities that stand the test of time.",
+          },
+          {
+            title: "January",
+            content:
+              "With over 35 million sq. ft. delivered and 40 million sq. ft. under construction across 3 countries, we continue to build legacies, shape lifestyles, and create integrated communities that stand the test of time.",
+          },
+          {
+            title: "January",
+            content:
+              "With over 35 million sq. ft. delivered and 40 million sq. ft. under construction across 3 countries, we continue to build legacies, shape lifestyles, and create integrated communities that stand the test of time.",
+          },
+        ],
+        imageSrc: "/assets/images/about/growth-chronicles-2024.png",
+        imageAlt: "Panchshil today and future vision",
+      },
+    ],
   },
   sustainability: {
     slides: [

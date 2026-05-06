@@ -10,6 +10,8 @@ import { AboutUsAlliances } from "@/components/AboutUsAlliances";
 import { AboutUsPageDummyData } from "@/app/about/about.data";
 import DevelopmentForYou from "@/components/DevelopmentForYou";
 import { AboutUsClients } from "../AboutUsClients";
+import AboutUsMilestones from "@/components/AboutUsMilestones/AboutUsMilestones";
+import AboutUsVideoBanner from "@/components/AboutUsVideoBanner/AboutUsVideoBanner";
 
 type AboutUsPageClientProps = {
   data: AboutUsPageDummyData;
@@ -24,6 +26,8 @@ export default function AboutUsPageClient({ data }: AboutUsPageClientProps) {
         <AboutUsStatsBar stats={data.stats} />
       </section>
       <AboutUsVisibleImpact content={data.visibleImpact} />
+      <AboutUsMilestones content={data.milestones} />
+      <AboutUsVideoBanner />
       <div className="bg-white">
         <DevelopmentForYou
           title="FROM PUNE TO THE WORLD"
