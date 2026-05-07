@@ -36,7 +36,17 @@ import Link from "next/link";
 //   },
 // ];
 
-const DevelopmentForYou = () => {
+interface DevelopmentForYouProps {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+}
+
+const DevelopmentForYou = ({
+  title = "Representing Exceptional, Scale or delivery excellence",
+  subtitle = "Development For You",
+  description,
+}: DevelopmentForYouProps = {}) => {
   const { theme } = useThemeStore();
   const navigationMenu = useNavigationMenu();
   const sectionRef = useRef<HTMLElement>(null);
@@ -65,7 +75,7 @@ const DevelopmentForYou = () => {
   return (
     <section
       ref={sectionRef}
-      className={`w-full py-10 md:py-20 transition-colors `}
+      className={`w-full py-10 md:py-10 transition-colors `}
     >
       <div className="mx-auto ">
         {/* Title and Description */}
@@ -79,15 +89,24 @@ const DevelopmentForYou = () => {
             ${theme === "day" ? "text-gold-beige" : "text-white"}
             `}
           >
-            Development For You
+            {subtitle}
           </div>
           <h2
             className={`text-2xl uppercase md:text-[28px] font-display-semi transition-colors ${
               theme === "day" ? "text-black" : "text-white"
             }`}
           >
-            Representing Exceptional, Scale or delivery excellence
+            {title}
           </h2>
+          {description && (
+            <p
+              className={`mt-4 text-sm md:text-base max-w-[800px] mx-auto leading-relaxed ${
+                theme === "day" ? "text-black/80" : "text-white/80"
+              }`}
+            >
+              {description}
+            </p>
+          )}
         </div>
 
         <div className="flex md:gap-4 md:flex-row flex-col justify-center">
