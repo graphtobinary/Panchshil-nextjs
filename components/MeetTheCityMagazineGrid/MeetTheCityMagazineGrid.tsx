@@ -13,7 +13,7 @@ export default function MeetTheCityMagazineGrid({
   editions,
   itemsPerPage = 6,
 }: MeetTheCityMagazineGridProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage] = useState(1);
 
   const totalPages = Math.max(1, Math.ceil(editions.length / itemsPerPage));
   const safeCurrentPage = Math.min(currentPage, totalPages);

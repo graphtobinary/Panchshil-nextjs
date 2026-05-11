@@ -7,13 +7,49 @@ import PropertyDetailsHero from "@/components/PropertyDetailsHero";
 import WhatSetsApart from "@/components/WhatSetsApart/WhatSetsApart";
 import {
   servicesHeroSlide,
-  servicesIntro,
   servicesSections,
+  ServicesPageDummyData,
 } from "@/app/services/services.data";
 import { EnquiryForm } from "@/components/PropertyInfo/EnquiryForm";
 
-export default function ServicesPageClient() {
+type ServicesPageClientProps = {
+  data: ServicesPageDummyData;
+};
+
+export default function ServicesPageClient({ data }: ServicesPageClientProps) {
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+
+  const introTitle =
+    data.servicesIntroData.services_headling || servicesSections.length > 0
+      ? data.servicesIntroData.services_headling
+      : "WHETHER BUILDING NEW DESTINATIONS OR SUPPORTING EXISTING DEVELOPMENTS, OUR FOCUS REMAINS THE SAME: THOUGHTFUL EXECUTION, EFFICIENT DELIVERY AND ENDURING VALUE.";
+
+  const introDescription = data.servicesIntroData.services_description;
+
+  const sections =
+    data.servicesData.length > 0
+      ? data.servicesData.map((service) => {
+          const thumbnail =
+            service.service_thumbnail ||
+            "/assets/images/services/development-service.png";
+          return {
+            property_defining_features_caption: service.service_name,
+            property_defining_features_description: service.service_description,
+            property_defining_features_subcaption: "OUR CAPABILITIES INCLUDE",
+            property_defining_features_layout: "imageLeft" as const,
+            property_defining_features_thumbnail: thumbnail,
+            property_defining_features_cta: {
+              label: "Connect With Us",
+              href: "",
+            },
+            property_defining_features: service.service_capabilities.map(
+              (cap) => ({
+                property_defining_feature_caption: cap,
+              })
+            ),
+          };
+        })
+      : servicesSections;
 
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
@@ -44,17 +80,17 @@ export default function ServicesPageClient() {
       <section className="w-full bg-white py-16 md:py-24">
         <div className="mx-auto max-w-[1200px] px-6 md:px-16 text-center">
           <h2 className="text-xl md:text-2xl font-display-semi text-[#1F180D] uppercase tracking-wide">
-            {servicesIntro.title}
+            {introTitle}
           </h2>
           <p className="mt-6 text-sm md:text-sm text-[#1F180D]/80 leading-relaxed max-w-5xl mx-auto">
-            {servicesIntro.subtitle}
+            {introDescription}
           </p>
         </div>
       </section>
 
       {/* Service sections */}
       <div className="bg-white pb-10">
-        {servicesSections.map((section, idx) => (
+        {sections.map((section, idx) => (
           <WhatSetsApart
             key={`${section.property_defining_features_caption}-${idx}`}
             property_defining_features_section={section}

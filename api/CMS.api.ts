@@ -159,6 +159,126 @@ export const getAboutIntro = (token: string) => {
   );
 };
 
+export const getAboutUsIntro = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ABOUT_US_INTRO,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAboutUsMilestones = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ABOUT_US_MILESTONES,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAboutUsGrowthChronicles = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ABOUT_US_GROWTH_CHRONICLES,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAboutUsVideo = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ABOUT_US_VIDEO,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAboutUsGlobalIntroduction = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ABOUT_US_GLOBAL_INTRODUCTION,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAboutUsEsg = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ABOUT_US_ESG,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAboutUsClients = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ABOUT_US_CLIENTS,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAboutUsPartners = (token: string) => {
+  return doGet(
+    API_CONSTANTS.ABOUT_US_PARTNERS,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getAboutServicesIntro = (token: string) => {
+  return doGet(
+    API_CONSTANTS.SERVICES_INTRO,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+export const getServicesList = (token: string) => {
+  return doGet(
+    API_CONSTANTS.SERVICES,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
 export const getMilestones = (token: string) => {
   return doGet(
     API_CONSTANTS.HOME_MILESTONES,

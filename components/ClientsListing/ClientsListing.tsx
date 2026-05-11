@@ -5,12 +5,12 @@ import type { ClientItem } from "@/app/clients/clients.data";
 
 type ClientsListingProps = {
   clients: ClientItem[];
-  itemsPerPage?: number;
+  // itemsPerPage?: number;
 };
 
 export default function ClientsListing({
   clients,
-  itemsPerPage: _itemsPerPage = 24,
+  // itemsPerPage: _itemsPerPage = 24,
 }: ClientsListingProps) {
   // Pagination is temporarily disabled.
   // const [currentPage, setCurrentPage] = useState(1);

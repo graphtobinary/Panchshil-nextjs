@@ -2,6 +2,22 @@ import type {
   MasterSliderData,
   PropertyDefiningFeaturesSectionType,
 } from "@/interfaces";
+import type { ServicesIntroData, ServiceItem } from "@/interfaces";
+
+export type ServicesPageDummyData = {
+  servicesIntroData: ServicesIntroData;
+  servicesData: ServiceItem[];
+};
+
+export const servicesPageDummyData: ServicesPageDummyData = {
+  servicesIntroData: {
+    services_headling:
+      "WHETHER BUILDING NEW DESTINATIONS OR SUPPORTING EXISTING DEVELOPMENTS, OUR FOCUS REMAINS THE SAME: THOUGHTFUL EXECUTION, EFFICIENT DELIVERY AND ENDURING VALUE.",
+    services_description:
+      "Panchshil offers integrated services across every stage of the real estate lifecycle from planning and development to construction oversight, fit out execution and longterm operational management. Our approach ensures consistency, accountability and quality across all asset classes, supporting our clients, residents and partners with a single point of ownership and expertise.",
+  },
+  servicesData: [],
+};
 
 export const servicesHeroSlide: MasterSliderData = {
   master_slider_title: "Our Services",

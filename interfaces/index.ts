@@ -210,6 +210,70 @@ export type AboutIntroData = {
   about_intro_button_caption: string;
 };
 
+export type AboutUsIntroData = {
+  about_intro_name: string;
+  about_intro_designation: string;
+  about_intro_caption: string;
+  about_intro_content: string;
+  about_intro_image: string;
+};
+
+export type AboutUsMilestonesApiItem = {
+  milestone_count: string;
+  milestone_title: string;
+};
+
+export type GrowthChronicleItem = {
+  growth_chronicle_year: number;
+  growth_chronicles: string[];
+};
+
+export type AboutVideoData = {
+  about_video_caption: string;
+  about_video_youtube_id: string;
+  about_intro_video_thumbnail: string;
+};
+
+export type GlobalContent = {
+  global_heading: string;
+  global_caption: string;
+  global_description: string;
+};
+
+export type AboutEsgContent = {
+  about_esg_caption: string;
+  about_esg_description: string;
+  about_esg_image: string;
+};
+
+export type AboutClient = {
+  client_name: string;
+  client_logo: string;
+};
+
+export type AboutPartner = {
+  partner_name: string;
+  partner_description: string;
+  partner_website: string;
+};
+
+export type AboutPartnerTab = {
+  partners: AboutPartner[];
+  partner_tab: string;
+};
+
+export type ServicesIntroData = {
+  services_headling: string;
+  services_description: string;
+};
+
+export type ServiceItem = {
+  service_name: string;
+  service_description: string;
+  service_thumbnail: string;
+  service_capabilities: string[];
+};
+
 export interface AuthTokenResponse {
   token: string;
 }

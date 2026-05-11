@@ -1,6 +1,175 @@
 import { AboutUsPageClient } from "@/components/AboutUsPage";
 import { aboutUsPageDummyData } from "./about.data";
+import {
+  getAuthToken,
+  getAboutUsIntro,
+  getAboutUsMilestones,
+  getAboutUsGrowthChronicles,
+  getAboutUsVideo,
+  getAboutUsGlobalIntroduction,
+  getAboutUsEsg,
+  getAboutUsClients,
+  getAboutUsPartners,
+} from "@/api/CMS.api";
+import {
+  AuthTokenResponse,
+  AboutUsIntroData,
+  AboutUsMilestonesApiItem,
+  GrowthChronicleItem,
+  AboutVideoData,
+  GlobalContent,
+  AboutEsgContent,
+  AboutClient,
+  AboutPartnerTab,
+} from "@/interfaces";
 
-export default function AboutUsPage() {
-  return <AboutUsPageClient data={aboutUsPageDummyData} />;
+export const revalidate = 600;
+
+export default async function AboutUsPage() {
+  let token: string | null = null;
+  try {
+    const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+    if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+      token = tokenResponse.token;
+    }
+  } catch (error) {
+    console.error("Error fetching auth token:", error);
+  }
+
+  const apiCalls = token
+    ? [
+        getAboutUsIntro(token),
+        getAboutUsMilestones(token),
+        getAboutUsGrowthChronicles(token),
+        getAboutUsVideo(token),
+        getAboutUsGlobalIntroduction(token),
+        getAboutUsEsg(token),
+        getAboutUsClients(token),
+        getAboutUsPartners(token),
+      ]
+    : [
+        Promise.resolve(null),
+        Promise.resolve(null),
+        Promise.resolve(null),
+        Promise.resolve(null),
+        Promise.resolve(null),
+        Promise.resolve(null),
+        Promise.resolve(null),
+        Promise.resolve(null),
+      ];
+
+  const [
+    aboutIntroRes,
+    milestonesRes,
+    growthChroniclesRes,
+    videoRes,
+    globalIntroRes,
+    esgRes,
+    clientsRes,
+    partnersRes,
+  ] = await Promise.allSettled(apiCalls);
+
+  const mergedData = { ...aboutUsPageDummyData };
+
+  if (aboutIntroRes.status === "fulfilled" && aboutIntroRes.value) {
+    const introData = aboutIntroRes.value as AboutUsIntroData;
+    mergedData.visibleImpact = {
+      ...mergedData.visibleImpact,
+      title: introData.about_intro_caption || mergedData.visibleImpact.title,
+      description: introData.about_intro_content ? (
+        <div
+          className="flex flex-col gap-4"
+          dangerouslySetInnerHTML={{ __html: introData.about_intro_content }}
+        />
+      ) : (
+        mergedData.visibleImpact.description
+      ),
+      imageSrc:
+        introData.about_intro_image || mergedData.visibleImpact.imageSrc,
+    };
+  }
+
+  if (milestonesRes.status === "fulfilled" && milestonesRes.value) {
+    const milestonesData = milestonesRes.value as AboutUsMilestonesApiItem[];
+    if (Array.isArray(milestonesData) && milestonesData.length > 0) {
+      mergedData.stats = milestonesData.map((milestone) => {
+        const countString = milestone.milestone_count || "0";
+        const numericValue = parseInt(countString.replace(/\D/g, "")) || 0;
+        const suffixValue = countString.replace(/\d/g, "");
+
+        return {
+          value: numericValue,
+          suffix: suffixValue,
+          label: milestone.milestone_title,
+        };
+      });
+    }
+  }
+
+  if (growthChroniclesRes.status === "fulfilled" && growthChroniclesRes.value) {
+    const growthData = growthChroniclesRes.value as GrowthChronicleItem[];
+    if (Array.isArray(growthData) && growthData.length > 0) {
+      mergedData.milestones = {
+        ...mergedData.milestones,
+        milestones: growthData.map((item, index) => {
+          const fallback =
+            aboutUsPageDummyData.milestones.milestones[index] ||
+            aboutUsPageDummyData.milestones.milestones[0];
+
+          return {
+            year: item.growth_chronicle_year.toString(),
+            title: fallback.title,
+            description: item.growth_chronicles.map((text) => ({
+              title: "",
+              content: text,
+            })),
+            imageSrc: fallback.imageSrc,
+            imageAlt: fallback.imageAlt,
+          };
+        }),
+      };
+    }
+  }
+
+  if (videoRes.status === "fulfilled" && videoRes.value) {
+    mergedData.videoBanner = videoRes.value as AboutVideoData;
+  }
+
+  if (globalIntroRes.status === "fulfilled" && globalIntroRes.value) {
+    mergedData.globalIntroduction = globalIntroRes.value as GlobalContent;
+  }
+
+  if (esgRes.status === "fulfilled" && esgRes.value) {
+    mergedData.esg = esgRes.value as AboutEsgContent;
+  }
+
+  if (clientsRes.status === "fulfilled" && clientsRes.value) {
+    const clients = clientsRes.value as AboutClient[];
+    if (Array.isArray(clients) && clients.length > 0) {
+      mergedData.ourValuedClients = clients.map((client) => ({
+        property_key_tenant_caption: client.client_name,
+        property_key_tenant_image: client.client_logo,
+      }));
+    }
+  }
+
+  if (partnersRes.status === "fulfilled" && partnersRes.value) {
+    const partnerTabs = partnersRes.value as AboutPartnerTab[];
+    if (Array.isArray(partnerTabs) && partnerTabs.length > 0) {
+      mergedData.alliances = {
+        ...mergedData.alliances,
+        tabs: partnerTabs.map((tab) => ({
+          tabLabel: tab.partner_tab,
+          slides: tab.partners.map((partner) => ({
+            title: partner.partner_name,
+            description: partner.partner_description,
+            linkLabel: "Read More",
+            linkHref: partner.partner_website,
+          })),
+        })),
+      };
+    }
+  }
+
+  return <AboutUsPageClient data={mergedData} />;
 }

@@ -18,8 +18,8 @@ export default function AboutUsSustainability({
     loop: false,
   });
 
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(false);
+  const [canPrev] = useState(false);
+  const [canNext] = useState(false);
 
   // const onSelect = useCallback(() => {
   //   if (!emblaApi) return;

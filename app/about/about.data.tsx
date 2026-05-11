@@ -1,3 +1,5 @@
+import { GlobalContent, AboutEsgContent, AboutClient } from "@/interfaces";
+
 export type AboutUsHeroContent = {
   imageSrc: string;
   title: string;
@@ -61,6 +63,10 @@ export type AboutUsPageDummyData = {
   sustainability: AboutUsSustainabilityContent;
   ourValuedClients: OurValuedClientsType[];
   alliances: AboutUsAlliancesContent;
+  videoBanner?: import("@/interfaces").AboutVideoData;
+  globalIntroduction?: GlobalContent;
+  esg?: AboutEsgContent;
+  aboutClients?: AboutClient[];
 };
 
 export type AboutUsMilestoneItem = {
