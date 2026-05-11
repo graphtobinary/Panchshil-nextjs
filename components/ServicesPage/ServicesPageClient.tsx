@@ -94,7 +94,7 @@ export default function ServicesPageClient({ data }: ServicesPageClientProps) {
           <WhatSetsApart
             key={`${section.property_defining_features_caption}-${idx}`}
             property_defining_features_section={section}
-            onCtaClick={() => setIsEnquiryOpen(true)}
+            // onCtaClick={() => setIsEnquiryOpen(true)}
           />
         ))}
       </div>

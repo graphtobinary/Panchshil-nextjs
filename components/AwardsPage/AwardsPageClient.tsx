@@ -17,7 +17,10 @@ export default function AwardsPageClient({ data }: AwardsPageClientProps) {
       <section className="min-h-screen flex flex-col bg-white">
         <CareerHero hero={data.hero} />
       </section>
-      <AwardsListing awards={data.awards} itemsPerPage={6} />
+      <AwardsListing
+        awards={data.awards}
+        // itemsPerPage={6}
+      />
       <Footer />
     </main>
   );
