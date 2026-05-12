@@ -17,7 +17,6 @@ export type TestimonialListItem = {
 export type TestimonialsPageData = {
   hero: CareerHeroContent;
   testimonials: TestimonialListItem[];
-  metaData: MetaDataProps;
 };
 
 const SAMPLE_QUOTE =
@@ -157,5 +156,4 @@ export const testimonialsPageDummyData: TestimonialsPageData = {
       avatarAlt: "Testimonial profile",
     },
   ],
-  metaData: {},
 };

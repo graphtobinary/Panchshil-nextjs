@@ -24,27 +24,27 @@ const openSans = Open_Sans({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-// export const metadata: Metadata = {
-//   title: "Panchshil - India's Leading Luxury Developer",
-//   description:
-//     "Since 2002, Panchshil Realty has set benchmarks in design, delivery and urban placemaking. From landmark residences and global office districts to iconic hospitality and convention destinations.",
-//   icons: {
-//     apple: "/assets/images/apple-touch-icon.png",
-//     icon: [
-//       {
-//         url: "/assets/images/favicon-32x32.png",
-//         sizes: "32x32",
-//         type: "image/png",
-//       },
-//       {
-//         url: "/assets/images/favicon-16x16.png",
-//         sizes: "16x16",
-//         type: "image/png",
-//       },
-//     ],
-//   },
-//   manifest: "/assets/site.webmanifest",
-// };
+export const metadata: Metadata = {
+  title: "Panchshil - India's Leading Luxury Developer",
+  description:
+    "Since 2002, Panchshil Realty has set benchmarks in design, delivery and urban placemaking. From landmark residences and global office districts to iconic hospitality and convention destinations.",
+  icons: {
+    apple: "/assets/images/apple-touch-icon.png",
+    icon: [
+      {
+        url: "/assets/images/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/assets/images/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+    ],
+  },
+  manifest: "/assets/site.webmanifest",
+};
 
 interface AuthTokenResponse {
   token: string;

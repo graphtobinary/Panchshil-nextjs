@@ -11,7 +11,6 @@ export type ClientItem = {
 export type ClientsPageData = {
   hero: CareerHeroContent;
   clients: ClientItem[];
-  metaData: MetaDataProps;
 };
 
 export const clientsPageData: ClientsPageData = {
@@ -312,5 +311,4 @@ export const clientsPageData: ClientsPageData = {
       imageAlt: "Citi",
     },
   ],
-  metaData: {},
 };

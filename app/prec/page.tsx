@@ -25,8 +25,43 @@ import {
   BannersProps,
   MetaDataProps,
 } from "@/interfaces";
+import type { Metadata } from "next";
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
+
+async function getPageMetaData(): Promise<MetaDataProps | null> {
+  let token: string | null = null;
+  try {
+    const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+    if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+      token = tokenResponse.token;
+    }
+  } catch (error) {
+    console.error("Error fetching auth token for metadata:", error);
+    return null;
+  }
+
+  if (!token) return null;
+
+  try {
+    return (await getMetaData(token, "PREC")) as MetaDataProps;
+  } catch (error) {
+    console.error("Error fetching meta data:", error);
+    return null;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const metaData = await getPageMetaData();
+  return {
+    title: metaData?.meta_title || "",
+    description: metaData?.meta_description || "",
+    keywords: metaData?.meta_keywords || "",
+    alternates: {
+      canonical: metaData?.canonical_tag || "",
+    },
+  };
+}
 
 const toAbsoluteAssetUrl = (imageUrl: string | undefined): string => {
   if (!imageUrl) return "";
@@ -98,7 +133,7 @@ export default async function PrecPage() {
   let introApi: PrecIntroApiResponse | null = null;
   let benefitsApi: PrecBenefitApiItem[] | null = null;
   let faqsApi: PrecFaqApiItem[] | null = null;
-  let metaDataApi: MetaDataProps | null = null;
+  const metaDataApi: MetaDataProps | null = null;
 
   if (siteUrl) {
     try {
@@ -127,11 +162,6 @@ export default async function PrecPage() {
       if (Array.isArray(faqsData)) {
         faqsApi = faqsData as PrecFaqApiItem[];
       }
-
-      // const metaData = unwrap(metaDataRes);
-      // if (metaData) {
-      //   metaDataApi = metaData as MetaDataProps;
-      // }
     } catch (error) {
       console.error("Error fetching PREC from proxy API:", error);
     }
@@ -140,10 +170,9 @@ export default async function PrecPage() {
   const needIntro = introApi === null;
   const needBenefits = benefitsApi === null || benefitsApi.length === 0;
   const needFaqs = faqsApi === null || faqsApi.length === 0;
-  const needMetaData = metaDataApi === null;
 
   let token: string | null = null;
-  if (needIntro || needBenefits || needFaqs || needMetaData) {
+  if (needIntro || needBenefits || needFaqs) {
     try {
       const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
       if (tokenResponse?.token && typeof tokenResponse.token === "string") {
@@ -171,12 +200,6 @@ export default async function PrecPage() {
           const raw = await getPrecFaqs(token);
           if (Array.isArray(raw) && raw.length > 0) {
             faqsApi = raw as PrecFaqApiItem[];
-          }
-        }
-        if (needMetaData) {
-          const raw = await getMetaData(token, "PREC");
-          if (raw) {
-            metaDataApi = raw as MetaDataProps;
           }
         }
       } catch (error) {
@@ -215,7 +238,6 @@ export default async function PrecPage() {
         : emptyPrecBenefits,
     faqs:
       faqsApi && faqsApi.length > 0 ? mapFaqsFromApi(faqsApi) : emptyPrecFaqs,
-    metaData: metaDataApi || {},
   };
 
   if (banner) {

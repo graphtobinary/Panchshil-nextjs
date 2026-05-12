@@ -94,7 +94,6 @@ export type EsgPageData = {
   beyondTheBuild: EsgBeyondTheBuildContent;
   recognitionsCertificates: EsgRecognitionsCertificatesContent;
   reports: EsgReportsContent;
-  metaData: MetaDataProps;
 };
 
 export const emptyEsgAccordion: EsgAccordionContent = {
@@ -351,5 +350,4 @@ export const esgPageData: EsgPageData = {
       },
     ],
   },
-  metaData: {},
 };

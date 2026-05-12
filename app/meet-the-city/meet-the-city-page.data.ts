@@ -17,7 +17,6 @@ export type MeetTheCityEdition = {
 export type MeetTheCityPageData = {
   hero: CareerHeroContent;
   editions: MeetTheCityEdition[];
-  metaData: MetaDataProps;
 };
 
 export const emptyMeetTheCityEditions: MeetTheCityEdition[] = [];
@@ -139,5 +138,4 @@ export const meetTheCityPageDummyData: MeetTheCityPageData = {
       imageAlt: "Meet The City May – June 2012 edition cover",
     },
   ],
-  metaData: {},
 };

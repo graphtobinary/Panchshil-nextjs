@@ -12,44 +12,15 @@ import DevelopmentForYou from "@/components/DevelopmentForYou";
 import { AboutUsClients } from "../AboutUsClients";
 import AboutUsMilestones from "@/components/AboutUsMilestones/AboutUsMilestones";
 import AboutUsVideoBanner from "@/components/AboutUsVideoBanner/AboutUsVideoBanner";
-import Head from "next/head";
-import { isValidString } from "@/utils/utils";
 
 type AboutUsPageClientProps = {
   data: AboutUsPageDummyData;
 };
 
 export default function AboutUsPageClient({ data }: AboutUsPageClientProps) {
-  const { metaData } = { ...data };
   return (
     <main className="min-h-screen bg-[#FFFAF7]">
       <Header />
-      <Head>
-        {isValidString(metaData?.meta_title) && (
-          <title key="title">{metaData?.meta_title}</title>
-        )}
-        {isValidString(metaData?.meta_description) && (
-          <meta
-            name="description"
-            key="description"
-            content={metaData?.meta_description}
-          />
-        )}
-        {isValidString(metaData?.meta_keywords) && (
-          <meta
-            name="keywords"
-            key="keywords"
-            content={metaData?.meta_keywords}
-          />
-        )}
-        {isValidString(metaData?.canonical_tag) && (
-          <link
-            rel="canonical"
-            key="canonical"
-            href={metaData?.canonical_tag}
-          />
-        )}
-      </Head>
       <section className="min-h-screen flex flex-col bg-white">
         <AboutUsHero hero={data.hero} />
         <AboutUsStatsBar stats={data.stats} />

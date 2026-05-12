@@ -108,10 +108,3 @@ export const getDeviceType = (): DeviceType => {
   }
   return window.innerWidth < 768 ? "mobile" : "desktop";
 };
-
-export const isValidString = (
-  value: unknown,
-  minLength: number = 1
-): value is string => {
-  return typeof value === "string" && value.trim().length >= minLength;
-};

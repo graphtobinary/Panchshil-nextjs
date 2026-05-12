@@ -18,8 +18,43 @@ import {
   BannersProps,
   MetaDataProps,
 } from "@/interfaces";
+import type { Metadata } from "next";
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
+
+async function getPageMetaData(): Promise<MetaDataProps | null> {
+  let token: string | null = null;
+  try {
+    const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+    if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+      token = tokenResponse.token;
+    }
+  } catch (error) {
+    console.error("Error fetching auth token for metadata:", error);
+    return null;
+  }
+
+  if (!token) return null;
+
+  try {
+    return (await getMetaData(token, "Meet The City")) as MetaDataProps;
+  } catch (error) {
+    console.error("Error fetching meta data:", error);
+    return null;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const metaData = await getPageMetaData();
+  return {
+    title: metaData?.meta_title || "",
+    description: metaData?.meta_description || "",
+    keywords: metaData?.meta_keywords || "",
+    alternates: {
+      canonical: metaData?.canonical_tag || "",
+    },
+  };
+}
 
 const toAbsoluteAssetUrl = (url: string | undefined): string => {
   if (!url) return "";
@@ -122,15 +157,6 @@ export default async function MeetTheCityPage() {
     }
   }
 
-  let metaData: MetaDataProps | null = null;
-  if (token) {
-    try {
-      metaData = (await getMetaData(token, "Meet The City")) as MetaDataProps;
-    } catch (error) {
-      console.error("Error fetching meta data:", error);
-    }
-  }
-
   const editions =
     magazinesFromApi && magazinesFromApi.length > 0
       ? mapMagazinesFromApi(magazinesFromApi)
@@ -146,7 +172,6 @@ export default async function MeetTheCityPage() {
   const data: MeetTheCityPageData = {
     hero,
     editions,
-    metaData: metaData || {},
   };
 
   return <MeetTheCityPageClient data={data} />;

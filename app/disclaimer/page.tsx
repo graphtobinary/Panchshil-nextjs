@@ -2,6 +2,42 @@ import { DisclaimerPageClient } from "@/components/DisclaimerPage";
 import { disclaimerPageData } from "./disclaimer-page.data";
 import { getAuthToken, getBanner, getMetaData } from "@/api/CMS.api";
 import { AuthTokenResponse, BannersProps, MetaDataProps } from "@/interfaces";
+import type { Metadata } from "next";
+
+async function getPageMetaData(): Promise<MetaDataProps | null> {
+  let token: string | null = null;
+  try {
+    const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+    if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+      token = tokenResponse.token;
+    }
+  } catch (error) {
+    console.error("Error fetching auth token for metadata:", error);
+    return null;
+  }
+
+  if (!token) return null;
+
+  try {
+    return (await getMetaData(token, "Disclaimer")) as MetaDataProps;
+  } catch (error) {
+    console.error("Error fetching meta data:", error);
+    return null;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const metaData = await getPageMetaData();
+  return {
+    title: metaData?.meta_title || "",
+    description: metaData?.meta_description || "",
+    keywords: metaData?.meta_keywords || "",
+    alternates: {
+      canonical: metaData?.canonical_tag || "",
+    },
+  };
+}
+
 const toAbsoluteAssetUrl = (imageUrl: string | undefined): string => {
   if (!imageUrl) return "";
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
@@ -36,16 +72,7 @@ export default async function DisclaimerPage() {
     }
   }
 
-  let metaData: MetaDataProps | null = null;
-  if (token) {
-    try {
-      metaData = (await getMetaData(token, "Disclaimer")) as MetaDataProps;
-    } catch (error) {
-      console.error("Error fetching meta data:", error);
-    }
-  }
-
-  const data = { ...disclaimerPageData, metaData: metaData || {} };
+  const data = { ...disclaimerPageData };
   if (banner) {
     data.hero = {
       ...data.hero,
