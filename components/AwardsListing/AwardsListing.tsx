@@ -5,12 +5,12 @@ import type { AwardItem } from "@/app/awards-and-recognitions/awards.data";
 
 type AwardsListingProps = {
   awards: AwardItem[];
-  itemsPerPage?: number;
+  // itemsPerPage?: number;
 };
 
 export default function AwardsListing({
   awards,
-  itemsPerPage: _itemsPerPage = 6,
+  // itemsPerPage: _itemsPerPage = 6,
 }: AwardsListingProps) {
   // Pagination is temporarily disabled.
   // const [currentPage, setCurrentPage] = useState(1);

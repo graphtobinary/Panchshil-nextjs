@@ -131,6 +131,7 @@ export default function AboutUsAlliances({ content }: AboutUsAlliancesProps) {
                     <div className="mt-8">
                       <Link
                         href={slide.linkHref}
+                        target="_blank"
                         className="text-[#B09E81] text-sm underline underline-offset-4 hover:text-[#8C7A5B] transition-colors"
                       >
                         {slide.linkLabel}

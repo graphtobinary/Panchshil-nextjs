@@ -2,8 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { AboutVideoData } from "@/interfaces";
 
-export default function AboutUsVideoBanner() {
+export default function AboutUsVideoBanner({
+  content,
+}: {
+  content?: AboutVideoData;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -25,7 +30,10 @@ export default function AboutUsVideoBanner() {
       >
         <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px]">
           <Image
-            src="/assets/images/career/build-career-that-shape-cities.png"
+            src={
+              content?.about_intro_video_thumbnail ||
+              "/assets/images/career/build-career-that-shape-cities.png"
+            }
             alt="Panchshil Video Banner"
             fill
             className="object-cover"
@@ -36,8 +44,19 @@ export default function AboutUsVideoBanner() {
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-[rgba(0,0,0,0.3)]">
           <div className="px-5 md:px-24 flex flex-col justify-center items-center gap-5">
             <p className="text-white text-2xl md:text-3xl  font-display-semi uppercase tracking-wider text-center px-4 leading-12">
-              WE STAND FOR UNWAVERING QUALITY, <br />
-              THOUGHTFUL DESIGN AND ENDURING VALUE.
+              {content?.about_video_caption ? (
+                content.about_video_caption.split("\n").map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    <br />
+                  </span>
+                ))
+              ) : (
+                <>
+                  WE STAND FOR UNWAVERING QUALITY, <br />
+                  THOUGHTFUL DESIGN AND ENDURING VALUE.
+                </>
+              )}
             </p>
             <div className="relative w-16 h-16 md:h-20 md:w-full">
               <Image
@@ -79,7 +98,7 @@ export default function AboutUsVideoBanner() {
             </button>
 
             <iframe
-              src="https://www.youtube.com/embed/eqR46NiBiBE?autoplay=1"
+              src={`https://www.youtube.com/embed/${content?.about_video_youtube_id || "eqR46NiBiBE"}?autoplay=1`}
               title="Panchshil Story Video"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

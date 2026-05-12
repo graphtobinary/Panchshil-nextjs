@@ -3,10 +3,10 @@ import Image from "next/image";
 
 const WhatSetsApart = ({
   property_defining_features_section,
-  onCtaClick,
+  // onCtaClick,
 }: {
   property_defining_features_section: PropertyDefiningFeaturesSectionType;
-  onCtaClick?: () => void;
+  // onCtaClick?: () => void;
 }) => {
   if (
     !(
@@ -69,14 +69,15 @@ const WhatSetsApart = ({
               <a
                 href={
                   property_defining_features_section
-                    .property_defining_features_cta.href
+                    .property_defining_features_cta.href ||
+                  "https://www.panchshil.com/contact"
                 }
                 className="inline-flex mt-10 bg-gold-beige text-white text-xs tracking-wide uppercase px-6 py-3 hover:bg-[#7a6a55] transition-colors"
-                onClick={(e) => {
-                  if (!onCtaClick) return;
-                  e.preventDefault();
-                  onCtaClick();
-                }}
+                // onClick={(e) => {
+                //   if (!onCtaClick) return;
+                //   e.preventDefault();
+                //   onCtaClick();
+                // }}
               >
                 {
                   property_defining_features_section

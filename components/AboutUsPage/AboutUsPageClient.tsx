@@ -27,15 +27,36 @@ export default function AboutUsPageClient({ data }: AboutUsPageClientProps) {
       </section>
       <AboutUsVisibleImpact content={data.visibleImpact} />
       <AboutUsMilestones content={data.milestones} />
-      <AboutUsVideoBanner />
+      <AboutUsVideoBanner content={data.videoBanner} />
       <div className="bg-white">
         <DevelopmentForYou
           title="FROM PUNE TO THE WORLD"
-          subtitle="WE ARE NOW"
-          description="With developments in Dubai, the Maldives, Sri Lanka and across Indian cities, panchshil brings global design sensibilities and international standards to every address-while staying deeply rooted in local context and community needs."
+          subtitle={data.globalIntroduction?.global_caption || "WE ARE NOW"}
+          description={
+            data.globalIntroduction?.global_description ||
+            "With developments in Dubai, the Maldives, Sri Lanka and across Indian cities, panchshil brings global design sensibilities and international standards to every address-while staying deeply rooted in local context and community needs."
+          }
         />
       </div>
-      <AboutUsSustainability content={data.sustainability} />
+      <AboutUsSustainability
+        content={{
+          slides: [
+            {
+              imageSrc:
+                data.esg?.about_esg_image ||
+                data.sustainability.slides[0]?.imageSrc,
+              title: data.esg?.about_esg_description
+                ? `CARING FOR PEOPLE, PLANET & LEGACY\n${data.esg.about_esg_caption || "OUR SUSTAINABILITY PROMISE"}`
+                : data.sustainability.slides[0]?.title,
+              description:
+                data.esg?.about_esg_description ||
+                data.sustainability.slides[0]?.description,
+              ctaLabel: "Visit ESG Page",
+              ctaHref: "/esg",
+            },
+          ],
+        }}
+      />
       <div>
         <AboutUsClients
           isAboutPage

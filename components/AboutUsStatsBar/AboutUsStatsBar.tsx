@@ -73,7 +73,7 @@ export default function AboutUsStatsBar({ stats }: AboutUsStatsBarProps) {
   const [isInView, setIsInView] = useState(false);
   const [isDocked, setIsDocked] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
-  const [barHeight, setBarHeight] = useState(0);
+  // const [barHeight, setBarHeight] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -96,7 +96,7 @@ export default function AboutUsStatsBar({ stats }: AboutUsStatsBarProps) {
   useEffect(() => {
     const updateHeight = () => {
       if (barRef.current) {
-        setBarHeight(barRef.current.offsetHeight);
+        // setBarHeight(barRef.current.offsetHeight);
       }
     };
 

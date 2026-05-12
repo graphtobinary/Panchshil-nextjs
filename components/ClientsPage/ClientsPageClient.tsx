@@ -17,7 +17,10 @@ export default function ClientsPageClient({ data }: ClientsPageClientProps) {
       <section className="min-h-screen flex flex-col bg-white">
         <CareerHero hero={data.hero} />
       </section>
-      <ClientsListing clients={data.clients} itemsPerPage={24} />
+      <ClientsListing
+        clients={data.clients}
+        // itemsPerPage={24}
+      />
       <Footer />
     </main>
   );

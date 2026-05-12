@@ -11,6 +11,14 @@ const API_CONSTANTS = {
   HOME_PROPERTIES_INTRO: `/home/properties-intro`,
   HOME_PROPERTY_CATEGORIES: `/home/property-categories`,
   HOME_ABOUT_INTRO: `/home/about-intro`,
+  ABOUT_US_INTRO: `/about/introduction`,
+  ABOUT_US_MILESTONES: `/about/milestones`,
+  ABOUT_US_GROWTH_CHRONICLES: `/about/growth-chronicles`,
+  ABOUT_US_VIDEO: `/about/video`,
+  ABOUT_US_GLOBAL_INTRODUCTION: `/about/global-introduction`,
+  ABOUT_US_ESG: `/about/esg`,
+  ABOUT_US_CLIENTS: `/about/clients`,
+  ABOUT_US_PARTNERS: `/about/partners`,
   HOME_MASTER_SLIDER: `/home/master-slider`,
   SUBSCRIBER_FORM_DETAILS: `/subscriber-form-details`,
   SUBSCRIBER_FORM_DETAILS_API: "/api/subscriber-form-details",
@@ -57,6 +65,8 @@ const API_CONSTANTS = {
   ESG_REPORTS_API: "/api/esg/reports",
   ENQUIRY_PROPERTY_FORM_DETAILS: `/enquiry/property-form-details`,
   ENQUIRY_GET_PROPERTY_LIST: `/enquiry/properties`,
+  SERVICES_INTRO: `/services/intro`,
+  SERVICES: `/services`,
 };
 
 // Pagination constants

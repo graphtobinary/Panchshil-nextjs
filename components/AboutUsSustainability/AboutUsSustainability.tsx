@@ -18,8 +18,8 @@ export default function AboutUsSustainability({
     loop: false,
   });
 
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(false);
+  const [canPrev] = useState(false);
+  const [canNext] = useState(false);
 
   // const onSelect = useCallback(() => {
   //   if (!emblaApi) return;
@@ -105,7 +105,7 @@ export default function AboutUsSustainability({
                     <div className="w-full flex justify-center">
                       <Link href={slide.ctaHref}>
                         <button
-                          className={`px-4 py-3 text-sm font-medium hover:opacity-90 transition-all shadow-sm w-fit bg-gold-beige text-white`}
+                          className={`px-4 py-3 cursor-pointer text-sm font-medium hover:opacity-90 transition-all shadow-sm w-fit bg-gold-beige text-white`}
                         >
                           {slide.ctaLabel}
                         </button>
