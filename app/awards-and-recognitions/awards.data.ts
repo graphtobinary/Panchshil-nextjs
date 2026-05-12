@@ -1,4 +1,5 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 export type AwardItem = {
   id: string;
@@ -11,6 +12,7 @@ export type AwardItem = {
 export type AwardsPageData = {
   hero: CareerHeroContent;
   awards: AwardItem[];
+  metaData: MetaDataProps;
 };
 
 export const awardsPageData: AwardsPageData = {
@@ -79,4 +81,5 @@ export const awardsPageData: AwardsPageData = {
       imageAlt: "British Safety Council International Safety Awards 2023",
     },
   ],
+  metaData: {},
 };

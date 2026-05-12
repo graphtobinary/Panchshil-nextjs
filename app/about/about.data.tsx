@@ -1,4 +1,9 @@
-import { GlobalContent, AboutEsgContent, AboutClient } from "@/interfaces";
+import {
+  GlobalContent,
+  AboutEsgContent,
+  AboutClient,
+  MetaDataProps,
+} from "@/interfaces";
 
 export type AboutUsHeroContent = {
   imageSrc: string;
@@ -53,6 +58,7 @@ export type AboutUsAlliancesContent = {
 
 export type AboutUsPageDummyData = {
   hero: AboutUsHeroContent;
+  metaData: MetaDataProps;
   stats: Array<{
     value: number;
     suffix?: string;
@@ -312,4 +318,5 @@ export const aboutUsPageDummyData: AboutUsPageDummyData = {
       },
     ],
   },
+  metaData: {},
 };

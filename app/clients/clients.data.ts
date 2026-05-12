@@ -1,4 +1,5 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 export type ClientItem = {
   id: string;
@@ -10,6 +11,7 @@ export type ClientItem = {
 export type ClientsPageData = {
   hero: CareerHeroContent;
   clients: ClientItem[];
+  metaData: MetaDataProps;
 };
 
 export const clientsPageData: ClientsPageData = {
@@ -310,4 +312,5 @@ export const clientsPageData: ClientsPageData = {
       imageAlt: "Citi",
     },
   ],
+  metaData: {},
 };

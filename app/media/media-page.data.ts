@@ -276,7 +276,7 @@ export const mediaPageDummyData: MediaPageData = {
     heading: "FEATURED ARTICLES",
     articles: [
       {
-        imageSrc: "/assets/images/media/nukkad-article.jpg",
+        imageSrc: "/assets/images/media/organised-hawker.png",
         imageAlt: "City Gets Nukkad",
         title: "City Gets “Nukkad” The First Organised Hawkers Pack",
         date: "08Aug, 2025",
@@ -287,7 +287,7 @@ export const mediaPageDummyData: MediaPageData = {
         link: "#",
       },
       {
-        imageSrc: "/assets/images/media/nukkad-article.jpg",
+        imageSrc: "/assets/images/media/organised-hawker.png",
         imageAlt: "City Gets Nukkad",
         title: "City Gets “Nukkad” The First Organised Hawkers Pack",
         date: "08Aug, 2025",
@@ -304,7 +304,7 @@ export const mediaPageDummyData: MediaPageData = {
     heading: "SOLUTION INSIGHTS",
     articles: [
       {
-        imageSrc: "/assets/images/media/nukkad-article.jpg",
+        imageSrc: "/assets/images/media/ventive-hospitality.png",
         imageAlt: "Ventive Hospitality",
         title:
           "Ventive Hospitality Ipo: Blackstone-Backed Firm Raises ₹719.5 Crore From Anchor Investors Ahead Of Public Issue",
@@ -316,7 +316,7 @@ export const mediaPageDummyData: MediaPageData = {
         link: "#",
       },
       {
-        imageSrc: "/assets/images/media/nukkad-article.jpg",
+        imageSrc: "/assets/images/media/organised-hawker.png",
         imageAlt: "City Gets Nukkad",
         title: "City Gets “Nukkad” The First Organised Hawkers Pack",
         date: "08Aug, 2025",
@@ -327,7 +327,7 @@ export const mediaPageDummyData: MediaPageData = {
         link: "#",
       },
       {
-        imageSrc: "/assets/images/media/nukkad-article.jpg",
+        imageSrc: "/assets/images/media/organised-hawker.png",
         imageAlt: "City Gets Nukkad",
         title: "City Gets “Nukkad” The First Organised Hawkers Pack",
         date: "08Aug, 2025",
@@ -344,7 +344,7 @@ export const mediaPageDummyData: MediaPageData = {
     heading: "INDUSTRY FEATURES",
     articles: [
       {
-        imageSrc: "/assets/images/media/nukkad-article.jpg",
+        imageSrc: "/assets/images/media/ventive-hospitality.png",
         imageAlt: "Ventive Hospitality",
         title:
           "Ventive Hospitality Ipo: Blackstone-Backed Firm Raises ₹719.5 Crore From Anchor Investors Ahead Of Public Issue",
@@ -356,7 +356,7 @@ export const mediaPageDummyData: MediaPageData = {
         link: "#",
       },
       {
-        imageSrc: "/assets/images/media/nukkad-article.jpg",
+        imageSrc: "/assets/images/media/organised-hawker.png",
         imageAlt: "City Gets Nukkad",
         title: "City Gets “Nukkad” The First Organised Hawkers Pack",
         date: "08Aug, 2025",
@@ -367,7 +367,7 @@ export const mediaPageDummyData: MediaPageData = {
         link: "#",
       },
       {
-        imageSrc: "/assets/images/media/nukkad-article.jpg",
+        imageSrc: "/assets/images/media/organised-hawker.png",
         imageAlt: "City Gets Nukkad",
         title: "City Gets “Nukkad” The First Organised Hawkers Pack",
         date: "08Aug, 2025",

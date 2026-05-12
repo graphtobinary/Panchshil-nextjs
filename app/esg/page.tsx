@@ -31,6 +31,7 @@ import {
   getEsgReportsAPI,
   getEsgReportsIntro,
   getEsgReportsIntroAPI,
+  getMetaData,
 } from "@/api/CMS.api";
 import {
   AuthTokenResponse,
@@ -43,8 +44,8 @@ import {
   EsgPolicyApiItem,
   EsgReportApiItem,
   EsgReportsIntroApiResponse,
+  MetaDataProps,
 } from "@/interfaces";
-
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
 
@@ -465,6 +466,15 @@ export default async function EsgPage() {
     }
   }
 
+  let metaData: MetaDataProps | null = null;
+  if (t) {
+    try {
+      metaData = (await getMetaData(t, "ESG")) as MetaDataProps;
+    } catch (error) {
+      console.error("Error fetching meta data:", error);
+    }
+  }
+
   const data: EsgPageData = {
     hero: {
       title: banner?.banner_image_caption ?? "",
@@ -477,6 +487,7 @@ export default async function EsgPage() {
     beyondTheBuild: mapBeyondTheBuild(milestonesIntro, milestones),
     recognitionsCertificates: mapAwards(awards),
     reports: mapReports(reportsIntro, reports),
+    metaData: metaData || {},
   };
 
   return <EsgPageClient data={data} />;

@@ -1,4 +1,5 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 export type TestimonialCategory = "residential" | "office";
 
@@ -16,6 +17,7 @@ export type TestimonialListItem = {
 export type TestimonialsPageData = {
   hero: CareerHeroContent;
   testimonials: TestimonialListItem[];
+  metaData: MetaDataProps;
 };
 
 const SAMPLE_QUOTE =
@@ -155,4 +157,5 @@ export const testimonialsPageDummyData: TestimonialsPageData = {
       avatarAlt: "Testimonial profile",
     },
   ],
+  metaData: {},
 };

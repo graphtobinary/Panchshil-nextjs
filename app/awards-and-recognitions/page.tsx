@@ -1,7 +1,12 @@
 import { AwardsPageClient } from "@/components/AwardsPage";
 import { awardsPageData } from "./awards.data";
-import { getAuthToken, getAwards, getAwardsAPI } from "@/api/CMS.api";
-import { AuthTokenResponse, AwardsApiItem } from "@/interfaces";
+import {
+  getAuthToken,
+  getAwards,
+  getAwardsAPI,
+  getMetaData,
+} from "@/api/CMS.api";
+import { AuthTokenResponse, AwardsApiItem, MetaDataProps } from "@/interfaces";
 
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
@@ -63,6 +68,15 @@ export default async function AwardsPage() {
     }
   }
 
+  let metaData: MetaDataProps | null = null;
+  if (token) {
+    try {
+      metaData = (await getMetaData(token, "Awards")) as MetaDataProps;
+    } catch (error) {
+      console.error("Error fetching meta data:", error);
+    }
+  }
+
   const mappedAwards =
     awardsFromApi.length > 0
       ? awardsFromApi.map((award, index) => ({
@@ -85,6 +99,7 @@ export default async function AwardsPage() {
       data={{
         hero: awardsPageData.hero,
         awards: mappedAwards,
+        metaData: metaData || {},
       }}
     />
   );

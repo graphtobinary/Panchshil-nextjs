@@ -1,8 +1,18 @@
 import { ClientsPageClient } from "@/components/ClientsPage";
 import { ClientItem, clientsPageData } from "./clients.data";
-import { getAuthToken, getClients, getClientsAPI } from "@/api/CMS.api";
-import { AuthTokenResponse, ClientsApiItem } from "@/interfaces";
-
+import {
+  getAuthToken,
+  getClients,
+  getClientsAPI,
+  getBanner,
+  getMetaData,
+} from "@/api/CMS.api";
+import {
+  AuthTokenResponse,
+  ClientsApiItem,
+  BannersProps,
+  MetaDataProps,
+} from "@/interfaces";
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
 
@@ -63,6 +73,36 @@ export default async function ClientsPage() {
     }
   }
 
+  // Fetch banner
+  if (!token) {
+    try {
+      const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+      if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+        token = tokenResponse.token;
+      }
+    } catch (error) {
+      console.error("Error fetching auth token for banner:", error);
+    }
+  }
+
+  let banner: BannersProps | null = null;
+  if (token) {
+    try {
+      banner = (await getBanner(token, "Clients")) as BannersProps;
+    } catch (error) {
+      console.error("Error fetching banner:", error);
+    }
+  }
+
+  let metaData: MetaDataProps | null = null;
+  if (token) {
+    try {
+      metaData = (await getMetaData(token, "Clients")) as MetaDataProps;
+    } catch (error) {
+      console.error("Error fetching meta data:", error);
+    }
+  }
+
   const mappedClients =
     clientsFromApi.length > 0
       ? clientsFromApi.map((client, index) => {
@@ -76,11 +116,19 @@ export default async function ClientsPage() {
         })
       : clientsPageData.clients;
 
+  const hero = { ...clientsPageData.hero };
+  if (banner) {
+    hero.imageSrc = toAbsoluteAssetUrl(banner.banner_image) || hero.imageSrc;
+    hero.title = banner.banner_image_caption || hero.title;
+    hero.description = banner.banner_image_description || hero.description;
+  }
+
   return (
     <ClientsPageClient
       data={{
-        hero: clientsPageData.hero,
+        hero,
         clients: mappedClients as ClientItem[],
+        metaData: metaData || {},
       }}
     />
   );

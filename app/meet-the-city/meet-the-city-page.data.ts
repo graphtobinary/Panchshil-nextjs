@@ -1,4 +1,5 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 const IMG_MAR_APR = "/assets/images/meet-the-city/mar-apr-edition.png";
 const IMG_AUG_SEP = "/assets/images/meet-the-city/aug-sep-edition.png";
@@ -16,6 +17,7 @@ export type MeetTheCityEdition = {
 export type MeetTheCityPageData = {
   hero: CareerHeroContent;
   editions: MeetTheCityEdition[];
+  metaData: MetaDataProps;
 };
 
 export const emptyMeetTheCityEditions: MeetTheCityEdition[] = [];
@@ -137,4 +139,5 @@ export const meetTheCityPageDummyData: MeetTheCityPageData = {
       imageAlt: "Meet The City May – June 2012 edition cover",
     },
   ],
+  metaData: {},
 };

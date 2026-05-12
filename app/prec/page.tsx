@@ -14,14 +14,17 @@ import {
   getPrecFaqsAPI,
   getPrecIntro,
   getPrecIntroAPI,
+  getBanner,
+  getMetaData,
 } from "@/api/CMS.api";
 import {
   AuthTokenResponse,
   PrecBenefitApiItem,
   PrecFaqApiItem,
   PrecIntroApiResponse,
+  BannersProps,
+  MetaDataProps,
 } from "@/interfaces";
-
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
 
@@ -95,6 +98,7 @@ export default async function PrecPage() {
   let introApi: PrecIntroApiResponse | null = null;
   let benefitsApi: PrecBenefitApiItem[] | null = null;
   let faqsApi: PrecFaqApiItem[] | null = null;
+  let metaDataApi: MetaDataProps | null = null;
 
   if (siteUrl) {
     try {
@@ -123,6 +127,11 @@ export default async function PrecPage() {
       if (Array.isArray(faqsData)) {
         faqsApi = faqsData as PrecFaqApiItem[];
       }
+
+      // const metaData = unwrap(metaDataRes);
+      // if (metaData) {
+      //   metaDataApi = metaData as MetaDataProps;
+      // }
     } catch (error) {
       console.error("Error fetching PREC from proxy API:", error);
     }
@@ -131,9 +140,10 @@ export default async function PrecPage() {
   const needIntro = introApi === null;
   const needBenefits = benefitsApi === null || benefitsApi.length === 0;
   const needFaqs = faqsApi === null || faqsApi.length === 0;
+  const needMetaData = metaDataApi === null;
 
-  if (needIntro || needBenefits || needFaqs) {
-    let token: string | null = null;
+  let token: string | null = null;
+  if (needIntro || needBenefits || needFaqs || needMetaData) {
     try {
       const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
       if (tokenResponse?.token && typeof tokenResponse.token === "string") {
@@ -163,9 +173,36 @@ export default async function PrecPage() {
             faqsApi = raw as PrecFaqApiItem[];
           }
         }
+        if (needMetaData) {
+          const raw = await getMetaData(token, "PREC");
+          if (raw) {
+            metaDataApi = raw as MetaDataProps;
+          }
+        }
       } catch (error) {
         console.error("Error fetching PREC from CMS:", error);
       }
+    }
+  }
+
+  // Fetch banner
+  if (!token) {
+    try {
+      const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+      if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+        token = tokenResponse.token;
+      }
+    } catch (error) {
+      console.error("Error fetching auth token for banner:", error);
+    }
+  }
+
+  let banner: BannersProps | null = null;
+  if (token) {
+    try {
+      banner = (await getBanner(token, "PREC")) as BannersProps;
+    } catch (error) {
+      console.error("Error fetching banner:", error);
     }
   }
 
@@ -178,7 +215,17 @@ export default async function PrecPage() {
         : emptyPrecBenefits,
     faqs:
       faqsApi && faqsApi.length > 0 ? mapFaqsFromApi(faqsApi) : emptyPrecFaqs,
+    metaData: metaDataApi || {},
   };
+
+  if (banner) {
+    data.hero = {
+      ...data.hero,
+      imageSrc: toAbsoluteAssetUrl(banner.banner_image) || data.hero.imageSrc,
+      title: banner.banner_image_caption || data.hero.title,
+      description: banner.banner_image_description || data.hero.description,
+    };
+  }
 
   return <PrecPageClient data={data} />;
 }

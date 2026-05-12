@@ -15,6 +15,7 @@ import {
   getMilestones,
 } from "@/api/CMS.api";
 import HomeClient from "./HomeClient";
+import type { Metadata } from "next";
 import {
   PropertyCategories,
   PropertiesIntroProps,

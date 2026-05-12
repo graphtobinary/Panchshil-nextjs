@@ -7,8 +7,16 @@ import {
   getAuthToken,
   getTestimonials,
   getTestimonialsAPI,
+  getBanner,
+  getMetaData,
 } from "@/api/CMS.api";
-import { AuthTokenResponse, TestimonialsApiItem } from "@/interfaces";
+import {
+  AuthTokenResponse,
+  TestimonialsApiItem,
+  BannersProps,
+  MetaDataProps,
+} from "@/interfaces";
+import type { Metadata } from "next";
 
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
@@ -63,6 +71,8 @@ function mapApiItemToListItem(
 
 export default async function TestimonialsPage() {
   let testimonialsFromApi: TestimonialsApiItem[] = [];
+  let banner: BannersProps | null = null;
+  let metaData: MetaDataProps | null = null;
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || "";
 
@@ -81,8 +91,8 @@ export default async function TestimonialsPage() {
     }
   }
 
+  let token: string | null = null;
   if (testimonialsFromApi.length === 0) {
-    let token: string | null = null;
     try {
       const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
       if (tokenResponse?.token && typeof tokenResponse.token === "string") {
@@ -104,13 +114,49 @@ export default async function TestimonialsPage() {
     }
   }
 
+  // Fetch banner
+  if (!token) {
+    try {
+      const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+      if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+        token = tokenResponse.token;
+      }
+    } catch (error) {
+      console.error("Error fetching auth token for banner:", error);
+    }
+  }
+
+  if (token) {
+    try {
+      banner = (await getBanner(token, "Testimonials")) as BannersProps;
+    } catch (error) {
+      console.error("Error fetching banner:", error);
+    }
+  }
+
+  if (token) {
+    try {
+      metaData = (await getMetaData(token, "Testimonials")) as MetaDataProps;
+    } catch (error) {
+      console.error("Error fetching meta data:", error);
+    }
+  }
+
+  const hero = { ...testimonialsPageDummyData.hero };
+  if (banner) {
+    hero.imageSrc = toAbsoluteAssetUrl(banner.banner_image) || hero.imageSrc;
+    hero.title = banner.banner_image_caption || hero.title;
+    hero.description = banner.banner_image_description || hero.description;
+  }
+
   const mappedTestimonials = testimonialsFromApi.map(mapApiItemToListItem);
 
   return (
     <TestimonialsPageClient
       data={{
-        hero: testimonialsPageDummyData.hero,
+        hero,
         testimonials: mappedTestimonials,
+        metaData: metaData as MetaDataProps,
       }}
     />
   );

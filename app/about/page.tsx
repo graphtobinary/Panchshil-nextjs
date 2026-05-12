@@ -10,6 +10,8 @@ import {
   getAboutUsEsg,
   getAboutUsClients,
   getAboutUsPartners,
+  getBanner,
+  getMetaData,
 } from "@/api/CMS.api";
 import {
   AuthTokenResponse,
@@ -21,9 +23,24 @@ import {
   AboutEsgContent,
   AboutClient,
   AboutPartnerTab,
+  BannersProps,
+  MetaDataProps,
 } from "@/interfaces";
-
 export const revalidate = 600;
+
+const toAbsoluteAssetUrl = (imageUrl: string | undefined): string => {
+  if (!imageUrl) return "";
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_ENDPOINT || "";
+  if (!baseUrl) {
+    return imageUrl;
+  }
+
+  return `${baseUrl.replace(/\/$/, "")}/${imageUrl.replace(/^\//, "")}`;
+};
 
 export default async function AboutUsPage() {
   let token: string | null = null;
@@ -38,6 +55,8 @@ export default async function AboutUsPage() {
 
   const apiCalls = token
     ? [
+        getBanner(token, "About"),
+        getMetaData(token, "About"),
         getAboutUsIntro(token),
         getAboutUsMilestones(token),
         getAboutUsGrowthChronicles(token),
@@ -56,9 +75,12 @@ export default async function AboutUsPage() {
         Promise.resolve(null),
         Promise.resolve(null),
         Promise.resolve(null),
+        Promise.resolve(null),
       ];
 
   const [
+    bannerRes,
+    metaDataRes,
     aboutIntroRes,
     milestonesRes,
     growthChroniclesRes,
@@ -169,6 +191,24 @@ export default async function AboutUsPage() {
         })),
       };
     }
+  }
+
+  if (bannerRes.status === "fulfilled" && bannerRes.value) {
+    const banner = bannerRes.value as BannersProps;
+    mergedData.hero = {
+      ...mergedData.hero,
+      imageSrc:
+        toAbsoluteAssetUrl(banner.banner_image) || mergedData.hero.imageSrc,
+      title: banner.banner_image_caption || mergedData.hero.title,
+      description:
+        banner.banner_image_description || mergedData.hero.description,
+    };
+  }
+
+  if (metaDataRes.status === "fulfilled" && metaDataRes.value) {
+    console.log(metaDataRes.value, "metaDataRes");
+    const metaData = metaDataRes.value as MetaDataProps;
+    mergedData.metaData = metaData;
   }
 
   return <AboutUsPageClient data={mergedData} />;
