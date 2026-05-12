@@ -14,7 +14,6 @@ type AwardsPageClientProps = {
 
 export default function AwardsPageClient({ data }: AwardsPageClientProps) {
   const metaData = data?.metaData;
-  console.log("metaData", metaData);
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FFFAF7]">
       <Header />

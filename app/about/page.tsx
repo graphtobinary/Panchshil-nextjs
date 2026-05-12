@@ -206,7 +206,6 @@ export default async function AboutUsPage() {
   }
 
   if (metaDataRes.status === "fulfilled" && metaDataRes.value) {
-    console.log(metaDataRes.value, "metaDataRes");
     const metaData = metaDataRes.value as MetaDataProps;
     mergedData.metaData = metaData;
   }

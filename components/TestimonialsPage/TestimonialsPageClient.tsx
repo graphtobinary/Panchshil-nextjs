@@ -16,10 +16,6 @@ export default function TestimonialsPageClient({
   data,
 }: TestimonialsPageClientProps) {
   const metaData = data?.metaData;
-  console.log(
-    isValidString(metaData?.canonical_tag),
-    "isValidString(metaData?.canonical_tag)"
-  );
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FFFAF7]">
       <Header />

@@ -15,13 +15,7 @@ type PrecPageClientProps = {
 };
 
 export default function PrecPageClient({ data }: PrecPageClientProps) {
-  console.log("dataprec", data);
   const { metaData } = data;
-  console.log(
-    isValidString(metaData?.canonical_tag),
-    metaData?.canonical_tag,
-    "canonical"
-  );
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FFFAF7]">
       <Header />
