@@ -1,7 +1,9 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 export type TermsConditionsPageData = {
   hero: CareerHeroContent;
+  metaData: MetaDataProps;
 };
 
 /** Same hero pattern as /testimonials (CareerHero + meet-the-city banner asset). */
@@ -12,4 +14,5 @@ export const termsConditionsPageData: TermsConditionsPageData = {
     description:
       "These Terms of Use govern your access to and use of www.panchshil.com (the “Website”), including any content, functionality and services offered on or through the Website. Please read them carefully before you start to use the Website.",
   },
+  metaData: {},
 };

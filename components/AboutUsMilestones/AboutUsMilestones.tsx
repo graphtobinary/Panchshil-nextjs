@@ -13,7 +13,7 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeMilestone = content.milestones[activeIndex];
   const isMobile = useIsMobile();
-  console.log("activeIndex", activeIndex);
+
   return (
     <section className=" py-14 md:py-20">
       <div className="max-w-[1320px] mx-auto px-6 md:px-10 lg:px-12">

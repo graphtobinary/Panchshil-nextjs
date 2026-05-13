@@ -16,11 +16,9 @@ export default function PrivacyPolicyPageClient({
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FFFAF7]">
       <Header />
-
       <section className="min-h-screen flex flex-col bg-white">
         <CareerHero hero={data.hero} />
       </section>
-
       <section className="w-full bg-white">
         <PrivacyPolicyLegalBody />
       </section>

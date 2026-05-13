@@ -1,4 +1,5 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 export type PrecStat = {
   value: string;
@@ -63,6 +64,7 @@ export type PrecPageData = {
       href: string;
     };
   };
+  metaData: MetaDataProps;
 };
 
 export const emptyPrecIntro: PrecPageData["intro"] = {
@@ -244,5 +246,12 @@ export const precPageDummyData: PrecPageData = {
       label: "Request an invite",
       href: "#join",
     },
+  },
+  metaData: {
+    canonical_tag: "https://www.panchshil.com/prec",
+    meta_description:
+      "Join the Panchshil Preferred Real Estate Consultants (PREC) Network, a community of trusted professionals offering exclusive access to Panchshil properties, comprehensive support, and co-branded marketing opportunities.",
+    meta_title:
+      "Preferred Real Estate Consultants (PREC) Network | Panchshil Realty",
   },
 };

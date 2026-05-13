@@ -10,6 +10,8 @@ import {
   getAboutUsEsg,
   getAboutUsClients,
   getAboutUsPartners,
+  getBanner,
+  getMetaData,
 } from "@/api/CMS.api";
 import {
   AuthTokenResponse,
@@ -21,9 +23,59 @@ import {
   AboutEsgContent,
   AboutClient,
   AboutPartnerTab,
+  BannersProps,
+  MetaDataProps,
 } from "@/interfaces";
-
+import type { Metadata } from "next";
 export const revalidate = 600;
+
+async function getPageMetaData(): Promise<MetaDataProps | null> {
+  let token: string | null = null;
+  try {
+    const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+    if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+      token = tokenResponse.token;
+    }
+  } catch (error) {
+    console.error("Error fetching auth token for metadata:", error);
+    return null;
+  }
+
+  if (!token) return null;
+
+  try {
+    return (await getMetaData(token, "About")) as MetaDataProps;
+  } catch (error) {
+    console.error("Error fetching meta data:", error);
+    return null;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const metaData = await getPageMetaData();
+  return {
+    title: metaData?.meta_title || "",
+    description: metaData?.meta_description || "",
+    keywords: metaData?.meta_keywords || "",
+    alternates: {
+      canonical: metaData?.canonical_tag || "",
+    },
+  };
+}
+
+const toAbsoluteAssetUrl = (imageUrl: string | undefined): string => {
+  if (!imageUrl) return "";
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_ENDPOINT || "";
+  if (!baseUrl) {
+    return imageUrl;
+  }
+
+  return `${baseUrl.replace(/\/$/, "")}/${imageUrl.replace(/^\//, "")}`;
+};
 
 export default async function AboutUsPage() {
   let token: string | null = null;
@@ -38,6 +90,7 @@ export default async function AboutUsPage() {
 
   const apiCalls = token
     ? [
+        getBanner(token, "About"),
         getAboutUsIntro(token),
         getAboutUsMilestones(token),
         getAboutUsGrowthChronicles(token),
@@ -56,9 +109,11 @@ export default async function AboutUsPage() {
         Promise.resolve(null),
         Promise.resolve(null),
         Promise.resolve(null),
+        Promise.resolve(null),
       ];
 
   const [
+    bannerRes,
     aboutIntroRes,
     milestonesRes,
     growthChroniclesRes,
@@ -169,6 +224,18 @@ export default async function AboutUsPage() {
         })),
       };
     }
+  }
+
+  if (bannerRes.status === "fulfilled" && bannerRes.value) {
+    const banner = bannerRes.value as BannersProps;
+    mergedData.hero = {
+      ...mergedData.hero,
+      imageSrc:
+        toAbsoluteAssetUrl(banner.banner_image) || mergedData.hero.imageSrc,
+      title: banner.banner_image_caption || mergedData.hero.title,
+      description:
+        banner.banner_image_description || mergedData.hero.description,
+    };
   }
 
   return <AboutUsPageClient data={mergedData} />;

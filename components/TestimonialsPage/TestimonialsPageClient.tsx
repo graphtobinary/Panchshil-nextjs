@@ -16,13 +16,10 @@ export default function TestimonialsPageClient({
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FFFAF7]">
       <Header />
-
       <section className="min-h-screen flex flex-col bg-white">
         <CareerHero hero={data.hero} />
       </section>
-
       <TestimonialsSection items={data.testimonials} itemsPerPage={8} />
-
       <Footer />
     </main>
   );

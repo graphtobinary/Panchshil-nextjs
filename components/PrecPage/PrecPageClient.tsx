@@ -16,15 +16,12 @@ export default function PrecPageClient({ data }: PrecPageClientProps) {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#FFFAF7]">
       <Header />
-
       <section className="min-h-screen flex flex-col bg-white">
         <CareerHero hero={data.hero} />
       </section>
-
       <PrecIntroSection content={data.intro} />
       <PrecBenefitsSection content={data.benefits} />
       <PrecFaqSection content={data.faqs} />
-
       <Footer />
     </main>
   );

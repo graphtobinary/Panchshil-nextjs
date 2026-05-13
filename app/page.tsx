@@ -15,6 +15,7 @@ import {
   getMilestones,
 } from "@/api/CMS.api";
 import HomeClient from "./HomeClient";
+import type { Metadata } from "next";
 import {
   PropertyCategories,
   PropertiesIntroProps,
@@ -34,6 +35,40 @@ import {
 
 // Enable page-level caching - revalidate every 10 minutes (600 seconds)
 export const revalidate = 600;
+
+async function getPageMetaData(): Promise<MetaDataProps | null> {
+  let token: string | null = null;
+  try {
+    const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+    if (tokenResponse?.token && typeof tokenResponse.token === "string") {
+      token = tokenResponse.token;
+    }
+  } catch (error) {
+    console.error("Error fetching auth token for metadata:", error);
+    return null;
+  }
+
+  if (!token) return null;
+
+  try {
+    return (await getMetaData(token, "Home")) as MetaDataProps;
+  } catch (error) {
+    console.error("Error fetching meta data:", error);
+    return null;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const metaData = await getPageMetaData();
+  return {
+    title: metaData?.meta_title || "",
+    description: metaData?.meta_description || "",
+    keywords: metaData?.meta_keywords || "",
+    alternates: {
+      canonical: metaData?.canonical_tag || "",
+    },
+  };
+}
 
 export default async function Home() {
   // Fetch token

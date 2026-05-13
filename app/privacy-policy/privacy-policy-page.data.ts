@@ -1,7 +1,9 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 export type PrivacyPolicyPageData = {
   hero: CareerHeroContent;
+  metaData: MetaDataProps;
 };
 
 /** Same hero pattern as /terms-conditions. */
@@ -12,4 +14,5 @@ export const privacyPolicyPageData: PrivacyPolicyPageData = {
     description:
       "Panchshil Realty respects your privacy. This policy describes how we collect, use and protect information when you visit www.panchshil.com (the “Website”). Please read it carefully.",
   },
+  metaData: {},
 };

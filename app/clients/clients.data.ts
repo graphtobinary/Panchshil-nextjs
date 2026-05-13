@@ -1,4 +1,5 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 export type ClientItem = {
   id: string;

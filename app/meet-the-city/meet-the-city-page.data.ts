@@ -1,4 +1,5 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { MetaDataProps } from "@/interfaces";
 
 const IMG_MAR_APR = "/assets/images/meet-the-city/mar-apr-edition.png";
 const IMG_AUG_SEP = "/assets/images/meet-the-city/aug-sep-edition.png";

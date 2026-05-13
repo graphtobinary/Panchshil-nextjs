@@ -143,6 +143,7 @@ export type MetaDataProps = {
   canonical_tag?: string;
   meta_description?: string;
   meta_title?: string;
+  meta_keywords?: string;
 };
 
 export type NavigationMenuProps = {
