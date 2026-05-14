@@ -57,11 +57,13 @@ export const updateSubscriberFormDetailsAPI = (formData: FormData) => {
 export const updateSubscriberFormDetails = (
   token: string,
   subscriberEmailId: string,
-  ipAddress: string
+  ipAddress: string,
+  referer_url: string
 ) => {
   const formData = new URLSearchParams();
   formData.append("subscriber_email_id", subscriberEmailId);
   formData.append("ip_address", ipAddress);
+  formData.append("referer_url", referer_url);
   return doPost(
     API_CONSTANTS.SUBSCRIBER_FORM_DETAILS,
     {},
