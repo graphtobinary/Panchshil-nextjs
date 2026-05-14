@@ -183,6 +183,7 @@ export function EnquiryForm({
             email: formData.email,
             propertyName: formData.projectInterested || propertyName || "",
             message: formData.message,
+            referer_url: window?.location?.href,
           }),
         });
 

@@ -121,7 +121,8 @@ export const submitPropertyEnquiryFormDetails = (
   propertyEnquiryEmailId: string,
   propertyEnquiryPropertyName: string,
   propertyEnquiryMessage: string,
-  ipAddress: string
+  ipAddress: string,
+  referer_url: string
 ) => {
   const formData = new URLSearchParams();
   formData.append("property_enquiry_first_name", propertyEnquiryFirstName);
@@ -137,6 +138,7 @@ export const submitPropertyEnquiryFormDetails = (
   );
   formData.append("property_enquiry_message", propertyEnquiryMessage);
   formData.append("ip_address", ipAddress || "");
+  formData.append("referer_url", referer_url);
 
   return doPost(
     API_CONSTANTS.ENQUIRY_PROPERTY_FORM_DETAILS,
