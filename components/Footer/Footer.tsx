@@ -61,7 +61,7 @@ export const Footer = forwardRef<HTMLElement>((props, ref) => {
     try {
       const formData = new FormData(e.target as HTMLFormElement);
       const subscriberEmailId = formData.get("subscriber_email_id") as string;
-
+      formData.append("referer_url", window?.location?.href);
       if (!subscriberEmailId) {
         throw new Error("Email is required");
       }

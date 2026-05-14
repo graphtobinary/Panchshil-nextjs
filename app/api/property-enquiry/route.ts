@@ -37,7 +37,8 @@ export async function POST(req: NextRequest) {
       body.email,
       body.propertyName,
       body.message ?? "",
-      ipAddress
+      ipAddress,
+      body.referer_url || req.headers.get("referer") || ""
     )) as unknown;
 
     return NextResponse.json(apiData);
