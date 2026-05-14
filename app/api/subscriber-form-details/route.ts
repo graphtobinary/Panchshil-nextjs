@@ -93,7 +93,8 @@ export async function POST(request: NextRequest) {
     const result = await updateSubscriberFormDetails(
       token,
       subscriberEmailId,
-      ipAddress
+      ipAddress,
+      request.headers.get("referer") || ""
     );
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
