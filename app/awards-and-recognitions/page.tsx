@@ -14,6 +14,7 @@ import {
   MetaDataProps,
 } from "@/interfaces";
 import type { Metadata } from "next";
+import { CareerHeroContent } from "../careers/career-page.data";
 
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
@@ -118,6 +119,13 @@ export default async function AwardsPage() {
     }
   }
 
+  const hero = {} as CareerHeroContent;
+  if (banner) {
+    hero.imageSrc = toAbsoluteAssetUrl(banner.banner_image) || "";
+    hero.title = banner.banner_image_caption;
+    hero.description = banner.banner_image_description;
+  }
+
   const mappedAwards =
     awardsFromApi.length > 0
       ? awardsFromApi.map((award, index) => ({
@@ -127,11 +135,11 @@ export default async function AwardsPage() {
           imageAlt: award.award_title || "",
         }))
       : [];
-  console.log(banner, "banner");
+
   return (
     <AwardsPageClient
       data={{
-        hero: banner,
+        hero,
         awards: mappedAwards,
       }}
     />

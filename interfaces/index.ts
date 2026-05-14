@@ -156,6 +156,14 @@ export type BannersProps = {
   banner_image: string;
   banner_image_caption: string;
   banner_image_description: string;
+  primaryCta?: {
+    label: string;
+    href: string;
+  };
+  secondaryCta?: {
+    label: string;
+    href: string;
+  };
 };
 export type FeaturedPropertiesIntroProps = {
   featured_properties_intro_heading: string;

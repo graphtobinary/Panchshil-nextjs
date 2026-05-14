@@ -1,5 +1,5 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
-import { BannersProps, MetaDataProps } from "@/interfaces";
+// import { BannersProps, MetaDataProps } from "@/interfaces";
 
 export type AwardItem = {
   id: string;
@@ -9,6 +9,6 @@ export type AwardItem = {
 };
 
 export type AwardsPageData = {
-  hero: BannersProps | null;
+  hero: CareerHeroContent;
   awards: AwardItem[] | [];
 };
