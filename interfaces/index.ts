@@ -777,15 +777,6 @@ export type EsgReportApiItem = {
 };
 
 export type AwardsApiItem = {
-  id?: string | number;
-  _id?: string | number;
-  title?: string;
-  name?: string;
-  award_name?: string;
-  description?: string;
-  award_description?: string;
-  image?: string;
-  image_url?: string;
-  image_path?: string;
+  award_title?: string;
   award_image?: string;
 };
