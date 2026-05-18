@@ -23,13 +23,16 @@ export default function ResidentVoiceTestimonialCard({
 }: ResidentVoiceTestimonialCardProps) {
   return (
     <article
-      className={cn("min-w-0 bg-[#F1EFEC] border border-black/5", className)}
+      className={cn(
+        "min-w-0 bg-[#F1EFEC] border border-black/5 flex flex-col justify-between bg-white",
+        className
+      )}
     >
-      <div className="p-6 md:p-8 bg-white">
+      <div className="p-6 md:p-8 bg-white ">
         <div className="flex items-start justify-end text-[64px] leading-[0.8] text-gold-beige font-display-semi rotate-180">
           <DoubleQuotesIcon width={64} height={64} />
         </div>
-        <p className="mt-2 text-base md:text-[16px] font-semibold text-black/90 leading-5">
+        <p className="mt-2 text-base md:text-[16px] font-semibold text-black/90 leading-5 min-h-[150px]">
           {quote}
         </p>
         <p className="mt-6 text-sm md:text-base text-black/80 leading-relaxed">
@@ -37,7 +40,7 @@ export default function ResidentVoiceTestimonialCard({
         </p>
       </div>
 
-      <div className="bg-[#AB9B81] px-6 md:px-8 py-4 flex items-center gap-4">
+      <div className="bg-[#AB9B81] px-6 md:px-8 py-4 flex items-center gap-4 min-h-[110px]">
         <div className="relative w-14 h-14 shrink-0 overflow-hidden">
           <Image
             src={avatarSrc}
