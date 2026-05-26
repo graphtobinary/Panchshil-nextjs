@@ -11,6 +11,13 @@ interface EsgRecognitionsCarouselProps {
   slides: EsgRecognitionSlide[];
 }
 
+export const descriptionArray = (data: string) => {
+  return data
+    .split(/\r?\n/)
+    .map((item) => item.replace(/^•\s*/, "").trim())
+    .filter(Boolean);
+};
+
 export function EsgRecognitionsCarousel({
   slides,
 }: EsgRecognitionsCarouselProps) {
@@ -83,15 +90,20 @@ export function EsgRecognitionsCarousel({
               </div>
 
               <div className="bg-[#F5EEE6] py-10 md:py-12">
-                <div className="mx-auto px-6 md:px-10 max-w-[1200px] text-center">
+                <div className="mx-auto px-6 md:px-32 text-center">
                   <h3 className="text-black-chocolate text-2xl md:text-[25px] font-display-semi tracking-wide mb-4">
                     {slide.title}
                   </h3>
-
-                  <p className="text-sm md:text-base text-black/80 leading-relaxed mb-8 max-w-[900px] mx-auto">
-                    {slide.description}
-                  </p>
-
+                  <div className="flex flex-wrap justify-between">
+                    {descriptionArray(slide.description).map((desc, index) => (
+                      <p
+                        key={index}
+                        className="text-sm md:text-base text-black/80 leading-relaxed mb-4 mx-auto"
+                      >
+                        • {desc}
+                      </p>
+                    ))}
+                  </div>
                   <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-12 text-gold-beige mb-10">
                     {slide.stats.map((stat, statIndex) => (
                       <div

@@ -16,6 +16,13 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
   const activeMilestone = content.milestones[activeIndex];
   const isMobile = useIsMobile();
   const yearsContainerRef = useRef<HTMLDivElement>(null);
+  const [activeMilestoneDescription, setActiveMilestoneDescription] = useState(
+    activeMilestone.description[0]
+  );
+
+  useEffect(() => {
+    setActiveMilestoneDescription(activeMilestone.description[0]);
+  }, [activeMilestone]);
 
   const canPrev = activeIndex > 0;
   const canNext = activeIndex < content.milestones.length - 1;
@@ -140,8 +147,8 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
           <div className="flex flex-1 flex-col md:flex-row gap-6 md:gap-8">
             <div className="relative w-full md:w-2/5 aspect-auto md:aspect-auto h-[400px] md:h-[500px] overflow-hidden">
               <Image
-                src={activeMilestone.imageSrc}
-                alt={activeMilestone.imageAlt}
+                src={activeMilestoneDescription?.imageSrc}
+                alt={activeMilestoneDescription?.title}
                 fill
                 className="object-cover transition-all duration-500"
               />
@@ -151,7 +158,15 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
               <div>
                 {activeMilestone.description.map((item, i) => {
                   return (
-                    <Fragment key={i}>
+                    <div
+                      key={i}
+                      onMouseEnter={() => setActiveMilestoneDescription(item)}
+                      className={`transition-opacity cursor-pointer ${
+                        activeMilestoneDescription === item
+                          ? "opacity-100"
+                          : "opacity-60 hover:opacity-100"
+                      }`}
+                    >
                       <h3 className="text-xl md:text-xl font-display-semi text-black-chocolate my-4">
                         {item.title}
                       </h3>
@@ -159,7 +174,7 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
                         {item.content}
                       </p>
                       <div className="w-full h-px bg-[#B09E81]/30 mt-6"></div>
-                    </Fragment>
+                    </div>
                   );
                 })}
               </div>
