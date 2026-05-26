@@ -177,6 +177,7 @@ export default async function AboutUsPage() {
             description: item.growth_chronicles.map((text) => ({
               title: "",
               content: text,
+              imageSrc: fallback.imageSrc || "",
             })),
             imageSrc: fallback.imageSrc,
             imageAlt: fallback.imageAlt,

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AboutUsMilestonesContent } from "@/app/about/about.data";
 import { useIsMobile } from "@/hooks/useIsMobile";
