@@ -11,6 +11,7 @@ import type {
 } from "@/interfaces";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
+import { permanentRedirect } from "next/navigation";
 
 interface PropertyDetailtPageProps {
   params: {
@@ -95,7 +96,7 @@ export default async function PropertyDetailPage({
   // Backward-compat: old pagination URLs were /:category/:page (e.g. /luxury-residences/1)
   // Redirect numeric slugs to the new /:category/page/:page route.
   if (/^\d+$/.test(propertyUrlSlug)) {
-    redirect(`/${propertyCategoryUrlSlug}/page/${propertyUrlSlug}`);
+    permanentRedirect(`/${propertyCategoryUrlSlug}`);
   }
 
   // Fetch token
@@ -124,7 +125,7 @@ export default async function PropertyDetailPage({
   } catch (error) {
     // If the API says the resource doesn't exist, redirect to category listing with 301
     if (error instanceof ApiException && error.statusCode === 404) {
-      redirect(`/${propertyCategoryUrlSlug}`);
+      permanentRedirect(`/${propertyCategoryUrlSlug}`);
     }
     // Handle "Invalid Property URL Slug" validation error
     if (
