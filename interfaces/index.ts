@@ -156,6 +156,14 @@ export type BannersProps = {
   banner_image: string;
   banner_image_caption: string;
   banner_image_description: string;
+  primaryCta?: {
+    label: string;
+    href: string;
+  };
+  secondaryCta?: {
+    label: string;
+    href: string;
+  };
 };
 export type FeaturedPropertiesIntroProps = {
   featured_properties_intro_heading: string;
@@ -380,8 +388,10 @@ export interface ListContactBannerProps {
 export interface NavigationMenuItemProps {
   menuTitle: string;
   menuURL: string;
-  menuDayThumbnail: string;
-  menuNightThumbnail: string;
+  _doc?: {
+    menuDayThumbnail: string;
+    menuNightThumbnail: string;
+  };
 }
 
 export interface StickyBottomBarProps {
@@ -777,15 +787,6 @@ export type EsgReportApiItem = {
 };
 
 export type AwardsApiItem = {
-  id?: string | number;
-  _id?: string | number;
-  title?: string;
-  name?: string;
-  award_name?: string;
-  description?: string;
-  award_description?: string;
-  image?: string;
-  image_url?: string;
-  image_path?: string;
+  award_title?: string;
   award_image?: string;
 };

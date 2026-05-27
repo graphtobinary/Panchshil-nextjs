@@ -1,13 +1,20 @@
 import { AwardsPageClient } from "@/components/AwardsPage";
-import { awardsPageData } from "./awards.data";
+// import { awardsPageData } from "./awards.data";
 import {
   getAuthToken,
   getAwards,
   getAwardsAPI,
+  getBanner,
   getMetaData,
 } from "@/api/CMS.api";
-import { AuthTokenResponse, AwardsApiItem, MetaDataProps } from "@/interfaces";
+import {
+  AuthTokenResponse,
+  AwardsApiItem,
+  BannersProps,
+  MetaDataProps,
+} from "@/interfaces";
 import type { Metadata } from "next";
+import { CareerHeroContent } from "../careers/career-page.data";
 
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
@@ -103,27 +110,36 @@ export default async function AwardsPage() {
     }
   }
 
+  let banner: BannersProps | null = null;
+  if (token) {
+    try {
+      banner = (await getBanner(token, "Awards")) as BannersProps;
+    } catch (error) {
+      console.error("Error fetching banner:", error);
+    }
+  }
+
+  const hero = {} as CareerHeroContent;
+  if (banner) {
+    hero.imageSrc = toAbsoluteAssetUrl(banner.banner_image) || "";
+    hero.title = banner.banner_image_caption;
+    hero.description = banner.banner_image_description;
+  }
+
   const mappedAwards =
     awardsFromApi.length > 0
       ? awardsFromApi.map((award, index) => ({
-          id: String(award.id ?? award._id ?? index + 1),
-          title: award.title || award.name || award.award_name || "Award",
-          description: award.description || award.award_description || "",
-          imageSrc: toAbsoluteAssetUrl(
-            award.image ||
-              award.image_url ||
-              award.image_path ||
-              award.award_image
-          ),
-          imageAlt:
-            award.title || award.name || award.award_name || "Award image",
+          id: String(index + 1),
+          title: award.award_title || "",
+          imageSrc: toAbsoluteAssetUrl(award.award_image),
+          imageAlt: award.award_title || "",
         }))
-      : awardsPageData.awards;
+      : [];
 
   return (
     <AwardsPageClient
       data={{
-        hero: awardsPageData.hero,
+        hero,
         awards: mappedAwards,
       }}
     />

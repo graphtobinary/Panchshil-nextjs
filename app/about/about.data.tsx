@@ -81,6 +81,7 @@ export type AboutUsMilestoneItem = {
   description: {
     title: string;
     content: string;
+    imageSrc: string;
   }[];
   imageSrc: string;
   imageAlt: string;
@@ -170,16 +171,19 @@ export const aboutUsPageDummyData: AboutUsPageDummyData = {
             title: "January",
             content:
               "Several iconic projects were completed and delivered, creating new landmarks in Pune. Our commitment to quality construction and timely delivery earned us industry recognition.",
+            imageSrc: "/assets/images/about/growth-chronicles-2024.png",
           },
           {
             title: "January",
             content:
               "Several iconic projects were completed and delivered, creating new landmarks in Pune. Our commitment to quality construction and timely delivery earned us industry recognition.",
+            imageSrc: "/assets/images/about/growth-chronicles-2024.png",
           },
           {
             title: "January",
             content:
               "Several iconic projects were completed and delivered, creating new landmarks in Pune. Our commitment to quality construction and timely delivery earned us industry recognition.",
+            imageSrc: "/assets/images/about/growth-chronicles-2024.png",
           },
         ],
         imageSrc: "/assets/images/about/growth-chronicles-2024.png",
@@ -193,16 +197,19 @@ export const aboutUsPageDummyData: AboutUsPageDummyData = {
             title: "January",
             content:
               "Panchshil expanded beyond India with projects in Dubai, Maldives, and Sri Lanka, bringing Indian luxury real estate expertise to international markets and global design sensibilities to every address.",
+            imageSrc: "/assets/images/about/growth-chronicles-2025.png",
           },
           {
             title: "January",
             content:
               "Panchshil expanded beyond India with projects in Dubai, Maldives, and Sri Lanka, bringing Indian luxury real estate expertise to international markets and global design sensibilities to every address.",
+            imageSrc: "/assets/images/about/growth-chronicles-2025.png",
           },
           {
             title: "January",
             content:
               "Panchshil expanded beyond India with projects in Dubai, Maldives, and Sri Lanka, bringing Indian luxury real estate expertise to international markets and global design sensibilities to every address.",
+            imageSrc: "/assets/images/about/growth-chronicles-2025.png",
           },
         ],
         imageSrc: "/assets/images/about/growth-chronicles-2024.png",
@@ -216,16 +223,19 @@ export const aboutUsPageDummyData: AboutUsPageDummyData = {
             title: "January",
             content:
               "With over 35 million sq. ft. delivered and 40 million sq. ft. under construction across 3 countries, we continue to build legacies, shape lifestyles, and create integrated communities that stand the test of time.",
+            imageSrc: "/assets/images/about/growth-chronicles-2026.png",
           },
           {
             title: "January",
             content:
               "With over 35 million sq. ft. delivered and 40 million sq. ft. under construction across 3 countries, we continue to build legacies, shape lifestyles, and create integrated communities that stand the test of time.",
+            imageSrc: "/assets/images/about/growth-chronicles-2026.png",
           },
           {
             title: "January",
             content:
               "With over 35 million sq. ft. delivered and 40 million sq. ft. under construction across 3 countries, we continue to build legacies, shape lifestyles, and create integrated communities that stand the test of time.",
+            imageSrc: "/assets/images/about/growth-chronicles-2026.png",
           },
         ],
         imageSrc: "/assets/images/about/growth-chronicles-2024.png",

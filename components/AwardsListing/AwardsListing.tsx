@@ -23,7 +23,6 @@ export default function AwardsListing({
   //   return awards.slice(startIndex, startIndex + itemsPerPage);
   // }, [safeCurrentPage, itemsPerPage, awards]);
   const paginatedAwards = awards;
-
   return (
     <section className="overflow-x-hidden bg-white py-10 md:py-14">
       <div className="mx-auto w-full max-w-[1440px] px-4 md:px-8">
@@ -47,9 +46,6 @@ export default function AwardsListing({
               <h3 className="mt-6 break-words text-xl md:text-[22px] leading-tight font-display-semi text-[#1f1f1f]">
                 {award.title}
               </h3>
-              <p className="mt-3 break-words text-[15px] md:text-[16px] leading-relaxed text-[#4a4a4a]">
-                {award.description}
-              </p>
             </article>
           ))}
         </div>

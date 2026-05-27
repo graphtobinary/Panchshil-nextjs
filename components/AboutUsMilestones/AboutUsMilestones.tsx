@@ -1,9 +1,11 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AboutUsMilestonesContent } from "@/app/about/about.data";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
+import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
 
 type AboutUsMilestonesProps = {
   content: AboutUsMilestonesContent;
@@ -13,6 +15,49 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeMilestone = content.milestones[activeIndex];
   const isMobile = useIsMobile();
+  const yearsContainerRef = useRef<HTMLDivElement>(null);
+  const [activeMilestoneDescription, setActiveMilestoneDescription] = useState(
+    activeMilestone.description[0]
+  );
+
+  useEffect(() => {
+    setActiveMilestoneDescription(activeMilestone.description[0]);
+  }, [activeMilestone]);
+
+  const canPrev = activeIndex > 0;
+  const canNext = activeIndex < content.milestones.length - 1;
+
+  const goToPrev = useCallback(() => {
+    if (canPrev) setActiveIndex((i) => i - 1);
+  }, [canPrev]);
+
+  const goToNext = useCallback(() => {
+    if (canNext) setActiveIndex((i) => i + 1);
+  }, [canNext]);
+
+  useEffect(() => {
+    const container = yearsContainerRef.current;
+    if (!container) return;
+    const activeButton = container.querySelector(
+      `[data-year-index="${activeIndex}"]`
+    ) as HTMLElement | null;
+    if (!activeButton) return;
+    const containerRect = container.getBoundingClientRect();
+    const buttonRect = activeButton.getBoundingClientRect();
+    const isAbove = buttonRect.top < containerRect.top;
+    const isBelow = buttonRect.bottom > containerRect.bottom;
+    if (isAbove) {
+      container.scrollBy({
+        top: buttonRect.top - containerRect.top - 16,
+        behavior: "smooth",
+      });
+    } else if (isBelow) {
+      container.scrollBy({
+        top: buttonRect.bottom - containerRect.bottom + 16,
+        behavior: "smooth",
+      });
+    }
+  }, [activeIndex]);
 
   return (
     <section className=" py-14 md:py-20">
@@ -24,13 +69,39 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
           <h2 className="text-2xl md:text-[28px] font-display-semi text-black-chocolate uppercase mt-2">
             {content.title}
           </h2>
+          {/* Arrow navigation */}
+          <div className="hidden md:flex items-center gap-3 self-start mt-2">
+            <button
+              aria-label="Previous year"
+              onClick={goToPrev}
+              disabled={!canPrev}
+              className={`grid place-items-center transition-opacity ${
+                canPrev ? "opacity-100" : "opacity-40 cursor-not-allowed"
+              }`}
+            >
+              <ArrowLeftIcon />
+            </button>
+            <button
+              aria-label="Next year"
+              onClick={goToNext}
+              disabled={!canNext}
+              className={`grid place-items-center transition-opacity ${
+                canNext ? "opacity-100" : "opacity-40 cursor-not-allowed"
+              }`}
+            >
+              <ArrowRightIcon />
+            </button>
+          </div>
           <div className="w-full h-px bg-[#B09E81]/30 mt-6"></div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-0 items-center">
           {/* Left Column - Vertical Tabs (Years) ~10% */}
 
-          <div className="flex flex-row md:flex-col lg:w-[15%] shrink-0 justify-start md:justify-start gap-8 md:gap-0 w-full md:w-auto md:max-h-[550px] overflow-x-auto overflow-y-hidden md:overflow-y-auto md:overflow-x-hidden no-scrollbar pt-2 md:pt-0">
+          <div
+            ref={yearsContainerRef}
+            className="flex flex-row md:flex-col lg:w-[15%] shrink-0 justify-start md:justify-start gap-8 md:gap-0 w-full md:w-auto md:max-h-[550px] overflow-x-auto overflow-y-hidden md:overflow-y-auto md:overflow-x-hidden no-scrollbar pt-2 md:pt-0"
+          >
             {content.milestones.map((milestone, index) => {
               const isActive = index === activeIndex;
               return (
@@ -48,6 +119,7 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
                 >
                   <button
                     type="button"
+                    data-year-index={index}
                     onClick={() => setActiveIndex(index)}
                     className={`text-center md:text-left py-4 px-2 md:py-12 md:px-0 transition-colors cursor-pointer w-full text-black/40 hover:text-black/70 
                 ${
@@ -55,7 +127,7 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
                     ? " border-b-2 md:border-b border-black/10"
                     : ""
                 }
-                  
+                   
                    `}
                   >
                     <span
@@ -75,8 +147,8 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
           <div className="flex flex-1 flex-col md:flex-row gap-6 md:gap-8">
             <div className="relative w-full md:w-2/5 aspect-auto md:aspect-auto h-[400px] md:h-[500px] overflow-hidden">
               <Image
-                src={activeMilestone.imageSrc}
-                alt={activeMilestone.imageAlt}
+                src={activeMilestoneDescription?.imageSrc}
+                alt={activeMilestoneDescription?.title}
                 fill
                 className="object-cover transition-all duration-500"
               />
@@ -86,7 +158,15 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
               <div>
                 {activeMilestone.description.map((item, i) => {
                   return (
-                    <Fragment key={i}>
+                    <div
+                      key={i}
+                      onMouseEnter={() => setActiveMilestoneDescription(item)}
+                      className={`transition-opacity cursor-pointer ${
+                        activeMilestoneDescription === item
+                          ? "opacity-100"
+                          : "opacity-60 hover:opacity-100"
+                      }`}
+                    >
                       <h3 className="text-xl md:text-xl font-display-semi text-black-chocolate my-4">
                         {item.title}
                       </h3>
@@ -94,7 +174,7 @@ export default function AboutUsMilestones({ content }: AboutUsMilestonesProps) {
                         {item.content}
                       </p>
                       <div className="w-full h-px bg-[#B09E81]/30 mt-6"></div>
-                    </Fragment>
+                    </div>
                   );
                 })}
               </div>
