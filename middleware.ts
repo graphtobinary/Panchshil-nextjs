@@ -2,12 +2,49 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { KNOWN_PROPERTY_CATEGORY_SLUGS } from "@/lib/property-category-slugs";
 import { getAuthToken, getPropertyDetail } from "@/api/CMS.api";
+import { getPropertyCategory } from "@/api/property";
 import ApiException from "@/api/Api.exception";
-import type { AuthTokenResponse } from "@/interfaces";
+import type { AuthTokenResponse, PropertyCategoryProps } from "@/interfaces";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const segments = pathname.split("/").filter(Boolean);
+
+  // Match: /categorySlug (single segment - redirect to /categorySlug/page/1)
+  if (segments.length === 1) {
+    const [categorySlug] = segments;
+
+    if (KNOWN_PROPERTY_CATEGORY_SLUGS.has(categorySlug)) {
+      try {
+        // Validate category exists via API
+        const tokenResponse = (await getAuthToken()) as AuthTokenResponse;
+        const token = tokenResponse?.token;
+
+        if (token) {
+          try {
+            const raw = await getPropertyCategory(token, categorySlug);
+            const category = raw as PropertyCategoryProps | null;
+            if (
+              category &&
+              typeof category.property_category_title === "string" &&
+              category.property_category_title.trim().length > 0
+            ) {
+              const targetUrl = new URL(`/${categorySlug}/page/1`, request.url);
+              return NextResponse.redirect(targetUrl, 301);
+            }
+          } catch {
+            // Category API error - fall through to known slug check
+          }
+        }
+      } catch (error) {
+        console.error("Middleware error validating category:", error);
+      }
+
+      // Fallback: if in known list, redirect with 301
+      const targetUrl = new URL(`/${categorySlug}/page/1`, request.url);
+      return NextResponse.redirect(targetUrl, 301);
+    }
+  }
 
   // Match: /categorySlug/page
   if (segments.length === 2) {
@@ -82,6 +119,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/:categorySlug",
     "/:categorySlug/page",
     "/:categorySlug/:propertySlug", // Match property detail routes
   ],
