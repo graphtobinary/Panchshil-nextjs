@@ -1,5 +1,4 @@
 import { getAuthToken, getPropertyDetail } from "@/api/CMS.api";
-import ApiException from "@/api/Api.exception";
 import PropertyDetailsPageClient from "@/components/PropertyDetailsPage/PropertyDetailsPageClient";
 import type {
   AuthTokenResponse,
@@ -9,9 +8,8 @@ import type {
   // PropertyInfoData,
   PropertyLocationCoOrdinatesProps,
 } from "@/interfaces";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { permanentRedirect } from "next/navigation";
 
 interface PropertyDetailtPageProps {
   params: {
@@ -93,12 +91,6 @@ export default async function PropertyDetailPage({
     notFound();
   }
 
-  // Backward-compat: old pagination URLs were /:category/:page (e.g. /luxury-residences/1)
-  // Redirect numeric slugs to the new /:category/page/:page route.
-  if (/^\d+$/.test(propertyUrlSlug)) {
-    permanentRedirect(`/${propertyCategoryUrlSlug}`);
-  }
-
   // Fetch token
   let token: string | null = null;
   try {
@@ -123,28 +115,10 @@ export default async function PropertyDetailPage({
       propertyUrlSlug
     );
   } catch (error) {
-    // If the API says the resource doesn't exist, redirect to category listing with 301
-    if (error instanceof ApiException && error.statusCode === 404) {
-      permanentRedirect(`/${propertyCategoryUrlSlug}`);
-    }
-    // Handle "Invalid Property URL Slug" validation error
-    if (
-      error instanceof ApiException &&
-      error.statusCode === 400 &&
-      error.response
-    ) {
-      const apiResponse = error.response as {
-        errors?: Array<{ msg?: string }>;
-      };
-      if (
-        apiResponse.errors?.some((err) =>
-          err.msg?.includes("Invalid Property URL Slug")
-        )
-      ) {
-        redirect(`/${propertyCategoryUrlSlug}`);
-      }
-    }
+    // Middleware should have caught 404 and "Invalid Property URL Slug" errors
+    // If we get here, it's another type of error
     console.error("Error fetching property detail:", error);
+    notFound();
   }
 
   const detail = (propertyDetail || {}) as PropertyDetailResponse;
