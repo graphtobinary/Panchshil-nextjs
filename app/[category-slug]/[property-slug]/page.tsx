@@ -122,9 +122,26 @@ export default async function PropertyDetailPage({
       propertyUrlSlug
     );
   } catch (error) {
-    // If the API says the resource doesn't exist, show 404
+    // If the API says the resource doesn't exist, redirect to category listing with 301
     if (error instanceof ApiException && error.statusCode === 404) {
-      notFound();
+      redirect(`/${propertyCategoryUrlSlug}`);
+    }
+    // Handle "Invalid Property URL Slug" validation error
+    if (
+      error instanceof ApiException &&
+      error.statusCode === 400 &&
+      error.response
+    ) {
+      const apiResponse = error.response as {
+        errors?: Array<{ msg?: string }>;
+      };
+      if (
+        apiResponse.errors?.some((err) =>
+          err.msg?.includes("Invalid Property URL Slug")
+        )
+      ) {
+        redirect(`/${propertyCategoryUrlSlug}`);
+      }
     }
     console.error("Error fetching property detail:", error);
   }
