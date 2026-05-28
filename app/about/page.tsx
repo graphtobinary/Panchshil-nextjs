@@ -174,10 +174,10 @@ export default async function AboutUsPage() {
           return {
             year: item.growth_chronicle_year.toString(),
             title: fallback.title,
-            description: item.growth_chronicles.map((text) => ({
-              title: "",
-              content: text,
-              imageSrc: fallback.imageSrc || "",
+            description: item.growth_chronicles.map((growth_chronicle) => ({
+              title: growth_chronicle.growth_chronicle_caption,
+              content: growth_chronicle.growth_chronicle_caption,
+              imageSrc: growth_chronicle.growth_chronicle_image || fallback.imageSrc,
             })),
             imageSrc: fallback.imageSrc,
             imageAlt: fallback.imageAlt,

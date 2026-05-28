@@ -232,9 +232,14 @@ export type AboutUsMilestonesApiItem = {
   milestone_title: string;
 };
 
+export type GrowthChronicle = {
+  growth_chronicle_caption: string;
+  growth_chronicle_image: string;
+}
+
 export type GrowthChronicleItem = {
   growth_chronicle_year: number;
-  growth_chronicles: string[];
+  growth_chronicles: GrowthChronicle[];
 };
 
 export type AboutVideoData = {
