@@ -388,10 +388,8 @@ export interface ListContactBannerProps {
 export interface NavigationMenuItemProps {
   menuTitle: string;
   menuURL: string;
-  _doc?: {
-    menuDayThumbnail: string;
-    menuNightThumbnail: string;
-  };
+  menuDayThumbnail: string;
+  menuNightThumbnail: string;
 }
 
 export interface StickyBottomBarProps {

@@ -122,8 +122,8 @@ const DevelopmentForYou = ({
                 <Image
                   src={
                     isDarkMode
-                      ? item?._doc?.menuNightThumbnail || ""
-                      : item?._doc?.menuDayThumbnail || ""
+                      ? item.menuNightThumbnail || ""
+                      : item.menuDayThumbnail || ""
                   }
                   alt={item.menuTitle}
                   fill
