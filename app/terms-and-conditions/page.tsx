@@ -3,7 +3,7 @@ import { termsConditionsPageData } from "./terms-conditions-page.data";
 import { getAuthToken, getBanner, getMetaData } from "@/api/CMS.api";
 import { AuthTokenResponse, BannersProps, MetaDataProps } from "@/interfaces";
 import type { Metadata } from "next";
-
+export const dynamic = "force-dynamic";
 async function getPageMetaData(): Promise<MetaDataProps | null> {
   let token: string | null = null;
   try {

@@ -18,6 +18,7 @@ import { CareerHeroContent } from "../careers/career-page.data";
 
 // Revalidate this route every 30 minutes.
 export const revalidate = 1800;
+export const dynamic = "force-dynamic";
 
 async function getPageMetaData(): Promise<MetaDataProps | null> {
   let token: string | null = null;

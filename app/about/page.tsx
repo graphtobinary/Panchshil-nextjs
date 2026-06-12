@@ -28,6 +28,7 @@ import {
 } from "@/interfaces";
 import type { Metadata } from "next";
 export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 async function getPageMetaData(): Promise<MetaDataProps | null> {
   let token: string | null = null;
@@ -53,6 +54,7 @@ async function getPageMetaData(): Promise<MetaDataProps | null> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const metaData = await getPageMetaData();
+  console.log("Fetched Metadata for About Us Page:", metaData);
   return {
     title: metaData?.meta_title || "",
     description: metaData?.meta_description || "",
