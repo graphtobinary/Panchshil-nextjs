@@ -311,10 +311,34 @@ export default function ContactUsPageClient() {
                 )}
               </div>
               <h3 className="text-xl font-display-semi mb-3">{b.title}</h3>
-              <p className="text-gray-700 whitespace-pre-line mb-4">
+              <p className="text-gray-700 whitespace-pre-line mb-4 text-base">
                 {b.address}
               </p>
-              {b.phone && <p className="text-gray-700">{b.phone}</p>}
+              <p className="text-gray-700 whitespace-pre-line mb-4 text-base">
+                {b.type === "email"
+                  ? b.emailData?.map((e, index) => (
+                      <p key={index}>
+                        <span>{e.label}: </span>
+
+                        <a
+                          href={`mailto:${e.email}`}
+                          className="text-gold-beige hover:underline"
+                        >
+                          {e.email}
+                        </a>
+                      </p>
+                    ))
+                  : null}
+              </p>
+
+              {b.phone && (
+                <a
+                  href={`tel:${b.phone}`}
+                  className="text-gray-700 hover:text-gold-beige transition-colors text-base"
+                >
+                  {b.phone}
+                </a>
+              )}
             </div>
           ))}
         </div>

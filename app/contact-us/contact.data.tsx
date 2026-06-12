@@ -44,9 +44,24 @@ export const branches = [
   },
   {
     title: "Email Us",
-    address:
-      "Sales Enquiry: sales@panchshil.com\nJob Opportunities: careers@panchshil.com\nLeasing Enquiry: info@panchshil.com",
+    address: "",
+    // "Sales Enquiry: sales@panchshil.com\nJob Opportunities: careers@panchshil.com\nLeasing Enquiry: info@panchshil.com",
     phone: "",
+    type: "email",
+    emailData: [
+      {
+        label: "Sales Enquiry",
+        email: "sales@panchshil.com",
+      },
+      {
+        label: "Job Opportunities",
+        email: "careers@panchshil.com",
+      },
+      {
+        label: "Leasing Enquiry",
+        email: "info@panchshil.com",
+      },
+    ],
   },
 ];
 
