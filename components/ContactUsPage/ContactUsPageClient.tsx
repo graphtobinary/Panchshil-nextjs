@@ -5,6 +5,85 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import AboutUsHero from "@/components/AboutUsHero/AboutUsHero";
 import { contactPageData, branches } from "@/app/contact-us/contact.data";
+import Link from "next/link";
+import { Button } from "../Button";
+import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
+
+const MAP_STYLE: google.maps.MapTypeStyle[] = [
+  {
+    featureType: "all",
+    elementType: "geometry",
+    stylers: [{ color: "#f5f5f5" }],
+  },
+  {
+    featureType: "all",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#5c5c5c" }],
+  },
+  {
+    featureType: "all",
+    elementType: "labels.text.stroke",
+    stylers: [{ color: "#ffffff" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [{ color: "#e8e8e8" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#d0d0d0" }],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#c9e6f5" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry",
+    stylers: [{ color: "#e8f0e8" }],
+  },
+];
+
+const PROPERTY_PIN_SVG =
+  '<svg width="65" height="65" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.626 2.29A4.92 4.92 0 005.13.848 4.92 4.92 0 001.635 2.29c-1.926 1.922-2.18 4.642-.31 7.408.95 1.397 3.805 4.905 3.805 4.905s2.857-3.508 3.806-4.905c1.87-2.757 1.616-5.476-.31-7.408zM5.13 8.884A2.967 2.967 0 012.161 5.92a2.973 2.973 0 012.97-2.963A2.972 2.972 0 018.1 5.92a2.972 2.972 0 01-2.97 2.963z" fill="#9E8C70"/></svg>';
+
+const PROPERTY_PIN_ICON =
+  "data:image/svg+xml," + encodeURIComponent(PROPERTY_PIN_SVG);
+
+interface ContactLocation {
+  id: string;
+  title: string;
+  lat: number;
+  lng: number;
+  zoom: number;
+}
+
+const contactLocations: ContactLocation[] = [
+  {
+    id: "corporate-office",
+    title: "Corporate Office",
+    lat: 18.5483,
+    lng: 73.9046,
+    zoom: 15,
+  },
+  {
+    id: "international",
+    title: "International",
+    lat: 51.5074,
+    lng: -0.1278,
+    zoom: 12,
+  },
+  {
+    id: "india",
+    title: "India",
+    lat: 19.076,
+    lng: 72.8777,
+    zoom: 12,
+  },
+];
 
 export default function ContactUsPageClient() {
   const [form, setForm] = useState({
@@ -18,6 +97,11 @@ export default function ContactUsPageClient() {
   const purposeOptions = ["General", "Careers"];
   const [isPurposeOpen, setIsPurposeOpen] = useState(false);
   const purposeRef = useRef<HTMLDivElement | null>(null);
+  const [activeLocationId, setActiveLocationId] = useState<string | null>(null);
+  const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapInstance = useRef<google.maps.Map | null>(null);
+  const markersRef = useRef<Record<string, google.maps.Marker>>({});
+  const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -30,6 +114,53 @@ export default function ContactUsPageClient() {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    setOptions({
+      key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+      v: "weekly",
+    });
+
+    importLibrary("maps").then(() => {
+      if (!mapRef.current) return;
+
+      const map = new google.maps.Map(mapRef.current, {
+        center: { lat: contactLocations[0].lat, lng: contactLocations[0].lng },
+        zoom: contactLocations[0].zoom,
+        styles: MAP_STYLE,
+        disableDefaultUI: true,
+      });
+
+      mapInstance.current = map;
+
+      contactLocations.forEach((loc) => {
+        const marker = new google.maps.Marker({
+          position: { lat: loc.lat, lng: loc.lng },
+          map,
+          title: loc.title,
+          icon: {
+            url: PROPERTY_PIN_ICON,
+            scaledSize: new google.maps.Size(48, 65),
+            anchor: new google.maps.Point(24, 65),
+          },
+        });
+
+        markersRef.current[loc.id] = marker;
+
+        marker.addListener("click", () => {
+          setActiveLocationId(loc.id);
+          map.panTo({ lat: loc.lat, lng: loc.lng });
+          map.setZoom(loc.zoom);
+          infoWindowRef.current?.close();
+        });
+      });
+
+      return () => {
+        Object.values(markersRef.current).forEach((m) => m.setMap(null));
+        markersRef.current = {};
+      };
+    });
   }, []);
 
   const handlePurposeSelect = (value: string) => {
@@ -57,6 +188,20 @@ export default function ContactUsPageClient() {
       message: "",
       purpose: "General",
     });
+  };
+
+  const panToLocation = (location: ContactLocation) => {
+    if (!mapInstance.current) return;
+
+    mapInstance.current.panTo({
+      lat: location.lat,
+      lng: location.lng,
+    });
+    mapInstance.current.panBy(0, -100);
+    mapInstance.current.setZoom(location.zoom);
+
+    setActiveLocationId(location.id);
+    infoWindowRef.current?.close();
   };
 
   return (
@@ -187,33 +332,39 @@ export default function ContactUsPageClient() {
               />
 
               <div className="md:col-span-2 mt-4 flex items-center gap-4">
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-[#9E8C70] text-white cursor-pointer"
-                >
+                <Button type="submit" variant="signature-outline" size="sm">
                   Submit Request
-                </button>
-                <button
-                  type="button"
-                  className="px-6 py-3 border border-[#9E8C70] text-[#9E8C70] font-display-normal cursor-pointer"
-                >
-                  Chat with us
-                </button>
+                </Button>
+                <Link href={"#"}>
+                  <Button variant="signature-outline" size="sm">
+                    Chat with us
+                  </Button>
+                </Link>
               </div>
             </form>
           </div>
 
           <div>
-            <div className="w-full h-[420px] shadow-lg">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.4610180907143!2d73.88975382520567!3d18.553243111974293!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c11f0e00be69%3A0x78f5a4be779da557!2sPanchshil%20Tech%20Park%20One!5e0!3m2!1sen!2sin!4v1781247600681!5m2!1sen!2sin"
-                width="600"
-                height="450"
-                style={{ border: 0 }}
-                // allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+            <div className="w-full h-[420px] shadow-lg relative">
+              <div className=" absolute top-3 left-3 z-10 flex flex-row gap-2 bg-white/90 backdrop-blur-sm px-3 py-2 rounded">
+                {contactLocations.map((loc) => (
+                  <Button
+                    key={loc.id}
+                    variant="signature-outline"
+                    size="sm"
+                    onClick={() => panToLocation(loc)}
+                    className={
+                      activeLocationId === loc.id
+                        ? "bg-gold-beige text-white"
+                        : ""
+                    }
+                  >
+                    {loc.title}
+                  </Button>
+                ))}
+              </div>
+
+              <div ref={mapRef} className="w-full h-full" />
             </div>
           </div>
         </div>
@@ -235,8 +386,8 @@ export default function ContactUsPageClient() {
                     <path
                       d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7"
                       stroke="#9e8c70"
-                      stroke-width="2"
-                      stroke-linecap="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
                       stroke-linejoin="round"
                     />
                     <rect
@@ -246,8 +397,8 @@ export default function ContactUsPageClient() {
                       height="14"
                       rx="2"
                       stroke="#9e8c70"
-                      stroke-width="2"
-                      stroke-linecap="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
                     />
                   </svg>
                 ) : (
@@ -288,7 +439,7 @@ export default function ContactUsPageClient() {
                           opacity: 1,
                         }}
                         transform=" matrix(1 0 0 1 0 0) "
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                       />
                       <path
                         d="M 45 44.597 c -8.076 0 -14.646 -6.57 -14.646 -14.646 S 36.924 15.306 45 15.306 c 8.075 0 14.646 6.57 14.646 14.646 S 53.075 44.597 45 44.597 z M 45 21.306 c -4.767 0 -8.646 3.878 -8.646 8.646 s 3.878 8.646 8.646 8.646 c 4.768 0 8.646 -3.878 8.646 -8.646 S 49.768 21.306 45 21.306 z"
@@ -304,7 +455,7 @@ export default function ContactUsPageClient() {
                           opacity: 1,
                         }}
                         transform=" matrix(1 0 0 1 0 0) "
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                       />
                     </g>
                   </svg>
