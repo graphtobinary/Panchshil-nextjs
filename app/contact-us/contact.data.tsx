@@ -35,12 +35,14 @@ export const branches = [
     title: "Corporate Office",
     address: "Tech Park One, Tower E, 191 Yerwada, Pune - 411 006. India",
     phone: "+91 20 66473200",
+    link: "+912066473200",
   },
   {
     title: "Mumbai Office",
     address:
       "Express Towers, 20th Floor, Nariman Point, Mumbai - 400 021 India",
     phone: "+91 22 66863939",
+    link: "+912266863939",
   },
   {
     title: "Email Us",

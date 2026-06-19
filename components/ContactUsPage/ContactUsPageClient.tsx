@@ -5,9 +5,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import AboutUsHero from "@/components/AboutUsHero/AboutUsHero";
 import { contactPageData, branches } from "@/app/contact-us/contact.data";
-import Link from "next/link";
+// import Link from "next/link";
 import { Button } from "../Button";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { EnquiryFormErrors } from "@/interfaces";
 
 const MAP_STYLE: google.maps.MapTypeStyle[] = [
   {
@@ -93,6 +96,7 @@ export default function ContactUsPageClient() {
     message: "",
     purpose: "",
   });
+  const [errors, setErrors] = useState<EnquiryFormErrors>({});
 
   const purposeOptions = ["General", "Careers"];
   const [isPurposeOpen, setIsPurposeOpen] = useState(false);
@@ -255,7 +259,9 @@ export default function ContactUsPageClient() {
                   onClick={() => setIsPurposeOpen((s) => !s)}
                   className={`w-full flex items-center justify-between pr-4 py-2.5 bg-white text-black-chocolate text-base border-b focus:outline-none focus:border-gold-beige appearance-none border-gold-beige`}
                 >
-                  <span>{form.purpose || "Purpose of Enquiry"}</span>
+                  <span className={!form.purpose ? "text-[#888]" : ""}>
+                    {form.purpose || "Purpose of Enquiry"}
+                  </span>
                   <svg
                     className={`w-4 h-4 transition-transform ${isPurposeOpen ? "rotate-180" : ""}`}
                     fill="none"
@@ -309,13 +315,37 @@ export default function ContactUsPageClient() {
                   </div>
                 )}
               </div>
-              <input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                placeholder="Mobile Number"
-                className="w-full pr-4 py-2.5 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
-              />
+              <div>
+                <PhoneInput
+                  country={"in"}
+                  value={form.phone}
+                  onChange={(
+                    value: string,
+                    country: { countryCode?: string } | undefined
+                  ) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      phone: value,
+                      phoneIsoCode: country?.countryCode || "",
+                    }));
+                    if (errors.phone) {
+                      setForm((prev) => ({ ...prev, phone: undefined }));
+                    }
+                  }}
+                  inputProps={{
+                    name: "phone",
+                    required: true,
+                  }}
+                  containerClass="w-full border-b border-gold-beige py-[4.5px]"
+                  buttonClass="!bg-transparent !border-none !shadow-none !rounded-none"
+                  inputClass="!w-full !bg-transparent !border-none !shadow-none !rounded-none !text-black-chocolate !text-base placeholder-black/50 focus:!outline-none"
+                  dropdownClass="!shadow-lg !border !border-gold-beige !rounded-none !text-black"
+                  placeholder="Enter Your Contact Number"
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                )}
+              </div>
               <input
                 name="email"
                 value={form.email}
@@ -335,11 +365,11 @@ export default function ContactUsPageClient() {
                 <Button type="submit" variant="signature-outline" size="sm">
                   Submit Request
                 </Button>
-                <Link href={"#"}>
+                {/* <Link href={"#"}>
                   <Button variant="signature-outline" size="sm">
                     Chat with us
                   </Button>
-                </Link>
+                </Link> */}
               </div>
             </form>
           </div>
@@ -388,7 +418,7 @@ export default function ContactUsPageClient() {
                       stroke="#9e8c70"
                       strokeWidth="2"
                       strokeLinecap="round"
-                      stroke-linejoin="round"
+                      strokeLinejoin="round"
                     />
                     <rect
                       x="3"
@@ -484,7 +514,7 @@ export default function ContactUsPageClient() {
 
               {b.phone && (
                 <a
-                  href={`tel:${b.phone}`}
+                  href={`tel:${b.link}`}
                   className="text-gray-700 hover:text-gold-beige transition-colors text-base"
                 >
                   {b.phone}
