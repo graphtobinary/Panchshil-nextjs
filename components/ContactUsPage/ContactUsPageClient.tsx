@@ -89,14 +89,20 @@ const contactLocations: ContactLocation[] = [
 ];
 
 export default function ContactUsPageClient() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    name: string;
+    phone: string;
+    email: string;
+    message: string;
+    purpose: string;
+  }>({
     name: "",
     phone: "",
     email: "",
     message: "",
     purpose: "",
   });
-  const [errors, setErrors] = useState<EnquiryFormErrors>({});
+  const [errors] = useState<EnquiryFormErrors>({});
 
   const purposeOptions = ["General", "Careers"];
   const [isPurposeOpen, setIsPurposeOpen] = useState(false);
@@ -329,7 +335,7 @@ export default function ContactUsPageClient() {
                       phoneIsoCode: country?.countryCode || "",
                     }));
                     if (errors.phone) {
-                      setForm((prev) => ({ ...prev, phone: undefined }));
+                      setForm((prev) => ({ ...prev, phone: "" }));
                     }
                   }}
                   inputProps={{
