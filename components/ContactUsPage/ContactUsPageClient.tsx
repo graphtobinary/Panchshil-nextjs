@@ -382,7 +382,7 @@ export default function ContactUsPageClient() {
 
           <div>
             <div className="w-full h-[420px] shadow-lg relative">
-              <div className=" absolute top-3 left-3 z-10 flex flex-row gap-2 bg-white/90 backdrop-blur-sm px-3 py-2 rounded">
+              <div className=" absolute top-3 left-3 z-10 flex flex-row gap-2  px-3 py-2 rounded">
                 {contactLocations.map((loc) => (
                   <Button
                     key={loc.id}
@@ -392,7 +392,7 @@ export default function ContactUsPageClient() {
                     className={
                       activeLocationId === loc.id
                         ? "bg-gold-beige text-white"
-                        : ""
+                        : "bg-white"
                     }
                   >
                     {loc.title}
