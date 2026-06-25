@@ -63,6 +63,8 @@ const API_CONSTANTS = {
   ESG_REPORTS_INTRO_API: "/api/esg/reports/intro",
   ESG_REPORTS: `/esg/reports`,
   ESG_REPORTS_API: "/api/esg/reports",
+  ENQUIRY_FORM_DETAILS: `/enquiry-form-details`,
+  ENQUIRY_FORM_DETAILS_API: "/api/enquiry-form-details",
   ENQUIRY_PROPERTY_FORM_DETAILS: `/enquiry/property-form-details`,
   ENQUIRY_GET_PROPERTY_LIST: `/enquiry/properties`,
   SERVICES_INTRO: `/services/intro`,

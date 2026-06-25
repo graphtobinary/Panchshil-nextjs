@@ -77,6 +77,38 @@ export const updateSubscriberFormDetails = (
   );
 };
 
+export const submitContactEnquiryFormDetails = (
+  token: string,
+  enquiryFullName: string,
+  enquiryReason: string,
+  enquiryEmailId: string,
+  enquiryMobileNumber: string,
+  enquiryMessage: string,
+  ipAddress: string,
+  refererUrl: string
+) => {
+  const formData = new URLSearchParams();
+  formData.append("enquiry_full_name", enquiryFullName);
+  formData.append("enquiry_reason", enquiryReason);
+  formData.append("enquiry_email_id", enquiryEmailId);
+  formData.append("enquiry_mobile_number", `+${enquiryMobileNumber}`);
+  formData.append("enquiry_message", enquiryMessage);
+  formData.append("ip_address", ipAddress || "");
+  formData.append("referer_url", refererUrl);
+
+  return doPost(
+    API_CONSTANTS.ENQUIRY_FORM_DETAILS,
+    {},
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData.toString(),
+    }
+  );
+};
+
 export const getMasterSlider = (token: string) => {
   return doGet(
     API_CONSTANTS.HOME_MASTER_SLIDER,

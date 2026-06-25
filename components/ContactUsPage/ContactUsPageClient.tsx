@@ -102,7 +102,12 @@ export default function ContactUsPageClient() {
     message: "",
     purpose: "",
   });
-  const [errors] = useState<EnquiryFormErrors>({});
+  const [errors, setErrors] = useState<EnquiryFormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   const purposeOptions = ["General", "Careers"];
   const [isPurposeOpen, setIsPurposeOpen] = useState(false);
@@ -187,17 +192,57 @@ export default function ContactUsPageClient() {
     setForm((s) => ({ ...s, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // currently static — integrate API later
-    alert("Enquiry submitted (demo)");
-    setForm({
-      name: "",
-      phone: "",
-      email: "",
-      message: "",
-      purpose: "General",
-    });
+    setIsSubmitting(true);
+    setSubmitResult(null);
+    setErrors({});
+
+    try {
+      const formData = new FormData();
+      formData.append("enquiry_full_name", form.name);
+      formData.append("enquiry_reason", form.purpose);
+      formData.append("enquiry_email_id", form.email);
+      formData.append("enquiry_mobile_number", form.phone);
+      formData.append("enquiry_message", form.message);
+
+      const res = await fetch("/api/enquiry-form-details", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrors({ email: data.error || "Submission failed" });
+        setSubmitResult({
+          type: "error",
+          message: data.error || "Something went wrong. Please try again.",
+        });
+        return;
+      }
+
+      setSubmitResult({
+        type: "success",
+        message:
+          data?.display_message ||
+          "Thank you! Your enquiry has been submitted successfully.",
+      });
+      setForm({
+        name: "",
+        phone: "",
+        email: "",
+        message: "",
+        purpose: "",
+      });
+    } catch {
+      setSubmitResult({
+        type: "error",
+        message: "Network error. Please check your connection and try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const panToLocation = (location: ContactLocation) => {
@@ -367,15 +412,28 @@ export default function ContactUsPageClient() {
                 className="md:col-span-2 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
               />
 
-              <div className="md:col-span-2 mt-4 flex items-center gap-4">
-                <Button type="submit" variant="signature-outline" size="sm">
-                  Submit Request
-                </Button>
-                {/* <Link href={"#"}>
-                  <Button variant="signature-outline" size="sm">
-                    Chat with us
+              <div className="md:col-span-2 mt-4 flex flex-col gap-2">
+                <div className="flex items-center gap-4">
+                  <Button
+                    type="submit"
+                    variant="signature-outline"
+                    size="sm"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Request"}
                   </Button>
-                </Link> */}
+                </div>
+                {submitResult && (
+                  <p
+                    className={`text-sm ${
+                      submitResult.type === "success"
+                        ? "text-green-600"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {submitResult.message}
+                  </p>
+                )}
               </div>
             </form>
           </div>
