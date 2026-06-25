@@ -1,0 +1,300 @@
+"use client";
+
+import React from "react";
+import Image from "next/image";
+import waterBanner from "@/assets/images/esg/water-banner.png";
+
+interface MetricItem {
+  value: string;
+  unit: string;
+  label: string;
+  borderClass: string;
+}
+
+const metrics: MetricItem[] = [
+  {
+    value: "6,10,247",
+    unit: "KL",
+    label: "WATER RECYCLED THROUGH STPS",
+    borderClass: "border-b md:border-r border-[#E2DFD7]/60",
+  },
+  {
+    value: "88%",
+    unit: "",
+    label: "RECYCLING EFFICIENCY ACHIEVED",
+    borderClass: "border-b md:border-r border-[#E2DFD7]/60",
+  },
+  {
+    value: "51%",
+    unit: "",
+    label: "WATER CONSUMPTION MET THROUGH RECYCLED WATER",
+    borderClass: "border-b border-[#E2DFD7]/60",
+  },
+  {
+    value: "4,50,175",
+    unit: "KL",
+    label: "RECYCLED WATER USED FOR FLUSHING",
+    borderClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
+  },
+  {
+    value: "1,17,623",
+    unit: "KL",
+    label: "RECYCLED WATER USED FOR IRRIGATION",
+    borderClass:
+      "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60 last:border-b-0",
+  },
+  {
+    value: "~67,267",
+    unit: "KL",
+    label: "WATER RECYCLED THROUGH STPS",
+    borderClass: "border-none",
+  },
+];
+
+export default function EsgWaterSection() {
+  return (
+    <section
+      id="water"
+      className="w-full bg-[#FFFFFF] py-16 md:py-24 border-t border-[#E2DFD7]/30 transition-colors duration-300 relative overflow-hidden"
+    >
+      {/* Decorative concentric circle lines in background (as seen in design) */}
+      <div className="absolute top-10 left-[-150px] w-[600px] h-[600px] pointer-events-none opacity-[0.06] select-none z-0">
+        <svg viewBox="0 0 100 100" className="w-full h-full text-black">
+          <circle
+            cx="50"
+            cy="50"
+            r="10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="30"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="50"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="60"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="70"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+        </svg>
+      </div>
+
+      <div className="max-w-[1540px] mx-auto px-6 md:px-10 lg:px-12 relative z-10">
+        {/* Header split layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-16 md:mb-10">
+          {/* Left: Text */}
+          <div className="lg:col-span-6 flex flex-col">
+            <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
+              — 01 / POWER RESPONSIBLY
+            </span>
+
+            <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
+              Water.
+            </h2>
+
+            <p className="mt-4 text-sm md:text-base text-[#626A70] font-sans font-light max-w-md">
+              Driving the transition with clean and renewable energy.
+            </p>
+          </div>
+          <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] pointer-events-none opacity-[0.06] select-none z-0 -translate-1/2">
+            <svg viewBox="0 0 100 100" className="w-full h-full text-black">
+              <circle
+                cx="50"
+                cy="50"
+                r="10"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.1"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.1"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="30"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.1"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.1"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="50"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.1"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="60"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.1"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="70"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.1"
+              />
+            </svg>
+          </div>
+          {/* Right: Inset drop image */}
+          <div className="lg:col-span-6 flex justify-end">
+            <div className="w-full relative aspect-[21/10] max-w-[560px] overflow-hidden rounded-[2px] shadow-sm">
+              <Image
+                src={waterBanner}
+                alt="Water Droplet Banner"
+                fill
+                className="object-cover object-center"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 3x2 Grid of Metrics */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 pt-0">
+          {metrics.map((item, index) => (
+            <div
+              key={index}
+              className={`px-5 min-h-[140px] flex flex-col justify-center bg-transparent ${item.borderClass}`}
+            >
+              <div>
+                <span className="font-display text-3xl md:text-[40px] lg:text-[44px] font-normal text-[#1F180D] leading-none tracking-tight">
+                  {item.value}
+                </span>
+                {item.unit && (
+                  <span className="font-display text-[10px] md:text-xs font-normal text-[#7F847E] font-sans ml-1.5 tracking-wide uppercase align-baseline">
+                    {item.unit}
+                  </span>
+                )}
+              </div>
+              <div className="w-40">
+                <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block leading-relaxed">
+                  {item.label}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="absolute top-10 right-[-150px] w-[600px] h-[600px] pointer-events-none opacity-[0.06] select-none z-0">
+        <svg viewBox="0 0 100 100" className="w-full h-full text-black">
+          <circle
+            cx="50"
+            cy="50"
+            r="10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="30"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="50"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="60"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="70"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.1"
+          />
+        </svg>
+      </div>
+    </section>
+  );
+}
