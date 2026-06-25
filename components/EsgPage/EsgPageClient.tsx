@@ -2,13 +2,16 @@
 
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { CareerHero } from "@/components/CareerHero";
-import { EsgAccordionSection } from "@/components/EsgAccordionSection";
-import { EsgPeopleCommunities } from "@/components/EsgPeopleCommunities";
-import { EsgSteeringCommittee } from "@/components/EsgSteeringCommittee";
-import { EsgBeyondTheBuild } from "@/components/EsgBeyondTheBuild";
-import { EsgRecognitionsCertificates } from "@/components/EsgRecognitionsCertificates";
-import { EsgReports } from "@/components/EsgReports";
+import { EsgHero } from "@/components/EsgHero";
+import { EsgTabBar } from "@/components/EsgTabBar";
+import { EsgOverviewSection } from "@/components/EsgOverviewSection";
+import { EsgEnergySection } from "@/components/EsgEnergySection";
+import { EsgWaterSection } from "@/components/EsgWaterSection";
+import { EsgWasteSection } from "@/components/EsgWasteSection";
+import { EsgMobilitySection } from "@/components/EsgMobilitySection";
+import { EsgIndoorAirSection } from "@/components/EsgIndoorAirSection";
+import { EsgCertificationsSection } from "@/components/EsgCertificationsSection";
+import { EsgReportsSection } from "@/components/EsgReportsSection";
 import { EsgPageData } from "@/app/esg/esg.data";
 
 type EsgPageClientProps = {
@@ -17,17 +20,18 @@ type EsgPageClientProps = {
 
 export default function EsgPageClient({ data }: EsgPageClientProps) {
   return (
-    <main className="min-h-screen bg-[#FFFAF7]">
+    <main className="min-h-screen bg-[#0F140D]">
       <Header />
-      <section className="min-h-screen flex flex-col bg-white">
-        <CareerHero hero={data.hero} />
-      </section>
-      <EsgAccordionSection content={data.accordion} />
-      <EsgPeopleCommunities content={data.peopleCommunities} />
-      <EsgSteeringCommittee content={data.steeringCommittee} />
-      <EsgBeyondTheBuild content={data.beyondTheBuild} />
-      <EsgRecognitionsCertificates content={data.recognitionsCertificates} />
-      <EsgReports content={data.reports} />
+      <EsgHero />
+      <EsgTabBar />
+      <EsgOverviewSection />
+      <EsgEnergySection />
+      <EsgWaterSection />
+      <EsgWasteSection />
+      <EsgMobilitySection />
+      <EsgIndoorAirSection />
+      <EsgCertificationsSection />
+      <EsgReportsSection />
       <Footer />
     </main>
   );

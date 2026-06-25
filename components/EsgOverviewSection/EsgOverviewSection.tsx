@@ -1,0 +1,120 @@
+"use client";
+
+import React from "react";
+import Image from "next/image";
+import impactAreaBanner from "@/assets/images/esg/impact-area-banner.png";
+
+interface GridItem {
+  id: string;
+  title: string;
+  desc: string;
+  borderClass: string;
+}
+
+const gridItems: GridItem[] = [
+  {
+    id: "01",
+    title: "Energy",
+    desc: "Rooftop Solar Photovoltaic (PV) Panels, Purchased RE Power, Wind Energy.",
+    borderClass: "border-b md:border-r border-[#E2DFD7]",
+  },
+  {
+    id: "02",
+    title: "Water",
+    desc: "Recycling performance and Rainwater Harvesting.",
+    borderClass: "border-b md:border-r border-[#E2DFD7]",
+  },
+  {
+    id: "03",
+    title: "Waste",
+    desc: "Dry, Hazardous, and Food Waste.",
+    borderClass: "border-b border-[#E2DFD7]",
+  },
+  {
+    id: "04",
+    title: "Indoor Air",
+    desc: "Healthier indoor environments through IAQ monitoring and better air quality.",
+    borderClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]",
+  },
+  {
+    id: "05",
+    title: "Mobility",
+    desc: "Enabling low-emission mobility and seamless connectivity.",
+    borderClass:
+      "border-b md:border-b-0 md:border-r border-[#E2DFD7] last:border-b-0",
+  },
+  {
+    id: "06",
+    title: "Reports & Certifications",
+    desc: "Strong governance, global certifications and safety excellence.",
+    borderClass: "border-0",
+  },
+];
+
+export default function EsgOverviewSection() {
+  return (
+    <section
+      id="overview"
+      className="w-full bg-[#F8F5EE] pt-16 md:pt-24 transition-colors duration-300"
+    >
+      <div className="max-w-[1540px] mx-auto px-6 md:px-10 lg:px-12">
+        {/* Section Header */}
+        <div className="w-full mb-10 md:mb-14">
+          <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
+            — 01 / OVERVIEW
+          </span>
+
+          <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.15] tracking-tight font-medium">
+            Our <span className="text-[#40A937]">ESG Impact</span> <br />
+            at a Glance.
+          </h2>
+
+          <p className="mt-2 text-sm md:text-base lg:text-[17px] text-[#626A70] font-sans font-light tracking-wide">
+            Measurable action. Meaningful impact. A better tomorrow.
+          </p>
+        </div>
+
+        {/* Banner Image */}
+        <div className="w-full relative aspect-[21/9] min-h-[260px] md:min-h-[400px] overflow-hidden mb-12 md:mb-16 rounded-[2px] shadow-sm">
+          <Image
+            src={impactAreaBanner}
+            alt="Our ESG Impact Banner"
+            fill
+            priority
+            className="object-cover object-center"
+          />
+        </div>
+
+        {/* 3x2 Grid of Impact Areas */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 ">
+          {gridItems.map((item, index) => (
+            <div
+              key={index}
+              className={`relative p-8 md:p-12 lg:p-14 min-h-[220px] md:min-h-[300px] flex flex-col justify-between bg-transparent transition-all duration-300 hover:bg-[#07150A] group ${item.borderClass}`}
+            >
+              <div>
+                {/* Number */}
+                <span className="font-display text-[44px] md:text-[54px] lg:text-[60px] font-medium text-[#E2DFD7] leading-none transition-colors duration-300 group-hover:text-[#40A937] block">
+                  {item.id}
+                </span>
+
+                {/* Title */}
+                <h3 className="font-display text-[22px] md:text-[26px] font-medium text-[#1F180D] mt-5 transition-colors duration-300 group-hover:text-white leading-tight">
+                  {item.title}
+                </h3>
+
+                {/* Description */}
+                <p className="font-sans text-xs md:text-[13px] lg:text-sm text-gray-600 mt-3 leading-relaxed transition-colors duration-300 group-hover:text-white/80 font-light">
+                  {item.desc}
+                </p>
+              </div>
+
+              {/* Bottom Horizontal Accent Line */}
+              <div className="w-12 h-px bg-[#AB9B81] transition-all duration-300 group-hover:bg-[#40A937] group-hover:w-16" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
