@@ -68,22 +68,22 @@ const contactLocations: ContactLocation[] = [
   {
     id: "corporate-office",
     title: "Corporate Office",
-    lat: 18.5483,
-    lng: 73.9046,
+    lat: 18.927970578475424,
+    lng: 72.8219189681855,
     zoom: 15,
+  },
+  {
+    id: "head-office",
+    title: "Head Office",
+    lat: 18.553319413518878,
+    lng: 73.89176548536943,
+    zoom: 12,
   },
   {
     id: "international",
     title: "International",
-    lat: 51.5074,
-    lng: -0.1278,
-    zoom: 12,
-  },
-  {
-    id: "india",
-    title: "India",
-    lat: 19.076,
-    lng: 72.8777,
+    lat: 25.2272699023725,
+    lng: 55.291459563842864,
     zoom: 12,
   },
 ];
@@ -112,7 +112,9 @@ export default function ContactUsPageClient() {
   const purposeOptions = ["General", "Careers"];
   const [isPurposeOpen, setIsPurposeOpen] = useState(false);
   const purposeRef = useRef<HTMLDivElement | null>(null);
-  const [activeLocationId, setActiveLocationId] = useState<string | null>(null);
+  const [activeLocationId, setActiveLocationId] = useState<string | null>(
+    "corporate-office"
+  );
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<Record<string, google.maps.Marker>>({});
