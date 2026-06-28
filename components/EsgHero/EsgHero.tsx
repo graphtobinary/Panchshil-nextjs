@@ -101,7 +101,7 @@ export default function EsgHero() {
 
         {/* Backdrop Blurred Cards */}
         <div className="relative z-10 w-full animate-fade-in-up-delay-3 mt-4">
-          <div className="flex overflow-x-auto gap-4 md:gap-5 pb-4 md:pb-0 no-scrollbar md:grid md:grid-cols-5 overflow-x-visible">
+          <div className="flex overflow-x-auto gap-4 md:gap-5 pb-4 md:pb-0 no-scrollbar md:grid md:grid-cols-5 md:overflow-x-visible">
             {defaultCards.map((card, index) => (
               <div
                 key={index}
