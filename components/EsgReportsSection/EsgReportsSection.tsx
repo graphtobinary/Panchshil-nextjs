@@ -16,21 +16,19 @@ const reports: ReportItem[] = [
     meta: "PDF • 4.2 MB",
     title: "ESG Report — FY 2024-25",
     href: "#",
-    gridClass:
-      "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60 pb-8 md:pb-0 md:pr-12",
+    gridClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
   },
   {
     meta: "PDF • 1.8 MB",
     title: "Sustainability Highlights — FY 2024-25",
     href: "#",
-    gridClass:
-      "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60 py-8 md:py-0 md:px-12",
+    gridClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
   },
   {
     meta: "PDF • 1.1 MB",
     title: "Energy & Emissions Disclosure",
     href: "#",
-    gridClass: "pt-8 md:pt-0 md:pl-12",
+    gridClass: "border-none",
   },
 ];
 
@@ -73,12 +71,12 @@ export default function EsgReportsSection() {
         </div>
 
         {/* 3-column downloads grid */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3  py-10 md:py-8 items-center">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 py-4 items-center">
           {reports.map((report, idx) => (
             <a
               key={idx}
               href={report.href}
-              className={`flex items-center justify-between group transition-all duration-300 ${report.gridClass} min-h-30`}
+              className={`flex items-center justify-between group transition-all duration-300 p-8 min-h-[160px] hover:bg-[#f5f9fa] hover:rounded-[2px] hover:shadow-sm hover:-translate-y-[2px] ${report.gridClass}`}
             >
               <div className="flex flex-col">
                 <span className="text-[10px] md:text-xs font-normal text-[#7F847E] font-sans tracking-wide uppercase">
@@ -90,31 +88,29 @@ export default function EsgReportsSection() {
               </div>
 
               {/* Download Icon */}
-              <div className="ml-4 shrink-0 w-8 h-8   flex items-end justify-center text-gray-500  transition-all duration-300">
+              <div className="ml-4 shrink-0 w-8 h-8 flex items-center justify-center text-black transition-colors duration-300 group-hover:text-[#40A937]">
                 <svg
-                  className="w-4 h-4"
+                  className="w-5 h-5"
                   fill="none"
                   stroke="currentColor"
-                  width="24"
-                  height="31"
                   viewBox="0 0 24 31"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
                     d="M5.93031 21.18L12.0003 27.25L18.0703 21.18"
-                    stroke="black"
-                    stroke-width="1.5"
-                    stroke-miterlimit="10"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeMiterlimit="10"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                   <path
                     d="M12 0.75L12 26.75"
-                    stroke="black"
-                    stroke-width="1.5"
-                    stroke-miterlimit="10"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeMiterlimit="10"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </div>

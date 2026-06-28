@@ -226,11 +226,11 @@ export default function EsgCertificationsSection() {
         </div>
 
         {/* General Metrics Grid (Borderless with subtle row separators) */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-y-12 gap-x-8 md:gap-x-12  py-12 mb-16">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-6 py-6 mb-16">
           {generalMetrics.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col border-t  border-[#E2DFD7]/80 pt-8"
+              className="flex flex-col border-t border-[#E2DFD7]/80 pt-8 p-6 transition-all duration-300 group"
             >
               <div>
                 <span className="font-display text-3xl md:text-[40px] lg:text-[44px] font-normal text-[#1F180D] leading-none tracking-tight">
@@ -242,8 +242,8 @@ export default function EsgCertificationsSection() {
                   </span>
                 )}
               </div>
-              <div className="w-40">
-                <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block">
+              <div className="w-44">
+                <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block leading-relaxed">
                   {item.label}
                 </span>
               </div>
@@ -299,11 +299,11 @@ export default function EsgCertificationsSection() {
                     }`}
                   >
                     {item.subGrid && (
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-x-12 md:gap-y-10 pt-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
                         {item.subGrid.map((sub, sIdx) => (
                           <div
                             key={sIdx}
-                            className="flex flex-col  border-t  border-[#E2DFD7]/80 pt-8"
+                            className="flex flex-col border-t border-[#E2DFD7]/80 pt-8 p-6 transition-all duration-300  group"
                           >
                             <span className="font-display text-2xl md:text-3xl font-normal text-[#1F180D] leading-none tracking-tight">
                               {sub.value}

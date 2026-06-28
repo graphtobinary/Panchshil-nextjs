@@ -97,34 +97,35 @@ export default function EsgWasteSection() {
         {/* 3x2 Grid of Metrics */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 ">
           {metrics.map((item, index) => (
-            <div
-              key={index}
-              className={`relative p-8 min-h-[140px] flex flex-col justify-between bg-transparent ${item.borderClass}`}
-            >
-              <div className="relative">
-                {/* Index number in the top-right corner of each cell */}
-                <span className="absolute top-0 right-0 text-[10px] md:text-xs font-normal text-[#7F847E]/60 font-sans select-none">
-                  {item.id}
-                </span>
-
-                <div className="mt-2">
-                  <span className="font-display text-3xl md:text-[40px] lg:text-[44px] font-normal text-[#1F180D] leading-none tracking-tight">
-                    {item.value}
+            <div key={index} className="bg-[#ddd]">
+              <div
+                className={`relative p-8 min-h-[150px] flex flex-col justify-between bg-[#F8F5EE] transition-all duration-300 hover:bg-[#fff]  hover:-translate-y-[3px] group ${item.borderClass}`}
+              >
+                <div className="relative">
+                  {/* Index number in the top-right corner of each cell */}
+                  <span className="absolute top-0 right-0 text-[10px] md:text-xs font-normal text-[#7F847E]/60 font-sans select-none">
+                    {item.id}
                   </span>
-                  {item.unit && (
-                    <span className="font-display text-[10px] md:text-xs font-normal text-[#7F847E] font-sans ml-1.5 tracking-wide uppercase align-baseline">
-                      {item.unit}
+
+                  <div className="mt-2">
+                    <span className="font-display text-3xl md:text-[40px] lg:text-[44px] font-normal text-[#1F180D] leading-none tracking-tight">
+                      {item.value}
                     </span>
-                  )}
+                    {item.unit && (
+                      <span className="font-display text-[10px] md:text-xs font-normal text-[#7F847E] font-sans ml-1.5 tracking-wide uppercase align-baseline">
+                        {item.unit}
+                      </span>
+                    )}
+                  </div>
+
+                  <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-4 block leading-normal">
+                    {item.label}
+                  </span>
                 </div>
 
-                <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-4 block leading-normal">
-                  {item.label}
-                </span>
+                {/* Bottom Accent line */}
+                <div className="w-[50px] h-[1px] bg-black/80 mt-5 transition-all duration-1000 group-hover:bg-[#40A937] group-hover:w-1/2" />
               </div>
-
-              {/* Bottom Accent line */}
-              <div className="w-12 h-px bg-[#AB9B81] mt-5" />
             </div>
           ))}
         </div>

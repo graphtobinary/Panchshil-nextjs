@@ -78,9 +78,12 @@ export default function EsgEnergySection() {
 
           {/* Right Column: Grid of 6 metrics */}
           <div className="lg:col-span-7 lg:pt-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-8 md:gap-x-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-6">
               {metrics.map((item, index) => (
-                <div key={index} className="flex flex-col">
+                <div
+                  key={index}
+                  className="flex flex-col p-6 transition-all duration-300"
+                >
                   <div>
                     <span className="font-display text-3xl md:text-[44px] lg:text-[48px] font-normal text-[#1F180D] leading-none tracking-tight">
                       {item.value}
@@ -89,8 +92,8 @@ export default function EsgEnergySection() {
                       {item.unit}
                     </span>
                   </div>
-                  <div className="w-40">
-                    <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block">
+                  <div className="w-44">
+                    <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block leading-relaxed">
                       {item.label}
                     </span>
                   </div>

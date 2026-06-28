@@ -88,32 +88,37 @@ export default function EsgMobilitySection() {
         </div>
 
         {/* 3x2 Grid of Metrics (Overlayed with faint white borders) */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 pt-4">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-6 pt-4">
           {metrics.map((item, index) => (
             <div
               key={index}
-              className={`p-8 md:p-5  min-h-30 flex flex-col justify-center bg-transparent ${item.borderClass} `}
+              className={`p-8 md:p-6 min-h-[160px] flex flex-col justify-between bg-transparent transition-all duration-300 group ${item.borderClass}`}
             >
               <div>
-                <span
-                  className={`font-display text-white leading-none tracking-tight font-normal ${
-                    item.isTextValue
-                      ? "text-2xl md:text-3xl lg:text-[34px]"
-                      : "text-3xl md:text-[40px] lg:text-[44px]"
-                  }`}
-                >
-                  {item.value}
-                </span>
-                {item.unit && (
-                  <span className="text-[10px] md:text-xs font-semibold text-white/50 font-sans ml-1.5 tracking-wide uppercase align-baseline">
-                    {item.unit}
+                <div>
+                  <span
+                    className={`font-display text-white leading-none tracking-tight font-normal transition-colors duration-300 group-hover:text-white ${
+                      item.isTextValue
+                        ? "text-2xl md:text-3xl lg:text-[34px]"
+                        : "text-3xl md:text-[40px] lg:text-[44px]"
+                    }`}
+                  >
+                    {item.value}
                   </span>
-                )}
+                  {item.unit && (
+                    <span className="text-[10px] md:text-xs font-semibold text-white/50 font-sans ml-1.5 tracking-wide uppercase align-baseline transition-colors duration-300 group-hover:text-white/75">
+                      {item.unit}
+                    </span>
+                  )}
+                </div>
+
+                <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block leading-relaxed uppercase">
+                  {item.label}
+                </span>
               </div>
 
-              <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block leading-relaxed uppercase">
-                {item.label}
-              </span>
+              {/* Bottom Accent Line */}
+              <div className="w-0 h-[1px] bg-white/20 mt-5 transition-all duration-1000 group-hover:bg-[#40A937] group-hover:w-full" />
             </div>
           ))}
         </div>

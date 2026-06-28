@@ -23,7 +23,7 @@ export default function EsgTabBar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const headerOffset = 180; // Combined sticky header (80px) + tab bar (64px) + margin
+      const headerOffset = 240; // Scrolled header (158px) + tab bar (~60px) + margin
       let currentActive = "overview";
 
       for (const tab of tabs) {
@@ -52,7 +52,7 @@ export default function EsgTabBar() {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const headerOffset = 150; // offset to not hide headings under sticky header + tab bar
+      const headerOffset = 220; // Scrolled header (158px) + tab bar (~60px)
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition =
         elementPosition + window.pageYOffset - headerOffset;
@@ -66,7 +66,7 @@ export default function EsgTabBar() {
   };
 
   return (
-    <div className="w-full bg-white border-b border-gray-200/40 py-4 px-4 sticky top-[76px] md:top-[80px] z-40 transition-all duration-300">
+    <div className="w-full bg-white border-b border-gray-200/40 py-4 px-4 sticky top-[76px] md:top-[158px] z-40 transition-all duration-300">
       <div className="max-w-[1540px] mx-auto flex items-center justify-start lg:justify-center overflow-x-auto no-scrollbar gap-2 md:gap-4 lg:gap-6">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;

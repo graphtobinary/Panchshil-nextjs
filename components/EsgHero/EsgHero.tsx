@@ -13,14 +13,13 @@ export interface EsgHeroCard {
 export interface EsgHeroTickerItem {
   number: string;
   text: string;
-  text2: string;
 }
 
 const defaultCards: EsgHeroCard[] = [
   {
     value: "21.68",
     unit: "MN SQ.FT.",
-    label: "LEED EBOM V4.1 Existing Buildings",
+    label: "LEED Core & Shell Certified",
   },
   {
     value: "14.5",
@@ -29,7 +28,7 @@ const defaultCards: EsgHeroCard[] = [
   },
   {
     value: "51%",
-    unit: "MN SQ.FT.",
+    unit: "",
     label: "Water Demand Met Through Recycling",
   },
   {
@@ -39,16 +38,26 @@ const defaultCards: EsgHeroCard[] = [
   },
   {
     value: "100%",
-    unit: "MN SQ.FT.",
-    label: "LEED EBOM V4.1 Existing Buildings",
+    unit: "",
+    label: "Organic Food Waste Recycled",
   },
 ];
 
-const defaultTicker: EsgHeroTickerItem[] = Array(4).fill({
-  number: "1,740",
-  text: "EMISSION SAVINGS THROUGH SOLAR",
-  text2: "tCO₂e",
-});
+// Items displayed in the scrolling ticker
+const tickerItems: EsgHeroTickerItem[] = [
+  { number: "WASTE RECYCLED", text: "" },
+  { number: "2.43", text: "MN KWH SOLAR ENERGY GENERATED" },
+  { number: "1,740", text: "TCO₂E EMISSION SAVINGS THROUGH SOLAR" },
+  { number: "6,10,247", text: "KL WATER RECYCLED THROUGH STPS" },
+];
+
+// Duplicate items list to cover screen width before marquee loops
+const defaultTicker: EsgHeroTickerItem[] = [
+  ...tickerItems,
+  ...tickerItems,
+  ...tickerItems,
+  ...tickerItems,
+];
 
 export default function EsgHero() {
   return (
@@ -92,11 +101,11 @@ export default function EsgHero() {
 
         {/* Backdrop Blurred Cards */}
         <div className="relative z-10 w-full animate-fade-in-up-delay-3 mt-4">
-          <div className="flex overflow-x-auto gap-4 md:gap-5 pb-4 md:pb-0 no-scrollbar md:grid md:grid-cols-5">
+          <div className="flex overflow-x-auto gap-4 md:gap-5 pb-4 md:pb-0 no-scrollbar md:grid md:grid-cols-5 overflow-x-visible">
             {defaultCards.map((card, index) => (
               <div
                 key={index}
-                className="w-[283px] md:w-full h-[160px] flex-shrink-0 flex flex-col justify-between p-5 md:p-6 bg-white/[0.03] border border-white/[0.1] backdrop-blur-[2px] rounded-[2px] transition-all duration-300 hover:bg-white/[0.08] hover:border-white/[0.18]"
+                className="w-[283px] md:w-full h-[160px] flex-shrink-0 flex flex-col justify-between p-5 md:p-6 bg-white/[0.03] border border-white/[0.1] backdrop-blur-[2px] rounded-[2px] transition-all duration-300 hover:bg-[#40A937]/5 hover:border-[#40A937] hover:shadow-[0_0_20px_rgba(64,169,55,0.15)] group hover:-translate-y-[2px]"
               >
                 <div>
                   <span className="text-3xl md:text-[36px] font-display text-white leading-none font-medium">
@@ -104,9 +113,11 @@ export default function EsgHero() {
                   </span>
                 </div>
                 <div className="flex flex-col mt-4">
-                  <span className="text-[10px] md:text-[11px] font-semibold tracking-wider text-[#7F847E] font-sans uppercase">
-                    {card.unit}
-                  </span>
+                  {card.unit && (
+                    <span className="text-[10px] md:text-[11px] font-semibold tracking-wider text-[#7F847E] font-sans uppercase">
+                      {card.unit}
+                    </span>
+                  )}
                   <span className="text-xs md:text-[13px] text-[#40A937] font-sans font-medium mt-1 leading-snug">
                     {card.label}
                   </span>
@@ -118,18 +129,44 @@ export default function EsgHero() {
       </div>
 
       {/* Infinite Horizontal Scrolling Ticker */}
-      <div className="relative z-20 w-full bg-white/[0.03] border border-white/[0.1] backdrop-blur-[2px] py-4.5 overflow-hidden px-6 mb-3">
-        <div className="flex justify-center">
+      <div className="relative z-20 w-full bg-black/40 border-t border-b border-white/[0.05] backdrop-blur-[2px] py-4.5 overflow-hidden">
+        <div className="flex whitespace-nowrap">
           {/* Main content group */}
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-12 shrink-0 animate-marquee">
             {defaultTicker.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <div className="flex items-center gap-2 font-sans text-[10px] md:text-[10px] tracking-widest uppercase font-semibold">
-                  <span className="text-white text-sm">{item.number}</span>
-                  <span className="text-[#7F847E]">{item.text2}</span>
-                  <span className="text-[#40A937]">{item.text}</span>
+              <div key={idx} className="flex items-center gap-12">
+                <div className="flex items-center gap-2 font-sans text-xs md:text-sm tracking-widest uppercase font-semibold">
+                  {item.number.match(/[A-Z]/) ? (
+                    <span className="text-[#40A937]">{item.number}</span>
+                  ) : (
+                    <span className="text-white">{item.number}</span>
+                  )}
+                  {item.text && (
+                    <span className="text-[#40A937]">{item.text}</span>
+                  )}
                 </div>
-                {/* <span className="text-[#40A937] text-lg font-bold select-none">*</span> */}
+                <span className="text-white/40 select-none px-2">•</span>
+              </div>
+            ))}
+          </div>
+          {/* Duplicate content group for seamless loop */}
+          <div
+            className="flex items-center gap-12 shrink-0 animate-marquee"
+            aria-hidden="true"
+          >
+            {defaultTicker.map((item, idx) => (
+              <div key={`dup-${idx}`} className="flex items-center gap-12">
+                <div className="flex items-center gap-2 font-sans text-xs md:text-sm tracking-widest uppercase font-semibold">
+                  {item.number.match(/[A-Z]/) ? (
+                    <span className="text-[#40A937]">{item.number}</span>
+                  ) : (
+                    <span className="text-white">{item.number}</span>
+                  )}
+                  {item.text && (
+                    <span className="text-[#40A937]">{item.text}</span>
+                  )}
+                </div>
+                <span className="text-white/40 select-none px-2">•</span>
               </div>
             ))}
           </div>

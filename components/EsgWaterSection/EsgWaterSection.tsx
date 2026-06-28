@@ -212,24 +212,25 @@ export default function EsgWaterSection() {
         {/* 3x2 Grid of Metrics */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 pt-0">
           {metrics.map((item, index) => (
-            <div
-              key={index}
-              className={`px-5 min-h-[140px] flex flex-col justify-center bg-transparent ${item.borderClass}`}
-            >
-              <div>
-                <span className="font-display text-3xl md:text-[40px] lg:text-[44px] font-normal text-[#1F180D] leading-none tracking-tight">
-                  {item.value}
-                </span>
-                {item.unit && (
-                  <span className="font-display text-[10px] md:text-xs font-normal text-[#7F847E] font-sans ml-1.5 tracking-wide uppercase align-baseline">
-                    {item.unit}
+            <div key={index} className="bg-[#ddd]">
+              <div
+                className={`px-6 py-8 min-h-[150px] flex flex-col justify-center bg-white transition-all duration-300 hover:bg-[#f8f5ee]  hover:-translate-y-[3px] group ${item.borderClass}`}
+              >
+                <div>
+                  <span className="font-display text-3xl md:text-[40px] lg:text-[44px] font-normal text-[#1F180D] leading-none tracking-tight">
+                    {item.value}
                   </span>
-                )}
-              </div>
-              <div className="w-40">
-                <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block leading-relaxed">
-                  {item.label}
-                </span>
+                  {item.unit && (
+                    <span className="font-display text-[10px] md:text-xs font-normal text-[#7F847E] font-sans ml-1.5 tracking-wide uppercase align-baseline">
+                      {item.unit}
+                    </span>
+                  )}
+                </div>
+                <div className="w-44">
+                  <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-3 block leading-relaxed">
+                    {item.label}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
