@@ -129,13 +129,13 @@ export default function EsgHero() {
       </div>
 
       {/* Infinite Horizontal Scrolling Ticker */}
-      <div className="relative z-20 w-full bg-black/40 border-t border-b border-white/[0.05] backdrop-blur-[2px] py-4.5 overflow-hidden">
+      <div className="relative z-20 w-full  border-t border-b border-white/[0.05] backdrop-blur-[2px] py-4.5 overflow-hidden">
         <div className="flex whitespace-nowrap">
           {/* Main content group */}
           <div className="flex items-center gap-12 shrink-0 animate-marquee">
             {defaultTicker.map((item, idx) => (
               <div key={idx} className="flex items-center gap-12">
-                <div className="flex items-center gap-2 font-sans text-xs md:text-sm tracking-widest uppercase font-semibold">
+                <div className="flex items-center gap-2 font-sans text-xs md:text-xs tracking-widest uppercase font-normal">
                   {item.number.match(/[A-Z]/) ? (
                     <span className="text-[#40A937]">{item.number}</span>
                   ) : (
