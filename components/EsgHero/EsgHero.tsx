@@ -105,7 +105,8 @@ export default function EsgHero() {
             {defaultCards.map((card, index) => (
               <div
                 key={index}
-                className="w-[283px] md:w-full h-[160px] flex-shrink-0 flex flex-col justify-between p-5 md:p-6 bg-white/[0.03] border border-white/[0.1] backdrop-blur-[2px] rounded-[2px] transition-all duration-300 hover:bg-[#40A937]/5 hover:border-[#40A937] hover:shadow-[0_0_20px_rgba(64,169,55,0.15)] group hover:-translate-y-[3px]"
+                className="w-[283px] md:w-full h-40 shrink-0 flex flex-col justify-between p-5 md:p-6  border border-white/10 backdrop-blur-[2px] transition-all duration-300 group hover:-translate-y-[3px]
+                bg-linear-to-b from-white/3 to-white/1 hover:border-[#4ade80] hover:bg-emerald-950/20 hover:shadow-[0_0_30px_rgba(74,222,128,0.15)]"
               >
                 <div>
                   <span className="text-3xl md:text-[36px] font-display text-white leading-none font-medium">
