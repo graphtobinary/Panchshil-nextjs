@@ -171,8 +171,10 @@ export default function ContactUsPageClient({
 
         marker.addListener("click", () => {
           setActiveLocationId(loc.id);
-          map.panTo({ lat: loc.lat, lng: loc.lng });
-          map.setZoom(loc.zoom);
+          map.moveCamera({
+            center: { lat: loc.lat, lng: loc.lng },
+            zoom: loc.zoom,
+          });
           infoWindowRef.current?.close();
         });
       });
@@ -313,12 +315,16 @@ export default function ContactUsPageClient({
   const panToLocation = (location: ContactLocation) => {
     if (!mapInstance.current) return;
 
-    mapInstance.current.panTo({
-      lat: location.lat,
-      lng: location.lng,
+    mapInstance.current.moveCamera({
+      center: { lat: location.lat, lng: location.lng },
+      zoom: location.zoom,
     });
-    mapInstance.current.panBy(0, -100);
-    mapInstance.current.setZoom(location.zoom);
+
+    setTimeout(() => {
+      if (mapInstance.current) {
+        mapInstance.current.panBy(0, -100);
+      }
+    }, 350);
 
     setActiveLocationId(location.id);
     infoWindowRef.current?.close();
