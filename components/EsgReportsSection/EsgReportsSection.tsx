@@ -40,7 +40,7 @@ export default function EsgReportsSection() {
     >
       <div className="max-w-[1540px] mx-auto px-6 md:px-10 lg:px-12">
         {/* Header split layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-8 md:mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-8 md:mb-4">
           {/* Left Side: Mockup Image */}
           <div className="lg:col-span-5 flex justify-start">
             <div className="w-full relative aspect-[5/3] max-w-[460px] overflow-hidden shadow-sm">
@@ -76,7 +76,7 @@ export default function EsgReportsSection() {
             <a
               key={idx}
               href={report.href}
-              className={`flex items-end justify-between group transition-all duration-300 p-8 min-h-[160px] hover:bg-[#f5f9fa]  ${report.gridClass}`}
+              className={`flex items-end justify-between group transition-all duration-300 px-8 py-8 min-h-[130px] hover:bg-[#f5f9fa]  ${report.gridClass}`}
             >
               <div className="flex flex-col">
                 <span className="text-[10px] md:text-xs font-normal text-[#7F847E] font-sans tracking-wide uppercase">
