@@ -1,6 +1,8 @@
 const API_CONSTANTS = {
   AUTH_TOKEN: `/auth/token`,
   CONTACT_DETAILS: `/contact-details`,
+  CONTACT_US_REASONS: `/contact-us/reasons`,
+  CONTACT_US_REASONS_API: "/api/contact-us-reasons",
   FOOTER_BLOCKS: `/home/footer-blocks`,
   HOME_MILESTONES: `/home/milestones`,
   HOME_SERVICES: `/home/services`,

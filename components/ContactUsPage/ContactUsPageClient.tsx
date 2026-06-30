@@ -10,7 +10,6 @@ import { Button } from "../Button";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { EnquiryFormErrors } from "@/interfaces";
 
 const MAP_STYLE: google.maps.MapTypeStyle[] = [
   {
@@ -102,14 +101,15 @@ export default function ContactUsPageClient() {
     message: "",
     purpose: "",
   });
-  const [errors, setErrors] = useState<EnquiryFormErrors>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
     type: "success" | "error";
     message: string;
   } | null>(null);
 
-  const purposeOptions = ["General", "Careers"];
+  const [purposeOptions, setPurposeOptions] = useState<string[]>([]);
+  const [isPurposeLoading, setIsPurposeLoading] = useState(true);
   const [isPurposeOpen, setIsPurposeOpen] = useState(false);
   const purposeRef = useRef<HTMLDivElement | null>(null);
   const [activeLocationId, setActiveLocationId] = useState<string | null>(
@@ -180,6 +180,37 @@ export default function ContactUsPageClient() {
     });
   }, []);
 
+  useEffect(() => {
+    const fetchReasons = async () => {
+      try {
+        const res = await fetch("/api/contact-us-reasons");
+        const json = await res.json();
+        if (json.success && json.data) {
+          const reasons = Array.isArray(json.data)
+            ? json.data
+            : (json.data.reasons ?? json.data.data ?? []);
+          setPurposeOptions(
+            reasons
+              .map(
+                (
+                  r: string | { reason?: string; name?: string; title?: string }
+                ) =>
+                  typeof r === "string"
+                    ? r
+                    : (r.reason ?? r.name ?? r.title ?? "")
+              )
+              .filter(Boolean)
+          );
+        }
+      } catch (e) {
+        console.error("Failed to load contact reasons", e);
+      } finally {
+        setIsPurposeLoading(false);
+      }
+    };
+    fetchReasons();
+  }, []);
+
   const handlePurposeSelect = (value: string) => {
     setForm((s) => ({ ...s, purpose: value }));
     setIsPurposeOpen(false);
@@ -196,9 +227,23 @@ export default function ContactUsPageClient() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setSubmitResult(null);
-    setErrors({});
+
+    const fieldErrors: Record<string, string> = {};
+    if (!form.name.trim()) fieldErrors.name = "Full name is required";
+    if (!form.purpose) fieldErrors.purpose = "Please select a purpose";
+    if (!form.phone.trim()) fieldErrors.phone = "Contact number is required";
+    if (!form.email.trim()) {
+      fieldErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      fieldErrors.email = "Enter a valid email address";
+    }
+    if (!form.message.trim()) fieldErrors.message = "Message is required";
+
+    setErrors(fieldErrors);
+    if (Object.keys(fieldErrors).length > 0) return;
+
+    setIsSubmitting(true);
 
     try {
       const formData = new FormData();
@@ -216,11 +261,30 @@ export default function ContactUsPageClient() {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrors({ email: data.error || "Submission failed" });
-        setSubmitResult({
-          type: "error",
-          message: data.error || "Something went wrong. Please try again.",
-        });
+        const serverErrors: Record<string, string> = {};
+        if (data.errors && Array.isArray(data.errors)) {
+          const fieldMap: Record<string, string> = {
+            enquiry_full_name: "name",
+            enquiry_email_id: "email",
+            enquiry_mobile_number: "phone",
+            enquiry_message: "message",
+            enquiry_reason: "purpose",
+          };
+          data.errors.forEach((err: { path?: string; msg?: string }) => {
+            if (err.path && err.msg) {
+              const formField = fieldMap[err.path] || err.path;
+              serverErrors[formField] = err.msg;
+            }
+          });
+        }
+        if (Object.keys(serverErrors).length > 0) {
+          setErrors(serverErrors);
+        } else {
+          setSubmitResult({
+            type: "error",
+            message: data.error || "Submission failed. Please try again.",
+          });
+        }
         return;
       }
 
@@ -230,13 +294,8 @@ export default function ContactUsPageClient() {
           data?.display_message ||
           "Thank you! Your enquiry has been submitted successfully.",
       });
-      setForm({
-        name: "",
-        phone: "",
-        email: "",
-        message: "",
-        purpose: "",
-      });
+      setForm({ name: "", phone: "", email: "", message: "", purpose: "" });
+      setErrors({});
     } catch {
       setSubmitResult({
         type: "error",
@@ -293,13 +352,20 @@ export default function ContactUsPageClient() {
               onSubmit={handleSubmit}
               className="grid grid-cols-1 md:grid-cols-2 gap-4"
             >
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Full Name"
-                className="w-full pr-4 py-2.5 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
-              />
+              <div className="relative">
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  className="w-full pr-4 py-2.5 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-[10px] absolute -bottom-[15px] left-0">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
               {/* Purpose dropdown (checkbox-style list copied from StickyBottomBar) */}
               <div
                 className="relative"
@@ -332,43 +398,59 @@ export default function ContactUsPageClient() {
 
                 {isPurposeOpen && (
                   <div className="absolute top-full left-0 mb-2 border border-golden-beige shadow-lg min-w-[220px] max-h-60 overflow-y-auto z-10 bg-white">
-                    <ul>
-                      {purposeOptions.map((option) => {
-                        const selected = form.purpose === option;
-                        return (
-                          <li key={option}>
-                            <button
-                              type="button"
-                              onClick={() => handlePurposeSelect(option)}
-                              className={`w-full text-black-chocolate text-left px-4 py-2 cursor-pointer text-sm flex items-center gap-2 ${selected ? "bg-gold-beige font-medium text-white" : ""}`}
-                            >
-                              <span
-                                className={`w-3 h-3 border flex items-center justify-center ${selected ? "bg-gold-beige border-white" : "border-black"}`}
+                    {isPurposeLoading ? (
+                      <div className="px-4 py-3 text-sm text-gray-500">
+                        Loading...
+                      </div>
+                    ) : purposeOptions.length === 0 ? (
+                      <div className="px-4 py-3 text-sm text-gray-500">
+                        No options available
+                      </div>
+                    ) : (
+                      <ul>
+                        {purposeOptions.map((option) => {
+                          const selected = form.purpose === option;
+                          return (
+                            <li key={option}>
+                              <button
+                                type="button"
+                                onClick={() => handlePurposeSelect(option)}
+                                className={`w-full text-black-chocolate text-left px-4 py-2 cursor-pointer text-sm flex items-center gap-2 ${selected ? "bg-gold-beige font-medium text-white" : ""}`}
                               >
-                                {selected && (
-                                  <svg
-                                    className="w-3 h-3 text-white"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                )}
-                              </span>
-                              {option}
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ul>
+                                <span
+                                  className={`w-3 h-3 border flex items-center justify-center ${selected ? "bg-gold-beige border-white" : "border-black"}`}
+                                >
+                                  {selected && (
+                                    <svg
+                                      className="w-3 h-3 text-white"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
+                                </span>
+                                {option}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                   </div>
                 )}
+                {errors.purpose && (
+                  <p className="text-red-500 text-[10px] absolute -bottom-[15px] left-0">
+                    {errors.purpose}
+                  </p>
+                )}
               </div>
-              <div>
+
+              <div className="relative">
                 <PhoneInput
                   country={"in"}
                   value={form.phone}
@@ -382,7 +464,11 @@ export default function ContactUsPageClient() {
                       phoneIsoCode: country?.countryCode || "",
                     }));
                     if (errors.phone) {
-                      setForm((prev) => ({ ...prev, phone: "" }));
+                      setErrors((prev) => {
+                        const next = { ...prev };
+                        delete next.phone;
+                        return next;
+                      });
                     }
                   }}
                   inputProps={{
@@ -396,23 +482,39 @@ export default function ContactUsPageClient() {
                   placeholder="Enter Your Contact Number"
                 />
                 {errors.phone && (
-                  <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                  <p className="text-red-500 text-[10px] absolute -bottom-[15px] left-0">
+                    {errors.phone}
+                  </p>
                 )}
               </div>
-              <input
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Email"
-                className="w-full pr-4 py-2.5 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
-              />
-              <textarea
-                name="message"
-                value={form.message}
-                onChange={handleChange}
-                placeholder="Message"
-                className="md:col-span-2 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
-              />
+              <div className="relative">
+                <input
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="Email"
+                  className="w-full pr-4 py-2.5 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-[10px] absolute -bottom-[15px] left-0">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+              <div className="md:col-span-2 relative">
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="Message"
+                  className="w-full border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
+                />
+                {errors.message && (
+                  <p className="text-red-500 text-[10px] absolute -bottom-[15px] left-0">
+                    {errors.message}
+                  </p>
+                )}
+              </div>
 
               <div className="md:col-span-2 mt-4 flex flex-col gap-2">
                 <div className="flex items-center gap-4">

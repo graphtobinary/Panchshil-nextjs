@@ -361,6 +361,18 @@ export const getContactDetails = (token: string) => {
   );
 };
 
+export const getContactUsReasons = (token: string) => {
+  return doGet(
+    API_CONSTANTS.CONTACT_US_REASONS,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
 export const getFooterBlocks = (token: string) => {
   return doGet(
     API_CONSTANTS.FOOTER_BLOCKS,
