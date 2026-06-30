@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import esgPageHeroBanner from "@/assets/images/esg/esg-page-hero-banner.png";
+import { useCountUp } from "@/hooks/useCountUp";
 
 export interface EsgHeroCard {
   value: string;
@@ -59,9 +60,69 @@ const defaultTicker: EsgHeroTickerItem[] = [
   ...tickerItems,
 ];
 
+function parseNumericValue(value: string): {
+  target: number;
+  prefix: string;
+  suffix: string;
+} {
+  const prefix = value.match(/^~/) ? "~" : "";
+  const suffix = value.match(/%$/) ? "%" : "";
+  const clean = value.replace(/^~/, "").replace(/%$/, "").replace(/,/g, "");
+  return {
+    target: parseFloat(clean) || 0,
+    prefix,
+    suffix,
+  };
+}
+
+function formatNumber(num: number, decimals: number): string {
+  if (decimals > 0) {
+    return num.toLocaleString("en-IN", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+  return num.toLocaleString("en-IN");
+}
+
+function AnimatedMetric({
+  value,
+  isActive,
+}: {
+  value: string;
+  isActive: boolean;
+}) {
+  const { target, prefix, suffix } = parseNumericValue(value);
+  const animatedValue = useCountUp(Math.round(target), isActive);
+  const decimals = 0;
+  const display = prefix + formatNumber(animatedValue, decimals) + suffix;
+  return <>{display}</>;
+}
+
 export default function EsgHero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden bg-[#0F140D]">
+    <section
+      ref={sectionRef}
+      className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden bg-[#0F140D]"
+    >
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -110,7 +171,7 @@ export default function EsgHero() {
               >
                 <div>
                   <span className="text-3xl md:text-[36px] font-display text-white leading-none font-medium">
-                    {card.value}
+                    <AnimatedMetric value={card.value} isActive={isInView} />
                   </span>
                 </div>
                 <div className="flex flex-col mt-4">

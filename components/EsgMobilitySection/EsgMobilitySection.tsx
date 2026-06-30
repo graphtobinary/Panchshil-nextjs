@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import mobilityBanner from "@/assets/images/esg/mobility-banner.png";
+import { useCountUp } from "@/hooks/useCountUp";
 
 interface MetricItem {
   value: string;
@@ -49,13 +50,73 @@ const metrics: MetricItem[] = [
   },
 ];
 
+function parseNumericValue(value: string): {
+  target: number;
+  prefix: string;
+  suffix: string;
+} {
+  const suffixMatch = value.match(/%/);
+  const prefixMatch = value.match(/^~/);
+  const clean = value.replace(/[~%]/g, "").replace(/,/g, "");
+  return {
+    target: parseFloat(clean) || 0,
+    prefix: prefixMatch ? "~" : "",
+    suffix: suffixMatch ? "%" : "",
+  };
+}
+
+function formatNumber(num: number, decimals: number): string {
+  if (decimals > 0) {
+    return num.toLocaleString("en-IN", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+  return num.toLocaleString("en-IN");
+}
+
+function AnimatedMetric({
+  value,
+  isActive,
+}: {
+  value: string;
+  isActive: boolean;
+}) {
+  const { target, prefix, suffix } = parseNumericValue(value);
+  const animatedValue = useCountUp(Math.round(target), isActive);
+  const decimals = value.includes(".")
+    ? value.split(".")[1].replace(/,/g, "").length
+    : 0;
+  const display = prefix + formatNumber(animatedValue, decimals) + suffix;
+  return <>{display}</>;
+}
+
 export default function EsgMobilitySection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="mobility"
+      ref={sectionRef}
       className="w-full relative min-h-[600px] flex flex-col justify-between py-16 md:py-24 overflow-hidden "
     >
-      {/* Background Banner Image */}
       <div className="absolute inset-0 z-0">
         <Image
           src={mobilityBanner}
@@ -63,12 +124,9 @@ export default function EsgMobilitySection() {
           fill
           className="object-cover object-center"
         />
-        {/* Dark overlay for readability */}
-        {/* <div className="absolute inset-0 bg-black/75 z-0" /> */}
       </div>
 
       <div className="max-w-[1540px] w-full mx-auto px-6 md:px-10 lg:px-12 relative z-10 flex-1 flex flex-col justify-between">
-        {/* Header split layout */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 md:mb-20">
           <div className="flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
@@ -87,12 +145,11 @@ export default function EsgMobilitySection() {
           </div>
         </div>
 
-        {/* 3x2 Grid of Metrics (Overlayed with faint white borders) */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-6 pt-4">
           {metrics.map((item, index) => (
             <div
               key={index}
-              className={`p-8 md:p-6 min-h-[160px] flex flex-col justify-between bg-transparent transition-all duration-300 group ${item.borderClass}`}
+              className={`p-8 md:p-6 min-h-[140px] flex flex-col justify-between bg-transparent transition-all duration-300 group ${item.borderClass}`}
             >
               <div>
                 <div>
@@ -103,7 +160,11 @@ export default function EsgMobilitySection() {
                         : "text-3xl md:text-[40px] lg:text-[44px]"
                     }`}
                   >
-                    {item.value}
+                    {item.isTextValue ? (
+                      item.value
+                    ) : (
+                      <AnimatedMetric value={item.value} isActive={isInView} />
+                    )}
                   </span>
                   {item.unit && (
                     <span className="text-[10px] md:text-xs font-semibold text-white/50 font-sans ml-1.5 tracking-wide uppercase align-baseline transition-colors duration-300 group-hover:text-white/75">
@@ -117,7 +178,6 @@ export default function EsgMobilitySection() {
                 </span>
               </div>
 
-              {/* Bottom Accent Line */}
               <div className="w-0 h-[1px] bg-white/20 mt-5 transition-all duration-1000 group-hover:bg-[#40A937] group-hover:w-full" />
             </div>
           ))}

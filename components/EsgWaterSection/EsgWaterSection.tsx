@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import waterBanner from "@/assets/images/esg/water-banner.png";
+import { useCountUp } from "@/hooks/useCountUp";
 
 interface MetricItem {
   value: string;
@@ -51,13 +52,73 @@ const metrics: MetricItem[] = [
   },
 ];
 
+function parseNumericValue(value: string): {
+  target: number;
+  prefix: string;
+  suffix: string;
+} {
+  const suffixMatch = value.match(/%/);
+  const prefixMatch = value.match(/^~/);
+  const clean = value.replace(/[~%]/g, "").replace(/,/g, "");
+  return {
+    target: parseFloat(clean) || 0,
+    prefix: prefixMatch ? "~" : "",
+    suffix: suffixMatch ? "%" : "",
+  };
+}
+
+function formatNumber(num: number, decimals: number): string {
+  if (decimals > 0) {
+    return num.toLocaleString("en-IN", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+  return num.toLocaleString("en-IN");
+}
+
+function AnimatedMetric({
+  value,
+  isActive,
+}: {
+  value: string;
+  isActive: boolean;
+}) {
+  const { target, prefix, suffix } = parseNumericValue(value);
+  const animatedValue = useCountUp(Math.round(target), isActive);
+  const decimals = value.includes(".")
+    ? value.split(".")[1].replace(/,/g, "").length
+    : 0;
+  const display = prefix + formatNumber(animatedValue, decimals) + suffix;
+  return <>{display}</>;
+}
+
 export default function EsgWaterSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="water"
+      ref={sectionRef}
       className="w-full bg-[#FFFFFF] py-16 md:py-24 border-t border-[#E2DFD7]/30 transition-colors duration-300 relative overflow-hidden"
     >
-      {/* Decorative concentric circle lines in background (as seen in design) */}
       <div className="absolute top-10 left-[-150px] w-[600px] h-[600px] pointer-events-none opacity-[0.06] select-none z-0">
         <svg viewBox="0 0 100 100" className="w-full h-full text-black">
           <circle
@@ -120,18 +181,14 @@ export default function EsgWaterSection() {
       </div>
 
       <div className="max-w-[1540px] mx-auto px-6 md:px-10 lg:px-12 relative z-10">
-        {/* Header split layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-16 md:mb-10">
-          {/* Left: Text */}
           <div className="lg:col-span-6 flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
               — 01 / POWER RESPONSIBLY
             </span>
-
             <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
               Water.
             </h2>
-
             <p className="mt-4 text-sm md:text-base text-[#626A70] font-sans font-light max-w-md">
               Driving the transition with clean and renewable energy.
             </p>
@@ -196,7 +253,6 @@ export default function EsgWaterSection() {
               />
             </svg>
           </div>
-          {/* Right: Inset drop image */}
           <div className="lg:col-span-6 flex justify-end">
             <div className="w-full relative aspect-[21/10] max-w-[560px] overflow-hidden rounded-[2px] shadow-sm">
               <Image
@@ -209,16 +265,15 @@ export default function EsgWaterSection() {
           </div>
         </div>
 
-        {/* 3x2 Grid of Metrics */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 pt-0">
           {metrics.map((item, index) => (
             <div key={index} className="bg-[#ddd]">
               <div
-                className={`px-6 py-8 min-h-[150px] flex flex-col justify-center bg-white transition-all duration-300 hover:bg-[#f8f5ee]  hover:-translate-y-[3px] group ${item.borderClass}`}
+                className={`px-6 py-8 min-h-[150px] flex flex-col justify-center bg-white transition-all duration-300 hover:bg-[#f8f5ee] hover:-translate-y-[3px] group ${item.borderClass}`}
               >
                 <div>
                   <span className="font-display text-3xl md:text-[40px] lg:text-[44px] font-normal text-[#1F180D] leading-none tracking-tight">
-                    {item.value}
+                    <AnimatedMetric value={item.value} isActive={isInView} />
                   </span>
                   {item.unit && (
                     <span className="font-display text-[10px] md:text-xs font-normal text-[#7F847E] font-sans ml-1.5 tracking-wide uppercase align-baseline">

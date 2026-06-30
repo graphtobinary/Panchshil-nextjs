@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import wasteBanner from "@/assets/images/esg/waste-banner.png";
+import { useCountUp } from "@/hooks/useCountUp";
 
 interface MetricItem {
   id: string;
@@ -58,14 +59,74 @@ const metrics: MetricItem[] = [
   },
 ];
 
+function parseNumericValue(value: string): {
+  target: number;
+  prefix: string;
+  suffix: string;
+} {
+  const suffixMatch = value.match(/%/);
+  const prefixMatch = value.match(/^~/);
+  const clean = value.replace(/[~%]/g, "").replace(/,/g, "");
+  return {
+    target: parseFloat(clean) || 0,
+    prefix: prefixMatch ? "~" : "",
+    suffix: suffixMatch ? "%" : "",
+  };
+}
+
+function formatNumber(num: number, decimals: number): string {
+  if (decimals > 0) {
+    return num.toLocaleString("en-IN", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+  return num.toLocaleString("en-IN");
+}
+
+function AnimatedMetric({
+  value,
+  isActive,
+}: {
+  value: string;
+  isActive: boolean;
+}) {
+  const { target, prefix, suffix } = parseNumericValue(value);
+  const animatedValue = useCountUp(Math.round(target), isActive);
+  const decimals = value.includes(".")
+    ? value.split(".")[1].replace(/,/g, "").length
+    : 0;
+  const display = prefix + formatNumber(animatedValue, decimals) + suffix;
+  return <>{display}</>;
+}
+
 export default function EsgWasteSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="waste"
+      ref={sectionRef}
       className="w-full bg-[#F8F5EE] py-16 md:py-24 border-t border-[#E2DFD7]/30 transition-colors duration-300"
     >
       <div className="max-w-[1540px] mx-auto px-6 md:px-10 lg:px-12">
-        {/* Header split layout */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 md:mb-14">
           <div className="flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
@@ -84,7 +145,6 @@ export default function EsgWasteSection() {
           </div>
         </div>
 
-        {/* Full-width Banner Image */}
         <div className="w-full relative aspect-[21/8] min-h-[220px] md:min-h-[380px] overflow-hidden mb-12 md:mb-16 rounded-[2px] shadow-sm">
           <Image
             src={wasteBanner}
@@ -94,7 +154,6 @@ export default function EsgWasteSection() {
           />
         </div>
 
-        {/* 3x2 Grid of Metrics */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 ">
           {metrics.map((item, index) => (
             <div key={index} className="bg-[#ddd]">
@@ -102,14 +161,13 @@ export default function EsgWasteSection() {
                 className={`relative p-8 min-h-[150px] flex flex-col justify-between bg-[#F8F5EE] transition-all duration-300 hover:bg-[#fff]  hover:-translate-y-[3px] group ${item.borderClass}`}
               >
                 <div className="relative">
-                  {/* Index number in the top-right corner of each cell */}
                   <span className="absolute top-0 right-0 text-[10px] md:text-xs font-normal text-[#7F847E]/60 font-sans select-none">
                     {item.id}
                   </span>
 
                   <div className="mt-2">
                     <span className="font-display text-3xl md:text-[40px] lg:text-[44px] font-normal text-[#1F180D] leading-none tracking-tight">
-                      {item.value}
+                      <AnimatedMetric value={item.value} isActive={isInView} />
                     </span>
                     {item.unit && (
                       <span className="font-display text-[10px] md:text-xs font-normal text-[#7F847E] font-sans ml-1.5 tracking-wide uppercase align-baseline">
@@ -123,7 +181,6 @@ export default function EsgWasteSection() {
                   </span>
                 </div>
 
-                {/* Bottom Accent line */}
                 <div className="w-[50px] h-[1px] bg-black/80 mt-5 transition-all duration-1000 group-hover:bg-[#40A937] group-hover:w-1/2" />
               </div>
             </div>

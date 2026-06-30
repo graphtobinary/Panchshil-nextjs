@@ -43,7 +43,11 @@ function renderTextWithSingleLink(text: string | undefined | null) {
   });
 }
 
-function useCountUp(targetValue: number, isActive: boolean, duration = 2000) {
+export function useCountUp(
+  targetValue: number,
+  isActive: boolean,
+  duration = 2000
+) {
   const [currentValue, setCurrentValue] = useState(0);
 
   useEffect(() => {

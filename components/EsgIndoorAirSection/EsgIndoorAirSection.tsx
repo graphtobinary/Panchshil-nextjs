@@ -78,14 +78,13 @@ export default function EsgIndoorAirSection() {
                     {item.value}
                   </span>
                 </div>
+                {/* Bottom Accent line */}
+                <div className="w-12 h-px bg-[#40A937] mt-5" />
 
                 <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-4 block leading-normal">
                   {item.label}
                 </span>
               </div>
-
-              {/* Bottom Accent line */}
-              <div className="w-12 h-px bg-[#AB9B81] mt-5" />
             </div>
           ))}
         </div>
