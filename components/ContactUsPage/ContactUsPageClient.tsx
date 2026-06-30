@@ -4,12 +4,12 @@ import { useState, useRef, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import AboutUsHero from "@/components/AboutUsHero/AboutUsHero";
-import { contactPageData, branches } from "@/app/contact-us/contact.data";
-// import Link from "next/link";
+import { branches } from "@/app/contact-us/contact.data";
 import { Button } from "../Button";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { AboutUsHeroContent } from "@/app/about/about.data";
 
 const MAP_STYLE: google.maps.MapTypeStyle[] = [
   {
@@ -87,7 +87,11 @@ const contactLocations: ContactLocation[] = [
   },
 ];
 
-export default function ContactUsPageClient() {
+export default function ContactUsPageClient({
+  hero,
+}: {
+  hero: AboutUsHeroContent;
+}) {
   const [form, setForm] = useState<{
     name: string;
     phone: string;
@@ -324,14 +328,7 @@ export default function ContactUsPageClient() {
     <main className="min-h-screen bg-[#FFFAF7]">
       <Header />
       <section className="bg-white">
-        <AboutUsHero
-          hero={{
-            imageSrc: contactPageData.imageSrc || contactPageData.imageSrc,
-            title: contactPageData.title,
-            description: contactPageData.description,
-          }}
-          //   compact
-        />
+        <AboutUsHero hero={hero} />
       </section>
 
       <section className="bg-white py-20">
