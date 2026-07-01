@@ -4,8 +4,6 @@ import { AuthTokenResponse, BannersProps, MetaDataProps } from "@/interfaces";
 import type { Metadata } from "next";
 import { AboutUsHeroContent } from "@/app/about/about.data";
 
-export const revalidate = 1800;
-
 async function getPageMetaData(): Promise<MetaDataProps | null> {
   let token: string | null = null;
   try {
