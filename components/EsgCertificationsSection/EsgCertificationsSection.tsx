@@ -398,7 +398,7 @@ const PortfolioCoverage = () => {
                 {portfolio.title}
               </h2>
 
-              <p className="mt-4 text-base leading-8 text-[#5D6963]">
+              <p className="mt-1 text-sm leading-8 text-[#5D6963]">
                 {portfolio.description}
               </p>
 
