@@ -24,6 +24,33 @@ interface AccordionItem {
   subGrid?: SubGridItem[];
 }
 
+const portfolioData = [
+  {
+    title: "Panchshil Portfolio",
+    description:
+      "Core Panchshil office park assets covered under Integrated Management System certifications.",
+    assets: [
+      "EON Free Zone I & II",
+      "World Trade Centre Pune",
+      "Panchshil Business Park East & West",
+      "Tech Park One",
+      "Panchshil Tech Park Shivajinagar",
+      "Panchshil Avenue",
+      "Quadra I",
+    ],
+  },
+  {
+    title: "Ventive Hospitality Portfolio",
+    description:
+      "Additional assets covered under the integrated certification framework.",
+    assets: [
+      "Business Bay",
+      "International Convention Center",
+      "Panchshil Tech Park Hinjewadi",
+    ],
+  },
+];
+
 const generalMetrics: GeneralMetric[] = [
   {
     value: "~21.68",
@@ -353,6 +380,46 @@ function AnimatedMetric({
   return <>{display}</>;
 }
 
+const PortfolioCoverage = () => {
+  return (
+    <section className=" py-10 border-t border-[#E2DFD7]/80">
+      <div className="mx-auto ">
+        <p className="mb-10 text-xs uppercase tracking-[0.45em] text-[#40a937]">
+          Portfolio Coverage — Assets
+        </p>
+
+        <div className="grid gap-8 lg:grid-cols-2">
+          {portfolioData.map((portfolio) => (
+            <div
+              key={portfolio.title}
+              className="bg-[#F8FCFD] p-10 min-h-[400px]"
+            >
+              <h2 className="font-serif text-2xl leading-tight text-[#1C2A22]">
+                {portfolio.title}
+              </h2>
+
+              <p className="mt-4 text-base leading-8 text-[#5D6963]">
+                {portfolio.description}
+              </p>
+
+              <ul className="mt-5 space-y-6">
+                {portfolio.assets.map((item) => (
+                  <li key={item} className="flex items-center gap-3 mb-4">
+                    <span className="block h-[1px] w-4 bg-[#40a937]" />
+                    <span className="text-sm leading-none text-[#2E483C]">
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 export default function EsgCertificationsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
@@ -488,27 +555,32 @@ export default function EsgCertificationsSection() {
                     }`}
                   >
                     {item.subGrid && (
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-                        {item.subGrid.map((sub, sIdx) => (
-                          <div
-                            key={sIdx}
-                            className="flex flex-col border-t border-[#E2DFD7]/80 pt-8 p-6 transition-all duration-300  group"
-                          >
-                            <span className="font-display text-2xl md:text-3xl font-normal text-[#1F180D] leading-none tracking-tight">
-                              <AnimatedMetric
-                                value={sub.value}
-                                isActive={isInView}
-                              />
-                            </span>
-                            <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-2 block">
-                              {sub.label}
-                            </span>
-                            <p className="font-sans text-xs text-[#626A70] mt-2 leading-relaxed font-light">
-                              {sub.desc}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
+                      <>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+                          {item.subGrid.map((sub, sIdx) => (
+                            <div
+                              key={sIdx}
+                              className="flex flex-col border-t border-[#E2DFD7]/80 pt-8 p-6 transition-all duration-300  group"
+                            >
+                              <span className="font-display text-2xl md:text-3xl font-normal text-[#1F180D] leading-none tracking-tight">
+                                <AnimatedMetric
+                                  value={sub.value}
+                                  isActive={isInView}
+                                />
+                              </span>
+                              <span className="text-[10px] md:text-[11px] font-normal text-[#40A937] tracking-wider font-sans mt-2 block">
+                                {sub.label}
+                              </span>
+                              <p className="font-sans text-xs text-[#626A70] mt-2 leading-relaxed font-light">
+                                {sub.desc}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                        {item.title === "ISO Integrated Management Systems" && (
+                          <PortfolioCoverage />
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

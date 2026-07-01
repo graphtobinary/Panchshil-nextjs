@@ -43,7 +43,7 @@ export default function EsgReportsSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-8 md:mb-4">
           {/* Left Side: Mockup Image */}
           <div className="lg:col-span-5 flex justify-start">
-            <div className="w-full relative aspect-[5/3] max-w-[460px] overflow-hidden shadow-sm">
+            <div className="w-full relative aspect-[5/3] max-w-full overflow-hidden shadow-sm">
               <Image
                 src={esgReports}
                 alt="ESG Reports Mockup Banner"
