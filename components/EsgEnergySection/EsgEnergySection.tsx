@@ -4,29 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import energySolar from "@/assets/images/esg/energy-solar.png";
 import { useCountUp } from "@/hooks/useCountUp";
+import { EsgPerformanceApiItem } from "@/interfaces";
 
 interface MetricItem {
   value: string;
   unit: string;
   label: string;
 }
-
-const metrics: MetricItem[] = [
-  { value: "2.34", unit: "MWp", label: "ROOFTOP SOLAR CAPACITY" },
-  { value: "2.34", unit: "MN KWH", label: "SOLAR ENERGY GENERATED" },
-  { value: "1,740", unit: "MN KWH", label: "EMISSION SAVINGS THROUGH SOLAR" },
-  { value: "55.48", unit: "MN KWH", label: "RE PURCHASED AT SEZ OFFICE PARKS" },
-  {
-    value: "~39,726",
-    unit: "TCO₂E",
-    label: "CARBON EMISSION SAVINGS (RE MIX)",
-  },
-  {
-    value: "~9,169",
-    unit: "TCO₂E",
-    label: "CARBON REDUCTION THROUGH WIND ENERGY",
-  },
-];
 
 function parseNumericValue(value: string): {
   target: number;
@@ -69,9 +53,29 @@ function AnimatedMetric({
   return <>{display}</>;
 }
 
-export default function EsgEnergySection() {
+type Props = {
+  performance?: EsgPerformanceApiItem[];
+};
+
+function findEnergyMetrics(performance?: EsgPerformanceApiItem[]) {
+  const energyItem = performance?.find(
+    (p) => p.performance_title?.toLowerCase() === "energy"
+  );
+  if (!energyItem?.metrics || energyItem.metrics.length === 0) return null;
+  return energyItem;
+}
+
+export default function EsgEnergySection({ performance }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
+
+  const energyData = findEnergyMetrics(performance);
+  const metrics: MetricItem[] =
+    energyData?.metrics!.map((m) => ({
+      value: m.metric_value || "",
+      unit: m.metric_config || "",
+      label: m.metric_description || "",
+    })) || [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -99,17 +103,18 @@ export default function EsgEnergySection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           <div className="lg:col-span-5 flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
-              — 01 / POWER RESPONSIBLY
+              — 01 / {energyData?.performance_tagline || "POWER RESPONSIBLY"}
             </span>
             <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
-              Energy.
+              {energyData?.performance_title || "Energy."}
             </h2>
             <p className="mt-4 text-sm md:text-base text-gray-600 font-sans font-light mb-8 max-w-md">
-              Driving the transition with clean and renewable energy.
+              {energyData?.performance_description ||
+                "Driving the transition with clean and renewable energy."}
             </p>
             <div className="w-full relative aspect-[4/3] max-w-[460px] overflow-hidden rounded-[2px] shadow-sm">
               <Image
-                src={energySolar}
+                src={energyData?.performance_image || energySolar}
                 alt="Solar Panels Banner"
                 fill
                 className="object-cover object-center"

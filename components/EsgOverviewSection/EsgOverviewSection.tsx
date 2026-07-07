@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-import impactAreaBanner from "@/assets/images/esg/impact-area-banner.png";
+import { EsgIntroductionApiResponse } from "@/interfaces";
 
 interface GridItem {
   id: string;
@@ -51,7 +50,11 @@ const gridItems: GridItem[] = [
   },
 ];
 
-export default function EsgOverviewSection() {
+type Props = {
+  introduction?: EsgIntroductionApiResponse | null;
+};
+
+export default function EsgOverviewSection({ introduction }: Props) {
   return (
     <section
       id="overview"
@@ -64,20 +67,22 @@ export default function EsgOverviewSection() {
             — 01 / OVERVIEW
           </span>
 
-          <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.15] tracking-tight font-medium">
-            Our <span className="text-[#40A937]">ESG Impact</span> <br />
-            at a Glance.
-          </h2>
+          {introduction?.intro_heading && (
+            <h2
+              className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.15] tracking-tight font-medium [&_p]:inline [&_span]:text-[#40A937]"
+              dangerouslySetInnerHTML={{ __html: introduction.intro_heading }}
+            />
+          )}
 
           <p className="mt-2 text-sm md:text-base lg:text-[17px] text-[#626A70] font-sans font-light tracking-wide">
-            Measurable action. Meaningful impact. A better tomorrow.
+            {introduction?.intro_caption}
           </p>
         </div>
 
         {/* Banner Image */}
         <div className="w-full relative aspect-[21/9] min-h-[260px] md:min-h-[400px] overflow-hidden mb-12 md:mb-16 rounded-[2px] shadow-sm">
           <Image
-            src={impactAreaBanner}
+            src={introduction?.intro_image || ""}
             alt="Our ESG Impact Banner"
             fill
             priority

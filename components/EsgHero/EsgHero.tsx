@@ -2,8 +2,15 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import esgPageHeroBanner from "@/assets/images/esg/esg-page-hero-banner.png";
 import { useCountUp } from "@/hooks/useCountUp";
+import { CareerHeroContent } from "@/app/careers/career-page.data";
+import { EsgMilestoneApiItem, EsgTickerApiItem } from "@/interfaces";
+
+export interface EsgHeroProps {
+  hero?: CareerHeroContent;
+  milestones?: EsgMilestoneApiItem[];
+  ticker?: EsgTickerApiItem[];
+}
 
 export interface EsgHeroCard {
   value: string;
@@ -15,50 +22,6 @@ export interface EsgHeroTickerItem {
   number: string;
   text: string;
 }
-
-const defaultCards: EsgHeroCard[] = [
-  {
-    value: "21.68",
-    unit: "MN SQ.FT.",
-    label: "LEED Core & Shell Certified",
-  },
-  {
-    value: "14.5",
-    unit: "MN SQ.FT.",
-    label: "LEED EBOM V4.1 Existing Buildings",
-  },
-  {
-    value: "51%",
-    unit: "",
-    label: "Water Demand Met Through Recycling",
-  },
-  {
-    value: "16.6",
-    unit: "MN SQ.FT.",
-    label: "Certified under Four ISO Management Systems",
-  },
-  {
-    value: "100%",
-    unit: "",
-    label: "Organic Food Waste Recycled",
-  },
-];
-
-// Items displayed in the scrolling ticker
-const tickerItems: EsgHeroTickerItem[] = [
-  { number: "WASTE RECYCLED", text: "" },
-  { number: "2.43", text: "MN KWH SOLAR ENERGY GENERATED" },
-  { number: "1,740", text: "TCO₂E EMISSION SAVINGS THROUGH SOLAR" },
-  { number: "6,10,247", text: "KL WATER RECYCLED THROUGH STPS" },
-];
-
-// Duplicate items list to cover screen width before marquee loops
-const defaultTicker: EsgHeroTickerItem[] = [
-  ...tickerItems,
-  ...tickerItems,
-  ...tickerItems,
-  ...tickerItems,
-];
 
 function parseNumericValue(value: string): {
   target: number;
@@ -99,9 +62,34 @@ function AnimatedMetric({
   return <>{display}</>;
 }
 
-export default function EsgHero() {
+export default function EsgHero({
+  hero = {} as CareerHeroContent,
+  milestones = [],
+  ticker = [],
+}: EsgHeroProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
+
+  const cards: EsgHeroCard[] =
+    milestones && milestones.length > 0
+      ? milestones.map((m) => ({
+          value: m.milestone_count || "",
+          unit: m.milestone_count_config || "",
+          label: m.milestone_description || "",
+        }))
+      : [];
+
+  const tickerItems: EsgHeroTickerItem[] = ticker.map((t) => ({
+    number: t.ticker_count || t.ticker_caption || "",
+    text: t.ticker_count ? t.ticker_caption || "" : "",
+  }));
+
+  const defaultTicker: EsgHeroTickerItem[] = [
+    ...tickerItems,
+    ...tickerItems,
+    ...tickerItems,
+    ...tickerItems,
+  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -126,7 +114,7 @@ export default function EsgHero() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src={esgPageHeroBanner}
+          src={hero.imageSrc}
           alt="ESG at Panchshil Hero Banner"
           fill
           priority
@@ -145,25 +133,26 @@ export default function EsgHero() {
           </span>
 
           {/* Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-[64px] font-display text-white leading-[1.1] tracking-tight max-w-4xl animate-fade-in-up-delay-1">
-            Building Workplaces That <br className="hidden md:inline" />
-            Work <span className="text-[#40A937]">Better</span> for the Planet.
-          </h1>
+          {hero.title && (
+            <h1
+              className="text-4xl md:text-5xl lg:text-[64px] font-display text-white leading-[1.1] tracking-tight max-w-4xl animate-fade-in-up-delay-1"
+              dangerouslySetInnerHTML={{ __html: hero.title }}
+            />
+          )}
 
           {/* Description */}
-          <p className="mt-6 text-sm md:text-base lg:text-[17px] text-[#E5E7EB] max-w-3xl leading-relaxed animate-fade-in-up-delay-2 font-sans font-light">
-            At Panchshil Office Parks, sustainability is integrated into the way
-            we design, build and operate commercial ecosystems. Across energy,
-            water, waste, mobility, indoor environmental quality and safety, our
-            ESG initiatives are designed to reduce impact, improve efficiency
-            and create healthier, future-ready workplaces.
-          </p>
+          {hero.description && (
+            <p
+              className="mt-6 text-sm md:text-base lg:text-[17px] text-[#E5E7EB] max-w-3xl leading-relaxed animate-fade-in-up-delay-2 font-sans font-light"
+              dangerouslySetInnerHTML={{ __html: hero.description }}
+            />
+          )}
         </div>
 
         {/* Backdrop Blurred Cards */}
         <div className="relative z-10 w-full animate-fade-in-up-delay-3 mt-4">
           <div className="flex overflow-x-auto gap-4 md:gap-5 pb-4 md:pb-0 no-scrollbar md:grid md:grid-cols-5 md:overflow-x-visible">
-            {defaultCards.map((card, index) => (
+            {cards.map((card, index) => (
               <div
                 key={index}
                 className="w-[283px] md:w-full h-40 shrink-0 flex flex-col justify-between p-5 md:p-6  border border-white/10 backdrop-blur-[2px] transition-all duration-300 group hover:-translate-y-[3px]

@@ -22,16 +22,23 @@ export default function EsgPageClient({ data }: EsgPageClientProps) {
   return (
     <main className="min-h-screen bg-[#0F140D]">
       <Header />
-      <EsgHero />
+      <EsgHero
+        hero={data.hero}
+        milestones={data.milestones}
+        ticker={data.ticker}
+      />
       <EsgTabBar />
-      <EsgOverviewSection />
-      <EsgEnergySection />
+      <EsgOverviewSection introduction={data.introduction} />
+      <EsgEnergySection performance={data.performance} />
       <EsgWaterSection />
       <EsgWasteSection />
       <EsgMobilitySection />
       <EsgIndoorAirSection />
-      <EsgCertificationsSection />
-      <EsgReportsSection />
+      <EsgCertificationsSection safetyGovernance={data.safetyGovernance} />
+      <EsgReportsSection
+        reportsIntro={data.reportsIntro}
+        reportsList={data.reportsList}
+      />
       <Footer />
     </main>
   );

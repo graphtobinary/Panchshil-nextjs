@@ -235,7 +235,7 @@ export type AboutUsMilestonesApiItem = {
 export type GrowthChronicle = {
   growth_chronicle_caption: string;
   growth_chronicle_image: string;
-}
+};
 
 export type GrowthChronicleItem = {
   growth_chronicle_year: number;
@@ -754,6 +754,27 @@ export type EsgPolicyApiItem = {
   policy_image?: string;
 };
 
+export type EsgPerformanceMetric = {
+  metric_value?: string;
+  metric_config?: string;
+  metric_description?: string;
+};
+
+export type EsgPerformanceApiItem = {
+  metrics?: EsgPerformanceMetric[];
+  performance_title?: string;
+  performance_tagline?: string;
+  performance_description?: string;
+  performance_short_desc?: string;
+  performance_image?: string;
+};
+
+export type EsgIntroductionApiResponse = {
+  intro_heading?: string;
+  intro_caption?: string;
+  intro_image?: string;
+};
+
 export type EsgMilestonesIntroApiResponse = {
   intro_heading?: string;
   intro_caption?: string;
@@ -761,6 +782,7 @@ export type EsgMilestonesIntroApiResponse = {
 
 export type EsgMilestoneApiItem = {
   milestone_count?: string;
+  milestone_count_config?: string;
   milestone_description?: string;
 };
 
@@ -780,6 +802,8 @@ export type EsgAwardApiItem = {
 export type EsgReportsIntroApiResponse = {
   reports_heading?: string;
   reports_caption?: string;
+  reports_description?: string;
+  reports_image?: string;
 };
 
 export type EsgReportApiItem = {
@@ -787,9 +811,40 @@ export type EsgReportApiItem = {
   report_year?: string;
   report_thumbnail?: string;
   report_pdf?: string;
+  report_pdf_file_size?: string;
 };
 
 export type AwardsApiItem = {
   award_title?: string;
   award_image?: string;
+};
+
+export type EsgSafetyGovernanceMetric = {
+  metric_value?: string;
+  metric_caption?: string;
+  metric_description?: string;
+};
+
+export type EsgSafetyGovernanceAsset = {
+  asset_title?: string;
+  asset_caption?: string;
+  asset_properties?: string[];
+};
+
+export type EsgSafetyGovernanceApiItem = {
+  metrics?: EsgSafetyGovernanceMetric[];
+  assets?: EsgSafetyGovernanceAsset[];
+  safety_and_governance_title?: string;
+  safety_and_governance_caption?: string;
+};
+
+export type EsgTickerApiItem = {
+  ticker_count?: string;
+  ticker_caption?: string;
+};
+
+export type EsgBannerApiItem = {
+  banner_caption?: string;
+  banner_description?: string;
+  banner_image?: string;
 };

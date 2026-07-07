@@ -1,5 +1,14 @@
 import { CareerHeroContent } from "@/app/careers/career-page.data";
-import { MetaDataProps } from "@/interfaces";
+import {
+  EsgIntroductionApiResponse,
+  EsgMilestoneApiItem,
+  EsgPerformanceApiItem,
+  EsgReportApiItem,
+  EsgReportsIntroApiResponse,
+  EsgSafetyGovernanceApiItem,
+  EsgTickerApiItem,
+  MetaDataProps,
+} from "@/interfaces";
 
 export type EsgAccordionItem = {
   id: number;
@@ -88,6 +97,13 @@ export type EsgReportsContent = {
 
 export type EsgPageData = {
   hero: CareerHeroContent;
+  milestones: EsgMilestoneApiItem[];
+  ticker: EsgTickerApiItem[];
+  introduction: EsgIntroductionApiResponse | null;
+  performance: EsgPerformanceApiItem[];
+  safetyGovernance: EsgSafetyGovernanceApiItem[];
+  reportsIntro: EsgReportsIntroApiResponse | null;
+  reportsList: EsgReportApiItem[];
   accordion: EsgAccordionContent;
   peopleCommunities: EsgPeopleCommunitiesContent;
   steeringCommittee: EsgSteeringCommitteeContent;
@@ -149,6 +165,13 @@ export const esgBeyondTheBuildDecorDefaults: Pick<
 };
 
 export const esgPageData: EsgPageData = {
+  milestones: [],
+  ticker: [],
+  introduction: null,
+  performance: [],
+  safetyGovernance: [],
+  reportsIntro: null,
+  reportsList: [],
   hero: {
     imageSrc: "/assets/images/esg/esg-hero-banner.png",
     title: "Building India's Most Sustainable Workplace",

@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import certificationSafety from "@/assets/images/esg/certification-safety.png";
 import { useCountUp } from "@/hooks/useCountUp";
+import { EsgSafetyGovernanceApiItem } from "@/interfaces";
 
 interface GeneralMetric {
   value: string;
@@ -24,7 +25,11 @@ interface AccordionItem {
   subGrid?: SubGridItem[];
 }
 
-const portfolioData = [
+type Props = {
+  safetyGovernance?: EsgSafetyGovernanceApiItem[];
+};
+
+const defaultPortfolioData = [
   {
     title: "Panchshil Portfolio",
     description:
@@ -90,241 +95,6 @@ const generalMetrics: GeneralMetric[] = [
   },
 ];
 
-const accordionData: AccordionItem[] = [
-  {
-    title: "LEED Core & Shell Certification",
-    subtitle: "GREEN BUILDING BENCHMARK • 21.68 MN SQ. FT.",
-    subGrid: [
-      {
-        value: "~21.68 Mn sq. ft.",
-        label: "LEED CORE & SHELL PORTFOLIO",
-        desc: "Green building benchmark coverage across Panchshil's office park portfolio.",
-      },
-      {
-        value: "11.62 Mn sq. ft.",
-        label: "LEED CERTIFIED PORTFOLIO",
-        desc: "Certified green building coverage across IGBC and USGBC ratings.",
-      },
-      {
-        value: "1.15 Mn sq. ft.",
-        label: "IGBC PLATINUM CERTIFIED",
-        desc: "Portfolio area certified under IGBC Platinum rating.",
-      },
-      {
-        value: "6.07 Mn sq. ft.",
-        label: "IGBC GOLD CERTIFIED",
-        desc: "Portfolio area certified under IGBC Gold rating.",
-      },
-      {
-        value: "4.4 Mn sq. ft.",
-        label: "USGBC GOLD CERTIFIED",
-        desc: "Portfolio area certified under USGBC Gold rating.",
-      },
-      {
-        value: "5.23 Mn sq. ft.",
-        label: "LEED PRE-CERTIFIED PORTFOLIO",
-        desc: "Additional office park area pre-certified under green building benchmarks.",
-      },
-      {
-        value: "4.83 Mn sq. ft.",
-        label: "IGBC GOLD CERTIFIED",
-        desc: "Portfolio area certified under IGBC Gold rating.",
-      },
-    ],
-  },
-  {
-    title: "LEED EBOM V4.1 — Existing Buildings",
-    subtitle: "OPERATIONS & MAINTENANCE • 14.5 MN SQ. FT.",
-    subGrid: [
-      {
-        value: "14.5 Mn sq. ft.",
-        label: "LEED EBOM V4.1 PORTFOLIO",
-        desc: "Operations and maintenance sustainability standards applied across existing buildings.",
-      },
-      {
-        value: "12.16 Mn sq. ft.",
-        label: "LEED EBOM Certified Portfolio",
-        desc: "Existing office park assets certified for operations and maintenance performance.",
-      },
-      {
-        value: "11.82 Mn sq. ft.",
-        label: "LEED EBOM Platinum Certified",
-        desc: "Majority of certified existing building portfolio is Platinum rated.",
-      },
-      {
-        value: "0.34 Mn sq. ft.",
-        label: "LEED EBOM Gold Certified",
-        desc: "Additional existing building area certified under Gold rating.",
-      },
-      {
-        value: "2.34 Mn sq. ft.",
-        label: "LEED EBOM in Process",
-        desc: "Further existing office park area is under certification.",
-      },
-    ],
-  },
-  {
-    title: "ISO Integrated Management Systems",
-    subtitle: "FOUR-SYSTEM FRAMEWORK • 16.6 MN SQ. FT. • 12 OFFICE PARKS",
-    subGrid: [
-      {
-        value: "16.6 Mn sq. ft.",
-        label: "ISO SYSTEM COVERAGE",
-        desc: "Integration of ISO Quality, Environment, Safety, and Asset management standards.",
-      },
-      {
-        value: "12 Office Parks",
-        label: "IMS COMPLIANT",
-        desc: "Twelve major business campuses operating under audited Integrated Management Systems.",
-      },
-      {
-        value: "ISO 9001:2015",
-        label: "Quality Management",
-        desc: "Certified quality management systems supporting consistent operational performance.",
-      },
-      {
-        value: "ISO 14001:2015",
-        label: "Environmental Management",
-        desc: "Certified environmental management systems supporting responsible operations.",
-      },
-      {
-        value: "ISO 45001:2018",
-        label: "Occupational Health & Safety",
-        desc: "Certified systems for workplace safety and occupational health management.",
-      },
-      {
-        value: "ISO 41001:2018",
-        label: "Facility Management",
-        desc: "Certified facility management systems for integrated building operations.",
-      },
-      {
-        value: "4 ISO Standards",
-        label: "Four-System Certification Framework",
-        desc: "One integrated framework covering quality, environment, safety and facility management.",
-      },
-    ],
-  },
-  {
-    title: "British Safety Council — Five Star Audit",
-    subtitle: "11 OFFICE PARKS • 7 CONSECUTIVE YEARS",
-    subGrid: [
-      {
-        value: "Five Star Rating",
-        label: "BRITISH SAFETY COUNCIL FIVE STAR AUDIT",
-        desc: "Panchshil Office Parks continue to demonstrate globally benchmarked occupational health and safety practices.",
-      },
-      {
-        value: "16.19 Mn sq. ft.",
-        label: "SAFETY-CERTIFIED PORTFOLIO COVERAGE",
-        desc: "Safety practices benchmarked across 11 Panchshil Office Parks in 2025-26.",
-      },
-      {
-        value: "11 Office Parks",
-        label: "PORTFOLIO-WIDE SAFETY BENCHMARKING",
-        desc: "Occupational health and safety systems assessed across 11 office park assets.",
-      },
-      {
-        value: "7 Years",
-        label: "CONSECUTIVE FIVE STAR RATINGS",
-        desc: "Flagship campuses have achieved consecutive Five Star ratings for seven years.",
-      },
-      {
-        value: "50 Elements",
-        label: "COMPREHENSIVE SAFETY EVALUATION",
-        desc: "The audit evaluates 50 health and safety system elements and five best-practice indicators.",
-      },
-      {
-        value: "92%+ Benchmark",
-        label: "EXCEEDING GLOBAL SAFETY STANDARDS",
-        desc: "Panchshil campuses exceeded the minimum qualifying benchmark for Five Star recognition.",
-      },
-    ],
-  },
-  {
-    title: "British Safety Council — Sword of Honour",
-    subtitle: "AMONG THE HIGHEST GLOBAL SAFETY HONOURS",
-    subGrid: [
-      {
-        value: "Sword of Honour",
-        label: "Global Safety Recognition",
-        desc: "Awarded for exemplary occupational health and safety management systems.",
-      },
-      {
-        value: "16.19 Mn sq. ft.",
-        label: "Expanding Award Coverage",
-        desc: "Award coverage spans 16.19 Mn sq. ft. across 11 office parks.",
-      },
-      {
-        value: "11 Office Parks",
-        label: "Recognised Safety Portfolio",
-        desc: "Eleven office parks are covered under British Safety Council recognition.",
-      },
-      {
-        value: "7 Years",
-        label: "Sustained Safety Excellence",
-        desc: "Flagship sites have received the Sword of Honour for seven years.",
-      },
-      {
-        value: "Global Standard",
-        label: "Among the Highest Safety Honours",
-        desc: "Recognised among the most respected occupational health and safety awards globally.",
-      },
-    ],
-  },
-  {
-    title: "British Safety Council — International Safety Awards",
-    subtitle: "6 YEARS OF YEAR-ON-YEAR RECOGNITION",
-    subGrid: [
-      {
-        value: "International Safety Awards",
-        label: "RECOGNISED FOR GLOBAL SAFETY EXCELLENCE",
-        desc: "Panchshil Office Parks have been recognised for excellence in health and safety management.",
-      },
-      {
-        value: "16.19 Mn sq. ft.",
-        label: "AWARDED SAFETY COVERAGE",
-        desc: "International Safety Awards coverage spans 16.19 Mn sq. ft. across 11 office parks.",
-      },
-      {
-        value: "6 Years",
-        label: "YEAR-ON-YEAR RECOGNITION",
-        desc: "Recognised consistently for six consecutive years across campuses.",
-      },
-      {
-        value: "March 2026",
-        label: "RECOGNITION FOR 2025-26 PERFORMANCE",
-        desc: "Recognition received in March 2026 for the 2025-26 performance year.",
-      },
-      {
-        value: "11 Office Parks",
-        label: "SAFETY ACROSS CAMPUSES",
-        desc: "Health and safety excellence recognised across 11 Panchshil Office Parks.",
-      },
-    ],
-  },
-  {
-    title: "Global Accreditation Frameworks",
-    subtitle: "IAF • NABCB • EGAC",
-    subGrid: [
-      {
-        value: "IAF",
-        label: "International Accreditation Forum",
-        desc: "The certifications are backed by the International Accreditation Forum framework, supporting global credibility and recognition.",
-      },
-      {
-        value: "NABCB",
-        label: "National Accreditation Board for Certification Bodies",
-        desc: "NABCB accreditation adds national-level credibility to Panchshil's management system certifications.",
-      },
-      {
-        value: "EGAC",
-        label: "Egyptian Accreditation Council",
-        desc: "EGAC, a member of the IAF, forms part of the global accreditation framework supporting the certification process.",
-      },
-    ],
-  },
-];
-
 function parseNumericValue(value: string): {
   target: number;
   prefix: string;
@@ -380,7 +150,7 @@ function AnimatedMetric({
   return <>{display}</>;
 }
 
-const PortfolioCoverage = () => {
+const PortfolioCoverage = ({ data }: { data: typeof defaultPortfolioData }) => {
   return (
     <section className=" py-10 border-t border-[#E2DFD7]/80">
       <div className="mx-auto ">
@@ -389,7 +159,7 @@ const PortfolioCoverage = () => {
         </p>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          {portfolioData.map((portfolio) => (
+          {data.map((portfolio) => (
             <div
               key={portfolio.title}
               className="bg-[#F8FCFD] p-10 min-h-[400px]"
@@ -420,9 +190,35 @@ const PortfolioCoverage = () => {
   );
 };
 
-export default function EsgCertificationsSection() {
+export default function EsgCertificationsSection({ safetyGovernance }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
+
+  const acData: AccordionItem[] =
+    safetyGovernance && safetyGovernance.length > 0
+      ? safetyGovernance.map((item) => ({
+          title: item.safety_and_governance_title || "",
+          subtitle: item.safety_and_governance_caption || "",
+          subGrid: (item.metrics || []).map((m) => ({
+            value: m.metric_value || "",
+            label: m.metric_caption || "",
+            desc: m.metric_description || "",
+          })),
+        }))
+      : [];
+
+  const isoAssets = safetyGovernance?.find(
+    (item) =>
+      item.safety_and_governance_title === "ISO Integrated Management Systems"
+  )?.assets;
+  const pfData: typeof defaultPortfolioData =
+    isoAssets && isoAssets.length > 0
+      ? isoAssets.map((a) => ({
+          title: a.asset_title || "",
+          description: a.asset_caption || "",
+          assets: a.asset_properties || [],
+        }))
+      : defaultPortfolioData;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -513,7 +309,7 @@ export default function EsgCertificationsSection() {
 
         <div id="safety-governance" className="w-full scroll-mt-24">
           <div className="w-full flex flex-col border-t border-[#E2DFD7]/80">
-            {accordionData.map((item, index) => {
+            {acData.map((item, index) => {
               const isExpanded = expandedIndex === index;
               return (
                 <div key={index} className="border-b border-[#E2DFD7]/80">
@@ -578,7 +374,7 @@ export default function EsgCertificationsSection() {
                           ))}
                         </div>
                         {item.title === "ISO Integrated Management Systems" && (
-                          <PortfolioCoverage />
+                          <PortfolioCoverage data={pfData} />
                         )}
                       </>
                     )}

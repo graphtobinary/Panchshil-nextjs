@@ -606,6 +606,15 @@ const esgProxyGet = (apiPath: string) => (baseUrl?: string) => {
   });
 };
 
+export const getEsgBanner = esgBearerGet(API_CONSTANTS.ESG_BANNER);
+export const getEsgIntroduction = esgBearerGet(API_CONSTANTS.ESG_INTRODUCTION);
+export const getEsgIntroductionAPI = esgProxyGet(
+  API_CONSTANTS.ESG_INTRODUCTION_API
+);
+export const getEsgPerformance = esgBearerGet(API_CONSTANTS.ESG_PERFORMANCE);
+export const getEsgPerformanceAPI = esgProxyGet(
+  API_CONSTANTS.ESG_PERFORMANCE_API
+);
 export const getEsgInitiatives = esgBearerGet(API_CONSTANTS.ESG_INITIATIVES);
 export const getEsgInitiativesAPI = esgProxyGet(
   API_CONSTANTS.ESG_INITIATIVES_API
@@ -632,5 +641,13 @@ export const getEsgReportsIntro = esgBearerGet(API_CONSTANTS.ESG_REPORTS_INTRO);
 export const getEsgReportsIntroAPI = esgProxyGet(
   API_CONSTANTS.ESG_REPORTS_INTRO_API
 );
+export const getEsgSafetyGovernance = esgBearerGet(
+  API_CONSTANTS.ESG_SAFETY_GOVERNANCE
+);
+export const getEsgSafetyGovernanceAPI = esgProxyGet(
+  API_CONSTANTS.ESG_SAFETY_GOVERNANCE_API
+);
 export const getEsgReports = esgBearerGet(API_CONSTANTS.ESG_REPORTS);
 export const getEsgReportsAPI = esgProxyGet(API_CONSTANTS.ESG_REPORTS_API);
+export const getEsgTicker = esgBearerGet(API_CONSTANTS.ESG_TICKER);
+export const getEsgTickerAPI = esgProxyGet(API_CONSTANTS.ESG_TICKER_API);

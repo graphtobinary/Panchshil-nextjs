@@ -3,36 +3,21 @@
 import React from "react";
 import Image from "next/image";
 import esgReports from "@/assets/images/esg/esg-reports.png";
+import { EsgReportApiItem, EsgReportsIntroApiResponse } from "@/interfaces";
 
-interface ReportItem {
-  meta: string;
-  title: string;
-  href: string;
-  gridClass: string;
+function formatFileSize(size?: string): string {
+  return size ? `PDF • ${size}` : "PDF";
 }
 
-const reports: ReportItem[] = [
-  {
-    meta: "PDF • 4.2 MB",
-    title: "ESG Report — FY 2024-25",
-    href: "#",
-    gridClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
-  },
-  {
-    meta: "PDF • 1.8 MB",
-    title: "Sustainability Highlights — FY 2024-25",
-    href: "#",
-    gridClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
-  },
-  {
-    meta: "PDF • 1.1 MB",
-    title: "Energy & Emissions Disclosure",
-    href: "#",
-    gridClass: "border-none",
-  },
-];
+type Props = {
+  reportsIntro?: EsgReportsIntroApiResponse | null;
+  reportsList?: EsgReportApiItem[];
+};
 
-export default function EsgReportsSection() {
+export default function EsgReportsSection({
+  reportsIntro,
+  reportsList,
+}: Props) {
   return (
     <section
       id="reports"
@@ -45,7 +30,7 @@ export default function EsgReportsSection() {
           <div className="lg:col-span-5 flex justify-start">
             <div className="w-full relative aspect-[5/3] max-w-full overflow-hidden shadow-sm">
               <Image
-                src={esgReports}
+                src={reportsIntro?.reports_image || esgReports}
                 alt="ESG Reports Mockup Banner"
                 fill
                 className="object-cover object-center"
@@ -56,26 +41,38 @@ export default function EsgReportsSection() {
           {/* Right Side: Text */}
           <div className="lg:col-span-7 flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
-              — REPORTS
+              — {reportsIntro?.reports_heading || "REPORTS"}
             </span>
 
             <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
-              ESG Reports & Downloads
+              {reportsIntro?.reports_caption || "ESG Reports & Downloads"}
             </h2>
 
             <p className="mt-4 text-sm md:text-base text-[#626A70] font-sans font-light max-w-xl">
-              Detailed reports published annually. Reach out for past editions
-              or asset-level documentation.
+              {reportsIntro?.reports_description ||
+                "Detailed reports published annually. Reach out for past editions or asset-level documentation."}
             </p>
           </div>
         </div>
 
         {/* 3-column downloads grid */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 py-4 items-center">
-          {reports.map((report, idx) => (
+          {(reportsList && reportsList.length > 0
+            ? reportsList.map((r, idx) => ({
+                meta: formatFileSize(r.report_pdf_file_size),
+                title: r.report_name || "",
+                href: r.report_pdf || "#",
+                gridClass:
+                  idx < (reportsList?.length || 0) - 1
+                    ? "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60"
+                    : "border-none",
+              }))
+            : []
+          ).map((report, idx) => (
             <a
               key={idx}
               href={report.href}
+              target="_blank"
               className={`flex items-end justify-between group transition-all duration-300 px-8 py-8 min-h-[130px] hover:bg-[#f5f9fa]  ${report.gridClass}`}
             >
               <div className="flex flex-col">
