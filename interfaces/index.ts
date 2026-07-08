@@ -841,6 +841,7 @@ export type EsgSafetyGovernanceApiItem = {
 export type EsgTickerApiItem = {
   ticker_count?: string;
   ticker_caption?: string;
+  ticker_count_config?: string;
 };
 
 export type EsgBannerApiItem = {

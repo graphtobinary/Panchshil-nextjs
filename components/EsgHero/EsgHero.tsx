@@ -21,6 +21,7 @@ export interface EsgHeroCard {
 export interface EsgHeroTickerItem {
   number: string;
   text: string;
+  ticker_count_config: string;
 }
 
 function parseNumericValue(value: string): {
@@ -82,6 +83,7 @@ export default function EsgHero({
   const tickerItems: EsgHeroTickerItem[] = ticker.map((t) => ({
     number: t.ticker_count || t.ticker_caption || "",
     text: t.ticker_count ? t.ticker_caption || "" : "",
+    ticker_count_config: t.ticker_count_config || "",
   }));
 
   const defaultTicker: EsgHeroTickerItem[] = [
@@ -196,6 +198,11 @@ export default function EsgHero({
                       {item.number}
                     </span>
                   )}
+                  {item.ticker_count_config && (
+                    <span className="text-[10px] md:text-xs  text-[#7F847E] tracking-wide uppercase select-none align-baseline">
+                      {item.ticker_count_config}
+                    </span>
+                  )}
                   {item.text && (
                     <span className="text-[#40A937] text-xs ">{item.text}</span>
                   )}
@@ -221,6 +228,11 @@ export default function EsgHero({
                       {item.number}
                     </span>
                   )}{" "}
+                  {item.ticker_count_config && (
+                    <span className="text-[10px] md:text-xs  text-[#7F847E] tracking-wide uppercase select-none align-baseline">
+                      {item.ticker_count_config}
+                    </span>
+                  )}
                   {item.text && (
                     <span className="text-[#40A937] text-xs ">{item.text}</span>
                   )}
