@@ -45,7 +45,7 @@ function AnimatedMetric({
   isActive: boolean;
 }) {
   const { target, prefix, suffix } = parseNumericValue(value);
-  const animatedValue = useCountUp(Math.round(target), isActive);
+  const animatedValue = useCountUp(target, isActive);
   const decimals = value.includes(".")
     ? value.split(".")[1].replace(/,/g, "").length
     : 0;

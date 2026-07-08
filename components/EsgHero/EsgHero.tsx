@@ -186,14 +186,18 @@ export default function EsgHero({
           <div className="flex items-center gap-12 shrink-0 animate-marquee">
             {defaultTicker.map((item, idx) => (
               <div key={idx} className="flex items-center gap-12">
-                <div className="flex items-center gap-2 font-sans text-xs md:text-xs tracking-widest uppercase font-normal">
+                <div className="flex items-center gap-2  tracking-widest uppercase ">
                   {item.number.match(/[A-Z]/) ? (
-                    <span className="text-[#40A937]">{item.number}</span>
+                    <span className="text-[#40A937] font-display-semi">
+                      {item.number}
+                    </span>
                   ) : (
-                    <span className="text-white">{item.number}</span>
+                    <span className="text-white text-lg font-display-semi">
+                      {item.number}
+                    </span>
                   )}
                   {item.text && (
-                    <span className="text-[#40A937]">{item.text}</span>
+                    <span className="text-[#40A937] text-xs ">{item.text}</span>
                   )}
                 </div>
                 <span className="text-white/40 select-none px-2">•</span>
@@ -207,14 +211,18 @@ export default function EsgHero({
           >
             {defaultTicker.map((item, idx) => (
               <div key={`dup-${idx}`} className="flex items-center gap-12">
-                <div className="flex items-center gap-2 font-sans text-xs md:text-sm tracking-widest uppercase font-semibold">
+                <div className="flex items-center gap-2 font-sans  tracking-widest uppercase font-semibold">
                   {item.number.match(/[A-Z]/) ? (
-                    <span className="text-[#40A937]">{item.number}</span>
+                    <span className="text-[#40A937] font-display-semi">
+                      {item.number}
+                    </span>
                   ) : (
-                    <span className="text-white">{item.number}</span>
-                  )}
+                    <span className="text-white text-lg font-display-semi">
+                      {item.number}
+                    </span>
+                  )}{" "}
                   {item.text && (
-                    <span className="text-[#40A937]">{item.text}</span>
+                    <span className="text-[#40A937] text-xs ">{item.text}</span>
                   )}
                 </div>
                 <span className="text-white/40 select-none px-2">•</span>

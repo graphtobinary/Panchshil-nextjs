@@ -12,12 +12,25 @@ export function useCountUp(
 
     let animationFrame: number;
     const startTime = performance.now();
+    const isInteger = Number.isInteger(targetValue);
 
     const animate = (time: number) => {
       const elapsed = time - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const easedProgress = 1 - Math.pow(1 - progress, 3);
-      const value = Math.round(easedProgress * targetValue);
+
+      let value = easedProgress * targetValue;
+
+      // Only round for integer targets
+      if (isInteger) {
+        value = Math.round(value);
+      }
+
+      // Ensure the final value is exact
+      if (progress >= 1) {
+        value = targetValue;
+      }
+
       setCurrentValue(value);
 
       if (progress < 1) {
@@ -27,9 +40,7 @@ export function useCountUp(
 
     animationFrame = requestAnimationFrame(animate);
 
-    return () => {
-      cancelAnimationFrame(animationFrame);
-    };
+    return () => cancelAnimationFrame(animationFrame);
   }, [targetValue, isActive, duration]);
 
   return currentValue;
