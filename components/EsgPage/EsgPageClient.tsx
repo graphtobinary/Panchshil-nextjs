@@ -30,11 +30,14 @@ export default function EsgPageClient({ data }: EsgPageClientProps) {
       <EsgTabBar />
       <EsgOverviewSection introduction={data.introduction} />
       <EsgEnergySection performance={data.performance} />
-      <EsgWaterSection />
-      <EsgWasteSection />
-      <EsgMobilitySection />
-      <EsgIndoorAirSection />
-      <EsgCertificationsSection safetyGovernance={data.safetyGovernance} />
+      <EsgWaterSection performance={data.performance} />
+      <EsgWasteSection performance={data.performance} />
+      <EsgMobilitySection performance={data.performance} />
+      <EsgIndoorAirSection performance={data.performance} />
+      <EsgCertificationsSection
+        performance={data.performance}
+        safetyGovernance={data.safetyGovernance}
+      />
       <EsgReportsSection
         reportsIntro={data.reportsIntro}
         reportsList={data.reportsList}

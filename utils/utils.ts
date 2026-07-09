@@ -1,4 +1,4 @@
-import { Browser } from "@/interfaces";
+import { Browser, EsgPerformanceApiItem } from "@/interfaces";
 
 interface WindowWithOpera extends Window {
   opr?: {
@@ -108,3 +108,14 @@ export const getDeviceType = (): DeviceType => {
   }
   return window.innerWidth < 768 ? "mobile" : "desktop";
 };
+
+export function findTypeMetrics(
+  performance?: EsgPerformanceApiItem[],
+  performanceTitle: string = "energy"
+) {
+  const energyItem = performance?.find(
+    (p) => p.performance_title?.toLowerCase() === performanceTitle
+  );
+  if (!energyItem?.metrics || energyItem.metrics.length === 0) return null;
+  return energyItem;
+}

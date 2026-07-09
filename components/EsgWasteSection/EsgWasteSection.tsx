@@ -1,62 +1,26 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import wasteBanner from "@/assets/images/esg/waste-banner.png";
 import { useCountUp } from "@/hooks/useCountUp";
+import { EsgPerformanceApiItem } from "@/interfaces";
+import { findTypeMetrics } from "@/utils/utils";
 
 interface MetricItem {
-  id: string;
+  id: number;
   value: string;
   unit: string;
   label: string;
   borderClass: string;
 }
 
-const metrics: MetricItem[] = [
-  {
-    id: "01",
-    value: "4,15,897",
-    unit: "KG",
-    label: "PAPER WASTE RECYCLED",
-    borderClass: "border-b md:border-r border-[#E2DFD7]",
-  },
-  {
-    id: "02",
-    value: "2,73,734",
-    unit: "KG",
-    label: "PLASTIC WASTE RECYCLED",
-    borderClass: "border-b md:border-r border-[#E2DFD7]",
-  },
-  {
-    id: "03",
-    value: "80,715",
-    unit: "KG",
-    label: "MULTI-LAYERED PLASTIC WASTE RECYCLED",
-    borderClass: "border-b border-[#E2DFD7]",
-  },
-  {
-    id: "04",
-    value: "16,523",
-    unit: "LITRES",
-    label: "OIL RECYCLED FOR INDUSTRIAL USE",
-    borderClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]",
-  },
-  {
-    id: "05",
-    value: "100%",
-    unit: "",
-    label: "BATTERIES DISPOSED VIA OEM PARTNERS",
-    borderClass:
-      "border-b md:border-b-0 md:border-r border-[#E2DFD7] last:border-b-0",
-  },
-  {
-    id: "06",
-    value: "100%",
-    unit: "",
-    label: "ORGANIC FOOD WASTE RECYCLED",
-    borderClass: "border-none",
-  },
+const borderClasses = [
+  "border-b md:border-r border-[#E2DFD7]/60",
+  "border-b md:border-r border-[#E2DFD7]/60",
+  "border-b border-[#E2DFD7]/60",
+  "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
+  "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60 last:border-b-0",
+  "border-none",
 ];
 
 function parseNumericValue(value: string): {
@@ -92,7 +56,7 @@ function AnimatedMetric({
   isActive: boolean;
 }) {
   const { target, prefix, suffix } = parseNumericValue(value);
-  const animatedValue = useCountUp(Math.round(target), isActive);
+  const animatedValue = useCountUp(target, isActive);
   const decimals = value.includes(".")
     ? value.split(".")[1].replace(/,/g, "").length
     : 0;
@@ -100,9 +64,23 @@ function AnimatedMetric({
   return <>{display}</>;
 }
 
-export default function EsgWasteSection() {
+export default function EsgWasteSection({
+  performance,
+}: {
+  performance?: EsgPerformanceApiItem[];
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const wasteData = findTypeMetrics(performance, "waste");
+
+  const metrics: MetricItem[] =
+    wasteData?.metrics!.map((m, i) => ({
+      id: i + 1,
+      value: m.metric_value || "",
+      unit: m.metric_config || "",
+      label: m.metric_description || "",
+      borderClass: borderClasses[i] || "",
+    })) || [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -130,24 +108,24 @@ export default function EsgWasteSection() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 md:mb-14">
           <div className="flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
-              — 03 / REDUCE. REUSE. REPURPOSE.
+              — 03 / {wasteData?.performance_tagline || ""}
             </span>
 
             <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
-              Waste.
+              {wasteData?.performance_title || ""}
             </h2>
           </div>
 
           <div className="mt-4 md:mt-0">
             <p className="text-sm md:text-base text-gray-600 font-sans font-light tracking-wide md:text-right">
-              Managing resources responsibly across operations.
+              {wasteData?.performance_description || ""}
             </p>
           </div>
         </div>
 
         <div className="w-full relative aspect-[21/8] min-h-[220px] md:min-h-[380px] overflow-hidden mb-12 md:mb-16 rounded-[2px] shadow-sm">
           <Image
-            src={wasteBanner}
+            src={wasteData?.performance_image || ""}
             alt="Waste Management Banner"
             fill
             className="object-cover object-center"

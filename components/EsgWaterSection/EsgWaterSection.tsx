@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import waterBanner from "@/assets/images/esg/water-banner.png";
 import { useCountUp } from "@/hooks/useCountUp";
+import { EsgPerformanceApiItem } from "@/interfaces";
+import { findTypeMetrics } from "@/utils/utils";
 
 interface MetricItem {
   value: string;
@@ -12,44 +13,13 @@ interface MetricItem {
   borderClass: string;
 }
 
-const metrics: MetricItem[] = [
-  {
-    value: "6,10,247",
-    unit: "KL",
-    label: "WATER RECYCLED THROUGH STPS",
-    borderClass: "border-b md:border-r border-[#E2DFD7]/60",
-  },
-  {
-    value: "88%",
-    unit: "",
-    label: "RECYCLING EFFICIENCY ACHIEVED",
-    borderClass: "border-b md:border-r border-[#E2DFD7]/60",
-  },
-  {
-    value: "51%",
-    unit: "",
-    label: "WATER CONSUMPTION MET THROUGH RECYCLED WATER",
-    borderClass: "border-b border-[#E2DFD7]/60",
-  },
-  {
-    value: "4,50,175",
-    unit: "KL",
-    label: "RECYCLED WATER USED FOR FLUSHING",
-    borderClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
-  },
-  {
-    value: "1,17,623",
-    unit: "KL",
-    label: "RECYCLED WATER USED FOR IRRIGATION",
-    borderClass:
-      "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60 last:border-b-0",
-  },
-  {
-    value: "~67,267",
-    unit: "KL",
-    label: "WATER RECYCLED THROUGH STPS",
-    borderClass: "border-none",
-  },
+const borderClasses = [
+  "border-b md:border-r border-[#E2DFD7]/60",
+  "border-b md:border-r border-[#E2DFD7]/60",
+  "border-b border-[#E2DFD7]/60",
+  "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
+  "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60 last:border-b-0",
+  "border-none",
 ];
 
 function parseNumericValue(value: string): {
@@ -85,7 +55,7 @@ function AnimatedMetric({
   isActive: boolean;
 }) {
   const { target, prefix, suffix } = parseNumericValue(value);
-  const animatedValue = useCountUp(Math.round(target), isActive);
+  const animatedValue = useCountUp(target, isActive);
   const decimals = value.includes(".")
     ? value.split(".")[1].replace(/,/g, "").length
     : 0;
@@ -93,9 +63,22 @@ function AnimatedMetric({
   return <>{display}</>;
 }
 
-export default function EsgWaterSection() {
+export default function EsgWaterSection({
+  performance,
+}: {
+  performance?: EsgPerformanceApiItem[];
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const waterData = findTypeMetrics(performance, "water");
+
+  const metrics: MetricItem[] =
+    waterData?.metrics!.map((m, i) => ({
+      value: m.metric_value || "",
+      unit: m.metric_config || "",
+      label: m.metric_description || "",
+      borderClass: borderClasses[i] || "",
+    })) || [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -184,13 +167,13 @@ export default function EsgWaterSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-16 md:mb-10">
           <div className="lg:col-span-6 flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
-              — 01 / POWER RESPONSIBLY
+              — 01 / {waterData?.performance_tagline}
             </span>
             <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
               Water.
             </h2>
             <p className="mt-4 text-sm md:text-base text-[#626A70] font-sans font-light max-w-md">
-              Driving the transition with clean and renewable energy.
+              {waterData?.performance_description}
             </p>
           </div>
           <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] pointer-events-none opacity-[0.06] select-none z-0 -translate-1/2">
@@ -256,7 +239,7 @@ export default function EsgWaterSection() {
           <div className="lg:col-span-6 flex justify-end">
             <div className="w-full relative aspect-[21/10] max-w-[560px] overflow-hidden rounded-[2px] shadow-sm">
               <Image
-                src={waterBanner}
+                src={waterData?.performance_image || ""}
                 alt="Water Droplet Banner"
                 fill
                 className="object-cover object-center"

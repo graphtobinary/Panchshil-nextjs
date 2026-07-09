@@ -57,7 +57,7 @@ function AnimatedMetric({
   isActive: boolean;
 }) {
   const { target, prefix, suffix } = parseNumericValue(value);
-  const animatedValue = useCountUp(Math.round(target), isActive);
+  const animatedValue = useCountUp(target, isActive);
   const decimals = 0;
   const display = prefix + formatNumber(animatedValue, decimals) + suffix;
   return <>{display}</>;

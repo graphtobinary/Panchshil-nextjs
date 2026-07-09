@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import mobilityBanner from "@/assets/images/esg/mobility-banner.png";
 import { useCountUp } from "@/hooks/useCountUp";
+import { EsgPerformanceApiItem } from "@/interfaces";
+import { findTypeMetrics } from "@/utils/utils";
 
 interface MetricItem {
   value: string;
@@ -13,41 +15,13 @@ interface MetricItem {
   isTextValue?: boolean;
 }
 
-const metrics: MetricItem[] = [
-  {
-    value: "85",
-    label: "FOUR-WHEELER EV CHARGERS INSTALLED",
-    borderClass: " md:border-t border-white/10",
-  },
-  {
-    value: "454",
-    label: "VEHICLES / DAY CHARGING CAPACITY",
-    borderClass: "md:border-t border-white/10",
-  },
-  {
-    value: "10,496",
-    label: "EVs CHARGED ACROSS ALL PANCHSHIL OFFICE PARKS",
-    borderClass: "border-t border-white/10",
-  },
-  {
-    value: "~142",
-    unit: "TCO₂E",
-    label: "OIL RECYCLED FOR INDUSTRIAL USE",
-    borderClass: "border-b md:border-b-0 md:border-t border-white/10",
-  },
-  {
-    value: "20",
-    label: "RECYCLED WATER USED FOR IRRIGATION",
-    borderClass:
-      "border-b md:border-b-0 md:border-t border-white/10 last:border-b-0",
-  },
-  {
-    value: "E-Shuttle Services",
-    label: "IN COLLABORATION WITH MAHA-METRO AND PMPML",
-    borderClass:
-      "border-b md:border-b-0 md:border-t border-white/10 last:border-b-0",
-    isTextValue: true,
-  },
+const borderClasses = [
+  " md:border-t border-white/10",
+  "md:border-t border-white/10",
+  "border-t border-white/10",
+  "border-b md:border-b-0 md:border-t border-white/10",
+  "border-b md:border-b-0 md:border-t border-white/10 last:border-b-0",
+  "border-b md:border-b-0 md:border-t border-white/10 last:border-b-0",
 ];
 
 function parseNumericValue(value: string): {
@@ -83,7 +57,7 @@ function AnimatedMetric({
   isActive: boolean;
 }) {
   const { target, prefix, suffix } = parseNumericValue(value);
-  const animatedValue = useCountUp(Math.round(target), isActive);
+  const animatedValue = useCountUp(target, isActive);
   const decimals = value.includes(".")
     ? value.split(".")[1].replace(/,/g, "").length
     : 0;
@@ -91,9 +65,23 @@ function AnimatedMetric({
   return <>{display}</>;
 }
 
-export default function EsgMobilitySection() {
+export default function EsgMobilitySection({
+  performance,
+}: {
+  performance?: EsgPerformanceApiItem[];
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const mobilityData = findTypeMetrics(performance, "mobility");
+
+  const metrics: MetricItem[] =
+    mobilityData?.metrics!.map((m, i) => ({
+      id: i + 1,
+      value: m.metric_value || "",
+      unit: m.metric_config || "",
+      label: m.metric_description || "",
+      borderClass: borderClasses[i] || "",
+    })) || [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -110,7 +98,7 @@ export default function EsgMobilitySection() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
-
+  const regex = /\d/;
   return (
     <section
       id="mobility"
@@ -130,17 +118,17 @@ export default function EsgMobilitySection() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 md:mb-20">
           <div className="flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
-              — 05 / MOVE CLEANER
+              — 05 / {mobilityData?.performance_tagline || ""}
             </span>
 
             <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-white leading-[1.1] tracking-tight font-medium">
-              Mobility.
+              {mobilityData?.performance_title || ""}
             </h2>
           </div>
 
           <div className="mt-4 md:mt-0">
             <p className="text-sm md:text-base text-white/70 font-sans font-light tracking-wide md:text-right">
-              Enabling cleaner commutes and connected ecosystems.
+              {mobilityData?.performance_description || ""}
             </p>
           </div>
         </div>
@@ -160,7 +148,7 @@ export default function EsgMobilitySection() {
                         : "text-3xl md:text-[40px] lg:text-[44px]"
                     }`}
                   >
-                    {item.isTextValue ? (
+                    {!regex.test(item.value) ? (
                       item.value
                     ) : (
                       <AnimatedMetric value={item.value} isActive={isInView} />

@@ -2,9 +2,12 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import certificationSafety from "@/assets/images/esg/certification-safety.png";
 import { useCountUp } from "@/hooks/useCountUp";
-import { EsgSafetyGovernanceApiItem } from "@/interfaces";
+import {
+  EsgPerformanceApiItem,
+  EsgSafetyGovernanceApiItem,
+} from "@/interfaces";
+import { findTypeMetrics } from "@/utils/utils";
 
 interface GeneralMetric {
   value: string;
@@ -25,8 +28,16 @@ interface AccordionItem {
   subGrid?: SubGridItem[];
 }
 
+interface MetricItem {
+  value: string;
+  unit: string;
+  label: string;
+  borderClass: string;
+}
+
 type Props = {
   safetyGovernance?: EsgSafetyGovernanceApiItem[];
+  performance?: EsgPerformanceApiItem[];
 };
 
 const defaultPortfolioData = [
@@ -56,43 +67,13 @@ const defaultPortfolioData = [
   },
 ];
 
-const generalMetrics: GeneralMetric[] = [
-  {
-    value: "~21.68",
-    unit: "MN SQ. FT.",
-    label: "LEED CORE & SHELL PORTFOLIO COVERAGE",
-    borderClass: "border-b md:border-r border-[#E2DFD7]",
-  },
-  {
-    value: "14.5",
-    unit: "MN SQ. FT.",
-    label: "EMISSION SAVINGS THROUGH SOLAR",
-    borderClass: "border-b md:border-r border-[#E2DFD7]",
-  },
-  {
-    value: "16.6",
-    unit: "MN SQ. FT.",
-    label: "CERTIFIED UNDER FOUR ISO MANAGEMENT SYSTEMS",
-    borderClass: "border-b md:border-r border-[#E2DFD7]",
-  },
-  {
-    value: "12",
-    unit: "",
-    label: "OFFICE PARKS COVERED UNDER IMS",
-    borderClass: " md:border-r border-[#E2DFD7]",
-  },
-  {
-    value: "11",
-    unit: "",
-    label: "OFFICE PARKS UNDER BRITISH SAFETY COUNCIL FIVE STAR AUDIT",
-    borderClass: " md:border-r border-[#E2DFD7]",
-  },
-  {
-    value: "7 Years",
-    unit: "",
-    label: "CONSECUTIVE FIVE STAR RATINGS AT FLAGSHIP SITES",
-    borderClass: " md:border-r border-[#E2DFD7]",
-  },
+const borderClasses = [
+  "border-b md:border-r border-[#E2DFD7]/60",
+  "border-b md:border-r border-[#E2DFD7]/60",
+  "border-b border-[#E2DFD7]/60",
+  "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
+  "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60 last:border-b-0",
+  "border-none",
 ];
 
 function parseNumericValue(value: string): {
@@ -144,7 +125,7 @@ function AnimatedMetric({
     return <>{value}</>;
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const animatedValue = useCountUp(Math.round(target), isActive);
+  const animatedValue = useCountUp(target, isActive);
   const decimals = 0;
   const display = prefix + formatNumber(animatedValue, decimals) + suffix;
   return <>{display}</>;
@@ -190,9 +171,24 @@ const PortfolioCoverage = ({ data }: { data: typeof defaultPortfolioData }) => {
   );
 };
 
-export default function EsgCertificationsSection({ safetyGovernance }: Props) {
+export default function EsgCertificationsSection({
+  safetyGovernance,
+  performance,
+}: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const certificationData = findTypeMetrics(
+    performance,
+    "certifications & safety."
+  );
+
+  const metrics: MetricItem[] =
+    certificationData?.metrics!.map((m, i) => ({
+      value: m.metric_value || "",
+      unit: m.metric_config || "",
+      label: m.metric_description || "",
+      borderClass: borderClasses[i] || "",
+    })) || [];
 
   const acData: AccordionItem[] =
     safetyGovernance && safetyGovernance.length > 0
@@ -252,24 +248,24 @@ export default function EsgCertificationsSection({ safetyGovernance }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start mb-5">
           <div className="lg:col-span-6 flex flex-col">
             <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
-              — 06 / CERTIFIED FOR PERFORMANCE
+              — 06 / {certificationData?.performance_tagline || ""}
             </span>
 
             <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
-              Certifications & <br />
-              <span className="text-[#40A937]">Safety.</span>
+              {/* Certifications & <br />
+              <span className="text-[#40A937]">Safety.</span> */}
+              {certificationData?.performance_title || ""}
             </h2>
 
             <p className="mt-4 text-sm md:text-base text-gray-600 font-sans font-light max-w-xl">
-              Validated by globally recognised standards. Benchmarked across
-              every Panchshil Office Park.
+              {certificationData?.performance_description || ""}
             </p>
           </div>
 
           <div className="lg:col-span-6 flex lg:justify-end justify-start">
             <div className="w-full relative aspect-[7/3] max-w-[600px] overflow-hidden rounded-[2px] shadow-sm">
               <Image
-                src={certificationSafety}
+                src={certificationData?.performance_image || ""}
                 alt="Certifications Facade Banner"
                 fill
                 className="object-cover object-center"
@@ -279,7 +275,7 @@ export default function EsgCertificationsSection({ safetyGovernance }: Props) {
         </div>
 
         <div className="w-full grid grid-cols-1 md:grid-cols-3 py-6 mb-16">
-          {generalMetrics.map((item, index) => (
+          {metrics.map((item, index) => (
             <div key={index} className="bg-[#ddd]">
               <div
                 className={`relative p-6 min-h-[186px] flex flex-col justify-between bg-[#F8F5EE] transition-all duration-300 hover:bg-[#fff]  hover:-translate-y-[3px] group ${item.borderClass} `}
