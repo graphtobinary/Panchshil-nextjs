@@ -762,7 +762,7 @@ export type EsgPerformanceMetric = {
 
 export type EsgPerformanceApiItem = {
   metrics?: EsgPerformanceMetric[];
-  performance_title?: string;
+  performance_title: string;
   performance_tagline?: string;
   performance_description?: string;
   performance_short_desc?: string;

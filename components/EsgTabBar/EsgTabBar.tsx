@@ -1,5 +1,6 @@
 "use client";
 
+import { EsgPerformanceApiItem } from "@/interfaces";
 import React, { useState, useEffect } from "react";
 
 interface TabItem {
@@ -7,19 +8,32 @@ interface TabItem {
   label: string;
 }
 
-const tabs: TabItem[] = [
-  { id: "overview", label: "ALL IMPACT AREAS" },
-  { id: "energy", label: "ENERGY" },
-  { id: "water", label: "WATER" },
-  { id: "waste", label: "WASTE" },
-  { id: "mobility", label: "MOBILITY" },
-  { id: "indoor-air", label: "INDOOR AIR" },
-  { id: "certifications", label: "CERTIFICATIONS" },
-  { id: "safety-governance", label: "SAFETY & GOVERNANCE" },
+const createTabs = (tabsData: EsgPerformanceApiItem[] = []): TabItem[] => [
+  {
+    id: "overview",
+    label: "ALL IMPACT AREAS",
+  },
+  ...tabsData.map((item) => ({
+    id: item?.performance_title
+      .toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/\./g, "")
+      .replace(/\s+/g, "-"),
+    label: item?.performance_title.replace(/\./g, "").toUpperCase(),
+  })),
+  {
+    id: "safety-governance",
+    label: "SAFETY & GOVERNANCE",
+  },
 ];
 
-export default function EsgTabBar() {
+export default function EsgTabBar({
+  performance,
+}: {
+  performance?: EsgPerformanceApiItem[];
+}) {
   const [activeTab, setActiveTab] = useState<string>("overview");
+  const tabs = createTabs(performance ?? []);
 
   useEffect(() => {
     const handleScroll = () => {

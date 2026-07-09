@@ -27,7 +27,7 @@ export default function EsgPageClient({ data }: EsgPageClientProps) {
         milestones={data.milestones}
         ticker={data.ticker}
       />
-      <EsgTabBar />
+      <EsgTabBar performance={data.performance} />
       <EsgOverviewSection introduction={data.introduction} />
       <EsgEnergySection performance={data.performance} />
       <EsgWaterSection performance={data.performance} />

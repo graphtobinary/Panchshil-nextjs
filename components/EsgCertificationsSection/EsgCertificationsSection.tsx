@@ -240,7 +240,7 @@ export default function EsgCertificationsSection({
 
   return (
     <section
-      id="certifications"
+      id="certifications-and-safety"
       ref={sectionRef}
       className="w-full bg-[#F8F5EE] py-16 md:py-24 border-t border-[#E2DFD7]/30 transition-colors duration-300"
     >
