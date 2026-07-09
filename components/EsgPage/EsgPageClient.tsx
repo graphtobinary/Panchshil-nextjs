@@ -32,8 +32,8 @@ export default function EsgPageClient({ data }: EsgPageClientProps) {
       <EsgEnergySection performance={data.performance} />
       <EsgWaterSection performance={data.performance} />
       <EsgWasteSection performance={data.performance} />
-      <EsgMobilitySection performance={data.performance} />
       <EsgIndoorAirSection performance={data.performance} />
+      <EsgMobilitySection performance={data.performance} />
       <EsgCertificationsSection
         performance={data.performance}
         safetyGovernance={data.safetyGovernance}

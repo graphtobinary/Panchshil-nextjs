@@ -98,7 +98,11 @@ export default function EsgWaterSection({
 
   return (
     <section
-      id="water"
+      id={waterData?.performance_title
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/\./g, "")
+        .replace(/\s+/g, "-")}
       ref={sectionRef}
       className="w-full bg-[#FFFFFF] py-16 md:py-24 border-t border-[#E2DFD7]/30 transition-colors duration-300 relative overflow-hidden"
     >

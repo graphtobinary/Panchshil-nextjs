@@ -100,7 +100,11 @@ export default function EsgWasteSection({
 
   return (
     <section
-      id="waste"
+      id={wasteData?.performance_title
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/\./g, "")
+        .replace(/\s+/g, "-")}
       ref={sectionRef}
       className="w-full bg-[#F8F5EE] py-16 md:py-24 border-t border-[#E2DFD7]/30 transition-colors duration-300"
     >

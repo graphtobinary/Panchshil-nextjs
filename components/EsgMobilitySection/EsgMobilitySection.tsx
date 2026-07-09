@@ -101,7 +101,11 @@ export default function EsgMobilitySection({
   const regex = /\d/;
   return (
     <section
-      id="mobility"
+      id={mobilityData?.performance_title
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/\./g, "")
+        .replace(/\s+/g, "-")}
       ref={sectionRef}
       className="w-full relative min-h-[600px] flex flex-col justify-between py-16 md:py-24 overflow-hidden "
     >

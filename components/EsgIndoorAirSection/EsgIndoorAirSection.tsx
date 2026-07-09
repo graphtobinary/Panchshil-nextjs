@@ -25,7 +25,11 @@ export default function EsgIndoorAirSection({
     })) || [];
   return (
     <section
-      id="indoor-air"
+      id={indoorAirData?.performance_title
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/\./g, "")
+        .replace(/\s+/g, "-")}
       className="w-full bg-[#FFFFFF] py-16 md:py-24 border-t border-[#E2DFD7]/30 transition-colors duration-300"
     >
       <div className="max-w-[1540px] mx-auto px-6 md:px-10 lg:px-12">

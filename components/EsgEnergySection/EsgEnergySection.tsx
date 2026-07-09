@@ -87,7 +87,11 @@ export default function EsgEnergySection({ performance }: Props) {
 
   return (
     <section
-      id="energy"
+      id={energyData?.performance_title
+        .toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/\./g, "")
+        .replace(/\s+/g, "-")}
       ref={sectionRef}
       className="w-full bg-[#F8F5EE] py-16 md:py-24 transition-colors duration-300"
     >
