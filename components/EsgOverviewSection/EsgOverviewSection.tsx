@@ -1,60 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { EsgIntroductionApiResponse } from "@/interfaces";
-
-interface GridItem {
-  id: string;
-  title: string;
-  desc: string;
-  borderClass: string;
-}
-
-const gridItems: GridItem[] = [
-  {
-    id: "01",
-    title: "Energy",
-    desc: "Rooftop Solar Photovoltaic (PV) Panels, Purchased RE Power, Wind Energy.",
-    borderClass: "border-b md:border-r border-[#E2DFD7]",
-  },
-  {
-    id: "02",
-    title: "Water",
-    desc: "Recycling performance and Rainwater Harvesting.",
-    borderClass: "border-b md:border-r border-[#E2DFD7]",
-  },
-  {
-    id: "03",
-    title: "Waste",
-    desc: "Dry, Hazardous, and Food Waste.",
-    borderClass: "border-b border-[#E2DFD7]",
-  },
-  {
-    id: "04",
-    title: "Indoor Air",
-    desc: "Healthier indoor environments through IAQ monitoring and better air quality.",
-    borderClass: "border-b md:border-b-0 md:border-r border-[#E2DFD7]",
-  },
-  {
-    id: "05",
-    title: "Mobility",
-    desc: "Enabling low-emission mobility and seamless connectivity.",
-    borderClass:
-      "border-b md:border-b-0 md:border-r border-[#E2DFD7] last:border-b-0",
-  },
-  {
-    id: "06",
-    title: "Reports & Certifications",
-    desc: "Strong governance, global certifications and safety excellence.",
-    borderClass: "border-0",
-  },
-];
+import {
+  EsgIntroductionApiResponse,
+  EsgPerformanceApiItem,
+} from "@/interfaces";
 
 type Props = {
   introduction?: EsgIntroductionApiResponse | null;
+  performance?: EsgPerformanceApiItem[];
 };
 
-export default function EsgOverviewSection({ introduction }: Props) {
+export default function EsgOverviewSection({
+  introduction,
+  performance,
+}: Props) {
   return (
     <section
       id="overview"
@@ -92,7 +52,7 @@ export default function EsgOverviewSection({ introduction }: Props) {
 
         {/* 3x2 Grid of Impact Areas */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 ">
-          {gridItems.map((item, index) => (
+          {performance?.map((item, index) => (
             <div
               key={index}
               className={`relative p-8 md:p-12 lg:p-14 min-h-[220px] md:min-h-[300px] flex flex-col justify-between bg-transparent transition-all duration-300 hover:bg-[#07150A] hover:-translate-y-[2px] group ${item.borderClass}`}
@@ -100,17 +60,17 @@ export default function EsgOverviewSection({ introduction }: Props) {
               <div>
                 {/* Number */}
                 <span className="font-display text-[44px] md:text-[54px] lg:text-[60px] font-medium text-[#E2DFD7] leading-none transition-colors duration-300 group-hover:text-[#40A937] block">
-                  {item.id}
+                  0{index + 1}
                 </span>
 
                 {/* Title */}
                 <h3 className="font-display text-[22px] md:text-[26px] font-medium text-[#1F180D] mt-5 transition-colors duration-300 group-hover:text-white leading-tight">
-                  {item.title}
+                  {item.performance_title}
                 </h3>
 
                 {/* Description */}
                 <p className="font-sans text-xs md:text-[13px] lg:text-sm text-gray-600 mt-3 leading-relaxed transition-colors duration-300 group-hover:text-white/80 font-light">
-                  {item.desc}
+                  {item.performance_description}
                 </p>
               </div>
 

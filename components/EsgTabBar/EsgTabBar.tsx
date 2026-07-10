@@ -88,7 +88,7 @@ export default function EsgTabBar({
             <button
               key={tab.id}
               onClick={(e) => handleTabClick(e, tab.id)}
-              className={`text-[10px] md:text-xs tracking-widest font-semibold font-sans uppercase transition-all duration-300 whitespace-nowrap ${
+              className={`text-[10px] md:text-xs tracking-widest font-semibold font-sans uppercase transition-all duration-300 whitespace-nowrap cursor-pointer ${
                 isActive
                   ? "bg-[#0C190E] border-2 border-[#B2D5AE] text-white px-5 py-2 rounded-full"
                   : "text-[#7F847E] hover:text-black px-4 py-2 border-2 border-transparent"

@@ -28,7 +28,10 @@ export default function EsgPageClient({ data }: EsgPageClientProps) {
         ticker={data.ticker}
       />
       <EsgTabBar performance={data.performance} />
-      <EsgOverviewSection introduction={data.introduction} />
+      <EsgOverviewSection
+        introduction={data.introduction}
+        performance={data.performance}
+      />
       <EsgEnergySection performance={data.performance} />
       <EsgWaterSection performance={data.performance} />
       <EsgWasteSection performance={data.performance} />
