@@ -6,6 +6,15 @@ import {
   EsgPerformanceApiItem,
 } from "@/interfaces";
 
+const borderClasses = [
+  "border-b md:border-r border-[#E2DFD7]/60",
+  "border-b md:border-r border-[#E2DFD7]/60",
+  "border-b border-[#E2DFD7]/60",
+  "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60",
+  "border-b md:border-b-0 md:border-r border-[#E2DFD7]/60 last:border-b-0",
+  "border-none",
+];
+
 type Props = {
   introduction?: EsgIntroductionApiResponse | null;
   performance?: EsgPerformanceApiItem[];
@@ -55,7 +64,7 @@ export default function EsgOverviewSection({
           {performance?.map((item, index) => (
             <div
               key={index}
-              className={`relative p-8 md:p-12 lg:p-14 min-h-[220px] md:min-h-[300px] flex flex-col justify-between bg-transparent transition-all duration-300 hover:bg-[#07150A] hover:-translate-y-[2px] group ${item.borderClass}`}
+              className={`relative p-8 md:p-12 lg:p-14 min-h-[220px] md:min-h-[300px] flex flex-col justify-between bg-transparent transition-all duration-300 hover:bg-[#07150A] hover:-translate-y-[2px] group ${borderClasses[index] || borderClasses[borderClasses.length - 1]}`}
             >
               <div>
                 {/* Number */}
