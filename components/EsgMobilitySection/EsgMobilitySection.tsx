@@ -111,7 +111,7 @@ export default function EsgMobilitySection({
     >
       <div className="absolute inset-0 z-0">
         <Image
-          src={mobilityBanner}
+          src={mobilityData?.performance_image || mobilityBanner}
           alt="Mobility Banner Background"
           fill
           className="object-cover object-center"
