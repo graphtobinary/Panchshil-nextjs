@@ -346,7 +346,7 @@ export default function EsgCertificationsSection({
                   <div
                     className={`overflow-hidden transition-all duration-300 ease-in-out ${
                       isExpanded
-                        ? "max-h-[1200px] opacity-100 pb-10"
+                        ? "max-h-auto opacity-100 pb-10"
                         : "max-h-0 opacity-0"
                     }`}
                   >
