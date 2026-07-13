@@ -5,10 +5,10 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
-import { EsgPageData } from "@/app/esg/esg.data";
+import { EsgSteeringCommitteeContent } from "@/app/esg/esg.data";
 
 type EsgSteeringCommitteeProps = {
-  content: EsgPageData["steeringCommittee"];
+  content: EsgSteeringCommitteeContent;
 };
 
 export default function EsgSteeringCommittee({

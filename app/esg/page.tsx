@@ -1,5 +1,5 @@
 import { EsgPageClient } from "@/components/EsgPage";
-import { EsgPageData, esgPageData } from "./esg.data";
+import { EsgPageData } from "./esg.data";
 import {
   getAuthToken,
   getEsgBanner,
@@ -161,35 +161,23 @@ export default async function EsgPage() {
   }
 
   const data: EsgPageData = {
-    ...esgPageData,
-    milestones:
-      esgMilestones.length > 0 ? esgMilestones : esgPageData.milestones,
-    ticker: esgTicker.length > 0 ? esgTicker : esgPageData.ticker,
-    safetyGovernance:
-      esgSafetyGovernance.length > 0
-        ? esgSafetyGovernance
-        : esgPageData.safetyGovernance,
-    reportsIntro: esgReportsIntro || esgPageData.reportsIntro,
-    reportsList:
-      esgReportsList.length > 0 ? esgReportsList : esgPageData.reportsList,
-    performance:
-      esgPerformance.length > 0 ? esgPerformance : esgPageData.performance,
+    milestones: esgMilestones,
+    ticker: esgTicker,
+    safetyGovernance: esgSafetyGovernance,
+    reportsIntro: esgReportsIntro,
+    reportsList: esgReportsList,
+    performance: esgPerformance,
     introduction: esgIntroduction
       ? {
           ...esgIntroduction,
           intro_image:
             toAbsoluteAssetUrl(esgIntroduction.intro_image) || undefined,
         }
-      : esgPageData.introduction,
+      : null,
     hero: {
-      title: esgBanner?.banner_caption || esgPageData.hero.title,
-      description:
-        esgBanner?.banner_description || esgPageData.hero.description,
-      imageSrc:
-        toAbsoluteAssetUrl(esgBanner?.banner_image) ||
-        esgPageData.hero.imageSrc,
-      primaryCta: esgPageData.hero.primaryCta,
-      secondaryCta: esgPageData.hero.secondaryCta,
+      title: esgBanner?.banner_caption,
+      description: esgBanner?.banner_description,
+      imageSrc: toAbsoluteAssetUrl(esgBanner?.banner_image) || "",
     },
   };
 

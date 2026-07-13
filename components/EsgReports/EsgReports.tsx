@@ -6,10 +6,10 @@ import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
-import { EsgPageData } from "@/app/esg/esg.data";
+import { EsgReportsContent } from "@/app/esg/esg.data";
 
 type EsgReportsProps = {
-  content: EsgPageData["reports"];
+  content: EsgReportsContent;
 };
 
 export default function EsgReports({ content }: EsgReportsProps) {

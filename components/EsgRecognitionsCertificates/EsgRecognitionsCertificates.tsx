@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { EsgRecognitionsCarousel } from "./EsgRecognitionsCarousel";
-import { EsgPageData } from "@/app/esg/esg.data";
+import { EsgRecognitionsCertificatesContent } from "@/app/esg/esg.data";
 
 type EsgRecognitionsCertificatesProps = {
-  content: EsgPageData["recognitionsCertificates"];
+  content: EsgRecognitionsCertificatesContent;
 };
 
 export default function EsgRecognitionsCertificates({

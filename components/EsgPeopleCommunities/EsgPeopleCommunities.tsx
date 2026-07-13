@@ -5,10 +5,10 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "@/assets/svgs/ArrowLeftIcon";
 import ArrowRightIcon from "@/assets/svgs/ArrowRightIcon";
-import { EsgPageData } from "@/app/esg/esg.data";
+import { EsgPeopleCommunitiesContent } from "@/app/esg/esg.data";
 
 type EsgPeopleCommunitiesProps = {
-  content: EsgPageData["peopleCommunities"];
+  content: EsgPeopleCommunitiesContent;
 };
 
 export default function EsgPeopleCommunities({

@@ -1,7 +1,7 @@
 export type CareerHeroContent = {
   imageSrc: string;
-  title: string;
-  description: string;
+  title: string | undefined;
+  description: string | undefined;
   primaryCta?: {
     label: string;
     href: string;

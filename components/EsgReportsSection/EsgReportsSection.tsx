@@ -1,8 +1,6 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-import esgReports from "@/assets/images/esg/esg-reports.png";
 import { EsgReportApiItem, EsgReportsIntroApiResponse } from "@/interfaces";
 
 function formatFileSize(size?: string): string {
@@ -24,36 +22,41 @@ export default function EsgReportsSection({
       className="w-full bg-[#FFFFFF] py-16 md:py-24 border-t border-[#E2DFD7]/30 transition-colors duration-300"
     >
       <div className="max-w-[1540px] mx-auto px-6 md:px-10 lg:px-12">
-        {/* Header split layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-8 md:mb-4">
-          {/* Left Side: Mockup Image */}
-          <div className="lg:col-span-5 flex justify-start">
-            <div className="w-full relative aspect-[5/3] max-w-full overflow-hidden shadow-sm">
-              <Image
-                src={reportsIntro?.reports_image || esgReports}
-                alt="ESG Reports Mockup Banner"
-                fill
-                className="object-cover object-center"
-              />
+        {typeof reportsIntro === "object" && (
+          <>
+            {/* Header split layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-8 md:mb-4">
+              {/* Left Side: Mockup Image */}
+              <div className="lg:col-span-5 flex justify-start">
+                {reportsIntro?.reports_image && (
+                  <div className="w-full relative aspect-[5/3] max-w-full overflow-hidden shadow-sm">
+                    <Image
+                      src={reportsIntro?.reports_image}
+                      alt="ESG Reports Mockup Banner"
+                      fill
+                      className="object-cover object-center"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Right Side: Text */}
+              <div className="lg:col-span-7 flex flex-col">
+                <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
+                  — {reportsIntro?.reports_heading || ""}
+                </span>
+
+                <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
+                  {reportsIntro?.reports_caption || ""}
+                </h2>
+
+                <p className="mt-4 text-sm md:text-base text-[#626A70] font-sans font-light max-w-xl">
+                  {reportsIntro?.reports_description || ""}
+                </p>
+              </div>
             </div>
-          </div>
-
-          {/* Right Side: Text */}
-          <div className="lg:col-span-7 flex flex-col">
-            <span className="text-[#40A937] text-xs md:text-sm font-normal tracking-widest uppercase block mb-3 font-sans">
-              — {reportsIntro?.reports_heading || "REPORTS"}
-            </span>
-
-            <h2 className="text-3xl md:text-5xl lg:text-[56px] font-display text-[#1F180D] leading-[1.1] tracking-tight font-medium">
-              {reportsIntro?.reports_caption || "ESG Reports & Downloads"}
-            </h2>
-
-            <p className="mt-4 text-sm md:text-base text-[#626A70] font-sans font-light max-w-xl">
-              {reportsIntro?.reports_description ||
-                "Detailed reports published annually. Reach out for past editions or asset-level documentation."}
-            </p>
-          </div>
-        </div>
+          </>
+        )}
 
         {/* 3-column downloads grid */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 py-4 items-center">
@@ -116,11 +119,13 @@ export default function EsgReportsSection({
         </div>
 
         {/* Disclaimer Footer Text */}
-        <div className="w-full mt-2">
-          <span className="text-[11px] md:text-xs text-gray-500 font-sans font-light tracking-wide block">
-            All data is for FY 2025-26 unless stated otherwise.
-          </span>
-        </div>
+        {typeof reportsIntro === "object" && reportsList && (
+          <div className="w-full mt-2">
+            <span className="text-[11px] md:text-xs text-gray-500 font-sans font-light tracking-wide block">
+              All data is for FY 2025-26 unless stated otherwise.
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

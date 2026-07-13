@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { EsgPageData } from "@/app/esg/esg.data";
+import { EsgBeyondTheBuildContent } from "@/app/esg/esg.data";
 
 type EsgBeyondTheBuildProps = {
-  content: EsgPageData["beyondTheBuild"];
+  content: EsgBeyondTheBuildContent;
 };
 
 export default function EsgBeyondTheBuild({ content }: EsgBeyondTheBuildProps) {

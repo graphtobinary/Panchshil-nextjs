@@ -19,7 +19,7 @@ export default function CareerHero({ hero, compact = false }: CareerHeroProps) {
     >
       <CommonHeroMedia
         imageSrc={hero.imageSrc}
-        imageAlt={hero.title}
+        imageAlt={hero.title || ""}
         overlayClassName="bg-black/35"
       />
 

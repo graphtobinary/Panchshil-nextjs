@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { CommonHeroMedia } from "@/components/CommonHeroMedia";
-import { EsgPageData } from "@/app/esg/esg.data";
+import { EsgAccordionContent } from "@/app/esg/esg.data";
 
 type EsgAccordionSectionProps = {
-  content: EsgPageData["accordion"];
+  content: EsgAccordionContent;
 };
 
 export default function EsgAccordionSection({
