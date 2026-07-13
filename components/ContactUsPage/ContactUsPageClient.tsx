@@ -93,13 +93,15 @@ export default function ContactUsPageClient({
   hero: AboutUsHeroContent;
 }) {
   const [form, setForm] = useState<{
-    name: string;
+    firstName: string;
+    lastName: string;
     phone: string;
     email: string;
     message: string;
     purpose: string;
   }>({
-    name: "",
+    firstName: "",
+    lastName: "",
     phone: "",
     email: "",
     message: "",
@@ -236,7 +238,9 @@ export default function ContactUsPageClient({
     setSubmitResult(null);
 
     const fieldErrors: Record<string, string> = {};
-    if (!form.name.trim()) fieldErrors.name = "Full name is required";
+    if (!form.firstName.trim())
+      fieldErrors.firstName = "First name is required";
+    if (!form.lastName.trim()) fieldErrors.lastName = "Last name is required";
     if (!form.purpose) fieldErrors.purpose = "Please select a purpose";
     if (!form.phone.trim()) fieldErrors.phone = "Contact number is required";
     if (!form.email.trim()) {
@@ -253,7 +257,8 @@ export default function ContactUsPageClient({
 
     try {
       const formData = new FormData();
-      formData.append("enquiry_full_name", form.name);
+      formData.append("enquiry_first_name", form.firstName);
+      formData.append("enquiry_last_name", form.lastName);
       formData.append("enquiry_reason", form.purpose);
       formData.append("enquiry_email_id", form.email);
       formData.append("enquiry_mobile_number", form.phone);
@@ -270,7 +275,8 @@ export default function ContactUsPageClient({
         const serverErrors: Record<string, string> = {};
         if (data.errors && Array.isArray(data.errors)) {
           const fieldMap: Record<string, string> = {
-            enquiry_full_name: "name",
+            enquiry_first_name: "firstName",
+            enquiry_last_name: "lastName",
             enquiry_email_id: "email",
             enquiry_mobile_number: "phone",
             enquiry_message: "message",
@@ -300,7 +306,14 @@ export default function ContactUsPageClient({
           data?.display_message ||
           "Thank you! Your enquiry has been submitted successfully.",
       });
-      setForm({ name: "", phone: "", email: "", message: "", purpose: "" });
+      setForm({
+        firstName: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        message: "",
+        purpose: "",
+      });
       setErrors({});
     } catch {
       setSubmitResult({
@@ -357,21 +370,35 @@ export default function ContactUsPageClient({
             >
               <div className="relative">
                 <input
-                  name="name"
-                  value={form.name}
+                  name="firstName"
+                  value={form.firstName}
                   onChange={handleChange}
-                  placeholder="Full Name"
+                  placeholder="First Name"
                   className="w-full pr-4 py-2.5 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
                 />
-                {errors.name && (
+                {errors.firstName && (
                   <p className="text-red-500 text-[10px] absolute -bottom-[15px] left-0">
-                    {errors.name}
+                    {errors.firstName}
                   </p>
                 )}
               </div>
-              {/* Purpose dropdown (checkbox-style list copied from StickyBottomBar) */}
+              <div className="relative">
+                <input
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  placeholder="Last Name"
+                  className="w-full pr-4 py-2.5 border-b border-gold-beige text-black-chocolate text-base placeholder-black/50 focus:outline-none focus:border-gold-beige "
+                />
+                {errors.lastName && (
+                  <p className="text-red-500 text-[10px] absolute -bottom-[15px] left-0">
+                    {errors.lastName}
+                  </p>
+                )}
+              </div>
+              {/* Purpose dropdown */}
               <div
-                className="relative"
+                className="relative md:col-span-2"
                 ref={(el) => {
                   purposeRef.current = el;
                 }}

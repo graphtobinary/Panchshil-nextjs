@@ -79,7 +79,8 @@ export const updateSubscriberFormDetails = (
 
 export const submitContactEnquiryFormDetails = (
   token: string,
-  enquiryFullName: string,
+  enquiryFirstName: string,
+  enquiryLastName: string,
   enquiryReason: string,
   enquiryEmailId: string,
   enquiryMobileNumber: string,
@@ -88,7 +89,8 @@ export const submitContactEnquiryFormDetails = (
   refererUrl: string
 ) => {
   const formData = new URLSearchParams();
-  formData.append("enquiry_full_name", enquiryFullName);
+  formData.append("enquiry_first_name", enquiryFirstName);
+  formData.append("enquiry_last_name", enquiryLastName);
   formData.append("enquiry_reason", enquiryReason);
   formData.append("enquiry_email_id", enquiryEmailId);
   formData.append("enquiry_mobile_number", `+${enquiryMobileNumber}`);

@@ -45,17 +45,23 @@ function getClientIp(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const enquiryFullName = formData.get("enquiry_full_name") as string;
+    const enquiryFirstName = formData.get("enquiry_first_name") as string;
+    const enquiryLastName = formData.get("enquiry_last_name") as string;
     const enquiryReason = formData.get("enquiry_reason") as string;
     const enquiryEmailId = formData.get("enquiry_email_id") as string;
     const enquiryMobileNumber = formData.get("enquiry_mobile_number") as string;
     const enquiryMessage = formData.get("enquiry_message") as string;
 
-    if (!enquiryFullName || !enquiryEmailId || !enquiryMobileNumber) {
+    if (
+      !enquiryFirstName ||
+      !enquiryLastName ||
+      !enquiryEmailId ||
+      !enquiryMobileNumber
+    ) {
       return NextResponse.json(
         {
           error:
-            "enquiry_full_name, enquiry_email_id, and enquiry_mobile_number are required",
+            "enquiry_first_name, enquiry_last_name, enquiry_email_id, and enquiry_mobile_number are required",
         },
         { status: 400 }
       );
@@ -86,7 +92,8 @@ export async function POST(request: NextRequest) {
 
     const result = await submitContactEnquiryFormDetails(
       token,
-      enquiryFullName,
+      enquiryFirstName,
+      enquiryLastName,
       enquiryReason || "",
       enquiryEmailId,
       enquiryMobileNumber,
