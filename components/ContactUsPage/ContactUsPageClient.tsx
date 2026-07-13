@@ -65,18 +65,18 @@ interface ContactLocation {
 
 const contactLocations: ContactLocation[] = [
   {
-    id: "corporate-office",
-    title: "Corporate Office",
-    lat: 18.927970578475424,
-    lng: 72.8219189681855,
-    zoom: 15,
-  },
-  {
     id: "head-office",
     title: "Head Office",
     lat: 18.553319413518878,
     lng: 73.89176548536943,
     zoom: 12,
+  },
+  {
+    id: "corporate-office",
+    title: "Corporate Office",
+    lat: 18.927970578475424,
+    lng: 72.8219189681855,
+    zoom: 15,
   },
   {
     id: "international",
@@ -119,7 +119,7 @@ export default function ContactUsPageClient({
   const [isPurposeOpen, setIsPurposeOpen] = useState(false);
   const purposeRef = useRef<HTMLDivElement | null>(null);
   const [activeLocationId, setActiveLocationId] = useState<string | null>(
-    "corporate-office"
+    "head-office"
   );
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
