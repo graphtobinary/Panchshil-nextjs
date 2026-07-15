@@ -20,18 +20,26 @@ export default function AboutUsVisibleImpact({
             {content.description}
           </div>
 
-          {content.points && content.points.length > 0 && (
-            <div className="mt-7">
+          {/* {content.points && content.points.length > 0 && (
+            <div className="mt-5">
               {content.points.map((point) => (
                 <p
                   key={point}
-                  className="text-black/85 text-sm md:text-base py-4 border-b border-black/10"
+                  className="text-black/85 text-sm md:text-base py-2 font-display-semi"
                 >
                   {point}
                 </p>
               ))}
             </div>
-          )}
+          )} */}
+          <div className="mt-5">
+            <p className="text-black/85 text-sm md:text-base py-2 font-display-semi">
+              {content.about_intro_name}
+            </p>
+            <p className="text-black/85 text-sm md:text-base py-2 ">
+              {content.about_intro_designation}
+            </p>
+          </div>
         </div>
 
         <div className="relative w-full aspect-[4/3] overflow-hidden">

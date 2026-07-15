@@ -142,6 +142,8 @@ export default async function AboutUsPage() {
       ),
       imageSrc:
         introData.about_intro_image || mergedData.visibleImpact.imageSrc,
+      about_intro_name: introData.about_intro_name,
+      about_intro_designation: introData.about_intro_designation,
     };
   }
 
