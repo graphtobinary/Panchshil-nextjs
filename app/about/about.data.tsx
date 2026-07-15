@@ -25,8 +25,8 @@ export type AboutUsVisibleImpactContent = {
   points?: string[];
   imageSrc: string;
   imageAlt: string;
-  about_intro_name: string;
-  about_intro_designation: string;
+  about_intro_name?: string;
+  about_intro_designation?: string;
 };
 
 export type AboutUsSustainabilitySlide = {
