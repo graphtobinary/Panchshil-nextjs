@@ -9,11 +9,11 @@ export default function PrecIntroSection({ content }: PrecIntroSectionProps) {
   return (
     <section className="py-14 md:py-20 bg-white">
       <div className="mx-auto max-w-6xl px-6">
-        <h2 className="mx-auto max-w-5xl text-center text-2xl md:text-[28px] font-display-semi text-black-chocolate">
+        <h2 className="mx-auto text-2xl md:text-[28px] font-display-semi text-black-chocolate">
           {content.heading}
         </h2>
 
-        <div className="mx-auto mt-6 max-w-5xl text-center text-lg md:text-lg leading-relaxed text-black-chocolate">
+        <div className="mx-auto mt-6 text-lg md:text-lg leading-relaxed text-black-chocolate">
           {content.paragraphs.map((paragraph) => (
             <p key={paragraph} className="mt-4 first:mt-0">
               {paragraph}
