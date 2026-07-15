@@ -18,10 +18,7 @@ export default function MeetTheCityMagazineGrid({
   const totalPages = Math.max(1, Math.ceil(editions.length / itemsPerPage));
   const safeCurrentPage = Math.min(currentPage, totalPages);
 
-  const paginatedEditions = useMemo(() => {
-    const startIndex = (safeCurrentPage - 1) * itemsPerPage;
-    return editions.slice(startIndex, startIndex + itemsPerPage);
-  }, [safeCurrentPage, itemsPerPage, editions]);
+  const paginatedEditions = editions;
 
   return (
     <section className="overflow-x-hidden bg-white py-10 md:py-14">
