@@ -16,6 +16,8 @@ export default function EsgReportsSection({
   reportsIntro,
   reportsList,
 }: Props) {
+  if (typeof reportsIntro !== "object" && reportsList?.length === 0)
+    return null;
   return (
     <section
       id="reports"

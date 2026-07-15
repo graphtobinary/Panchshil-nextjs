@@ -127,7 +127,6 @@ export default async function AboutUsPage() {
   ] = await Promise.allSettled(apiCalls);
 
   const mergedData = { ...aboutUsPageDummyData };
-
   if (aboutIntroRes.status === "fulfilled" && aboutIntroRes.value) {
     const introData = aboutIntroRes.value as AboutUsIntroData;
     mergedData.visibleImpact = {
@@ -135,7 +134,7 @@ export default async function AboutUsPage() {
       title: introData.about_intro_caption || mergedData.visibleImpact.title,
       description: introData.about_intro_content ? (
         <div
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-4 whitespace-pre-line"
           dangerouslySetInnerHTML={{ __html: introData.about_intro_content }}
         />
       ) : (
@@ -179,7 +178,8 @@ export default async function AboutUsPage() {
             description: item.growth_chronicles.map((growth_chronicle) => ({
               title: growth_chronicle.growth_chronicle_caption,
               content: growth_chronicle.growth_chronicle_caption,
-              imageSrc: growth_chronicle.growth_chronicle_image || fallback.imageSrc,
+              imageSrc:
+                growth_chronicle.growth_chronicle_image || fallback.imageSrc,
             })),
             imageSrc: fallback.imageSrc,
             imageAlt: fallback.imageAlt,
