@@ -48,7 +48,7 @@ export default function TestimonialsSection({
   return (
     <section className="w-full bg-white py-14 md:py-20">
       <div className="mx-auto max-w-[1540px] px-6 md:px-10">
-        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14">
+        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14 hidden">
           {TABS.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -100,7 +100,7 @@ export default function TestimonialsSection({
                 key={page}
                 type="button"
                 onClick={() => setCurrentPage(page)}
-                className={`h-10 min-w-10 flex items-center justify-center border px-3 text-[14px] transition-colors ${
+                className={`h-10 min-w-10 flex items-center justify-center border px-3 text-[14px] transition-colors cursor-pointer ${
                   page === safePage
                     ? "bg-[#ad9d7d] border-[#ad9d7d] text-white"
                     : "bg-white border-[#c8c8c8] text-[#ad9d7d] hover:bg-[#f7f4ee]"
